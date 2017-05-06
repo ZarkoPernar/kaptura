@@ -6,17 +6,21 @@
   "scripts": {
     "build": "nwb build-preact-app",
     "clean": "nwb clean-app",
-    "start": "nwb serve-preact-app",
+    "start": "npm-run-all dev server",
+    "dev": "nwb serve-preact-app",
+    "server": "nodemon server",
     "test": "nwb test-preact",
     "test:coverage": "nwb test-preact --coverage",
     "test:watch": "nwb test-preact --server"
   },
   "dependencies": {
+    "express": "^4.15.2",
     "preact": "^8.1.0",
     "preact-compat": "^3.16.0"
   },
   "devDependencies": {
-    "nwb": "0.15.x"
+    "npm-run-all": "^4.0.2",
+    "nwb": "^0.15.6"
   },
   "author": "",
   "license": "MIT",
