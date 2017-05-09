@@ -1,0 +1,122 @@
+@import './palette.scss';
+
+$header-height: 4rem;
+
+$sidenav-width: 16rem;
+$sidenav-z-index: 3;
+
+$nav-highlight: darken($bc-light, 5);
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif;
+}
+
+.App {
+    height: 100%;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+}
+
+.App-flex {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.App-heading {
+    background-color: $bc-earth;
+    color: $bc-light;
+    font-size: 1rem;
+    z-index: 2;
+    max-height: $header-height;
+
+    h2 {
+        font-weight: 400;
+        text-align: left;
+        padding-left: 1.65rem;
+    }
+    &__link {
+        position: absolute;
+        top: 1rem;
+        right: 2rem;
+        color: #fff;
+    }
+}
+
+.App-logo {
+    max-height: 30vh;
+    max-width: 30vh;
+}
+
+.App-body {
+    background-color: #f9f9f9;
+    color: #000;
+    padding: 0;
+    padding-left: $sidenav-width;
+}
+
+.table {
+    width: 100%;
+    font-size: 16px;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+
+    td {
+        padding: .25em .5em;
+        border-right: $bc-light;
+        border-bottom: $bc-light;
+    }
+
+    td:first-child {
+        border-left: $bc-light;
+    }
+
+    th {
+        text-align: left;
+        background-color: #f1f1f1;
+        padding: .5em;
+        border-right: $bc-light;
+    }
+}
+
+
+
+.btn {
+    font-size: 1rem;
+    font-weight: 600;
+    height: 2.5rem;
+    background-color: darken($bc-light, 10);
+    // border: 1px solid darken($bc-light, 20);
+    border: 0;
+    border-radius: 2px;
+    padding: .75rem 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
+
+    &:hover {
+        background-color: darken($bc-light, 15);
+        // cursor: pointer;
+    }
+
+    &--block {
+        width: 100%;
+    }
+
+    &--primary {
+        color: #fff;
+        background-color: $bc-water;
+        border-color: darken($bc-water, 5);
+
+        &:hover {
+            background-color: darken($bc-water, 10);
+        }
+    }
+
+    svg {
+        margin-top: -4px;
+        margin-right: 5px;
+    }
+}

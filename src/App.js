@@ -1,31 +1,39 @@
-import './App.css'
+import React, { Component } from 'react'
+import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom'
+import { MdPersonOutline } from 'react-icons/lib/md'
+import moment from 'moment'
 
-import {h, Component} from 'preact'
+moment.locale('hr')
 
-export default class App extends Component {
-  state = {
-    message: 'world'
-  }
-  
-  componentWillMount = () => {
-    fetch('/api/lol')
-      .then(res => res.json())
-      .then(res => {
-        this.setState({message: res})
-      })
-  }
+import AppSidenav from './AppSidenav'
 
-  render() {
-    return <div className="App">
-      <div className="App-heading App-flex">
+import HomeComponent from './pages/Home'
+import TvrtkaComponent from './pages/Tvrtka'
+import KorisnikComponent from './pages/Korisnik'
+import ProjektiComponent from './pages/Projekti'
+
+import './App.scss'
+
+export default () => (
+  <Router basename="/">
+    <div className="App">
+      <AppSidenav key="sidenav" />
+
+      <div className="App-heading" key="header">
         <h2>
-          Welcome to <img alt="Preact" src={require('./preact-name.svg')} style="height: 1.8em; vertical-align: middle;"/>
+          Kaptura
+
+          <NavLink to="/korisnik" className="App-heading__link" key="korisnik" activeClassName="App-heading__link--active" exact>
+              <MdPersonOutline />
+          </NavLink>
         </h2>
       </div>
-      <div className="App-instructions App-flex">
-        <img className="App-logo" src={require('./preact-logo.svg')}/>
-        <p>Edit <code>src/App.js</code> and save to hot reload your {this.state.message}.</p>
+      <div className="App-body" key="body">
+        <Route exact path="/" component={HomeComponent} key="home" />
+        <Route path="/tvrtka" component={TvrtkaComponent} key="tvrtka" />
+        <Route path="/korisnik" component={KorisnikComponent} key="korisnik" />
+        <Route path="/projekti" component={ProjektiComponent} key="projekti" />
       </div>
     </div>
-  }
-}
+  </Router>
+)
