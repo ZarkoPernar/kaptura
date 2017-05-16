@@ -1,20 +1,35 @@
 import React, { Component } from 'react'
 import SkyLight from 'react-skylight'
-import { MdAdd } from 'react-icons/lib/md'
+import { MdAdd, MdDelete } from 'react-icons/lib/md'
 
-import ListTable from '../projects/list/table'
-import CreateProjectForm from '../projects/create/Form'
+import http from '../shared/httpService'
+import ProjectList from '../projects/list/ProjectList'
+import EditProjectForm from '../projects/edit/Form'
+import DeleteProjectDialog from '../projects/edit/DeleteProjectDialog'
+import updateById from '../utils/updateById'
+import projectValidator from '../projects/validator'
+import Toaster from '../shared/toast/Toaster'
 
 import './projekti.scss'
 
 const dialogStyles = {
     fontSize: '1rem',
     height: 'auto',
+    marginTop: '100px',
+    top: 0,
+    allowRemoval: false,
 }
 
+const confirmDeleteDialogStyles = Object.assign({}, dialogStyles, {
+
+})
+
 export default class C extends Component {
-    state ={
+    state = {
         projects: [],
+        toasts: [],
+        projectForEdit: null,
+        projectForDelete: null,
         isModalOpen: false,
     }
 
@@ -28,46 +43,152 @@ export default class C extends Component {
         })
     }
 
-    sendProject = (project) => {
+    createProject = (project) => {
         this.modal.hide()
-        this.formComponent.reset()
-
-        this.setState(({ projects }) => ({ projects: [...projects, project]}))
 
         createProject(project)
             .then(() => this.getProjects())
+            .catch(this.handleCreateProjectError)
+
+        try {
+            projectValidator(project)
+            this.setState(({ projects }) => ({ projects: [project, ...projects]}))
+        } catch(err) {
+            // console.error(err)
+        }
     }
 
-    remove = (project) => {
-        removeProject(project)
+    removeToast = (toast) => {
+        this.setState((state) => ({
+            toasts: state.toasts.filter(temp => temp.id !== toast.id)
+        }))
+    }
+
+    handleCreateProjectError = (err) => {
+        console.log(err)
+        this.setState(state => ({
+            toasts: [...state.toasts, {
+                description: err.message
+            }]
+        }))
+    }
+
+    updateProject = (project) => {
+        this.modal.hide()
+
+        this.setState(({ projects }) => ({
+            projects: updateById(project, projects),
+            projectForEdit: null,
+        }))
+
+        updateProject(project)
+            .then(() => this.getProjects())
+    }
+
+    _executeAfterModalClose = () => {
+        this.setState({
+            projectForEdit: null
+        })
+    }
+
+    openProject = (project) => {
+        this.setState({
+            projectForEdit: project
+        })
+        this.openModal()
+    }
+
+    openNew = () => {
+        this.setState({
+            projectForEdit: null,
+        })
+        this.openModal()
+    }
+
+    askForRemove = (project) => {
+        this.setState({
+            projectForDelete: project
+        })
+        this.deleteModalRef.show()
+    }
+
+    deleteConfirm = () => {
+        this.remove()
+        this.deleteModalRef.hide()
+    }
+
+    deleteDismiss = () => {
+        this.setState({
+            projectForDelete: null
+        })
+        this.deleteModalRef.hide()
+    }
+
+    remove = () => {
+        removeProject(this.state.projectForDelete)
             .then(() => {
-                this.setState(({projects}) => {
+                this.setState(({projects, projectForDelete}) => {
                     return {
-                        projects: projects.filter(pr => pr._id !== project._id)
+                        projects: projects.filter(pr => pr._id !== projectForDelete._id),
+                        projectForDelete: null,
                     }
                 })
             })
+    }
+
+    toggleRemoval = () => {
+        this.setState(state => ({
+            allowRemoval: !state.allowRemoval
+        }))
     }
 
     openModal = () => {
         this.modal.show()
     }
 
+    dismiss = () => {
+        this.modal.hide()
+    }
+
+    getDeleteModalRef = (el) => {
+        this.deleteModalRef = el
+    }
+
     render() {
         return (
             <div className="Projekti">
-                <SkyLight dialogStyles={dialogStyles} hideOnOverlayClicked ref={el => { this.modal = el }} key="modal">
-                    <CreateProjectForm key="create" onSubmit={this.sendProject} ref={cmp => { this.formComponent = cmp }} />
+                <Toaster key="toaster" remove={this.removeToast} toasts={this.state.toasts} />
+                <SkyLight dialogStyles={dialogStyles} hideOnOverlayClicked afterClose={this._executeAfterModalClose} ref={el => { this.modal = el }} key="modal">
+                    {(
+                        this.state.projectForEdit ?
+                        <EditProjectForm project={this.state.projectForEdit} onSubmit={this.updateProject} onDismiss={this.dismiss} /> :
+                        <EditProjectForm onSubmit={this.createProject} onDismiss={this.dismiss} />
+                    )}
+                </SkyLight>
+
+                <SkyLight dialogStyles={confirmDeleteDialogStyles}
+                    hideOnOverlayClicked
+                    ref={this.getDeleteModalRef} key="delete-modal">
+
+                    <DeleteProjectDialog
+                        confirm={this.deleteConfirm}
+                        dismiss={this.deleteDismiss}
+                        project={this.state.projectForDelete} />
                 </SkyLight>
 
                 <div className="Projekti__controls" key="controls">
-                    <button className="btn btn--primary" onClick={this.openModal}>
+                    <button className="btn btn--primary" onClick={this.openNew}>
                         <MdAdd />
                         Novi Projekt
                     </button>
                 </div>
 
-                <ListTable projects={this.state.projects} key="table" rowClick={this.remove} />
+                <ProjectList
+                    projects={this.state.projects}
+                    activeProject={this.state.projectForEdit}
+                    key="table"
+                    rowRemove={this.askForRemove}
+                    rowClick={this.openProject} />
             </div>
         )
     }
@@ -79,23 +200,13 @@ function getProjects() {
 }
 
 function createProject(project) {
-    return fetch('/api/v1/project/create', {
-        method: 'POST',
-        body: JSON.stringify(project),
-        headers: new Headers({
-            'Content-Type': 'application/json'
-        })
-    })
-    .then(res => res.json())
+    return http.post('/project/create', project)
+}
+
+function updateProject(project) {
+    return http.post('/project/update', project)
 }
 
 function removeProject(project) {
-    return fetch('/api/v1/project/remove', {
-        method: 'POST',
-        body: JSON.stringify(project),
-        headers: new Headers({
-            'Content-Type': 'application/json'
-        })
-    })
-    .then(res => res.json())
+    return http.post('/project/remove', project)
 }

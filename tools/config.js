@@ -14,6 +14,11 @@ module.exports = {
         port: process.env.PORT || 8080,
         host: 'localhost',
         stats: 'errors-only',
+        overlay: true,
+        watchOptions: {
+            aggregateTimeout: 300,
+            poll: 1000
+        },
 
         hot: true,
 

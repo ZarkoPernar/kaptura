@@ -9,9 +9,12 @@ $color5: hsla(229%, 57%, 63%, 1);
 
 /* RGB */
 $bc-light: rgba(252, 252, 252, 1);
-$bc-dark: rgba(48, 48, 54, 1);
-$bc-fire: rgba(232, 96, 110, 1);
-$bc-earth: rgba(66, 75, 84, 1);
+$bc-dark: #2E3645;
+// $bc-fire: rgba(232, 96, 110, 1);
+// $bc-fire: #F68355;
+$bc-fire: #FF7043;
+// $bc-earth: rgba(66, 75, 84, 1);
+$bc-earth: #585A78;
 $bc-water: rgba(107, 127, 215, 1);
 
 $bc-primary: #42a5f5;

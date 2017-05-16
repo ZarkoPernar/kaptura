@@ -1,5 +1,10 @@
 @import './palette.scss';
 
+$medium-device: 64rem;
+
+$font-family: 'Overpass', -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif;
+$body-bg-color: #f6f7f9;
+
 $header-height: 4rem;
 
 $sidenav-width: 16rem;
@@ -7,8 +12,14 @@ $sidenav-z-index: 3;
 
 $nav-highlight: darken($bc-light, 5);
 
+*, *:after, *:before {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif;
+    color: $bc-earth;
+    background-color: $body-bg-color;
+    font-family: $font-family;
 }
 
 .App {
@@ -27,11 +38,12 @@ body {
 }
 
 .App-heading {
-    background-color: $bc-earth;
-    color: $bc-light;
-    font-size: 1rem;
+    background-color: $bc-light;
+    color: $bc-earth;
+    font-size: 2rem;
     z-index: 2;
-    max-height: $header-height;
+    min-height: $header-height;
+    box-shadow: 0 1px 3px rgba(70,70,70,.3);
 
     h2 {
         font-weight: 400;
@@ -40,83 +52,36 @@ body {
     }
     &__link {
         position: absolute;
-        top: 1rem;
+        top: .5rem;
         right: 2rem;
-        color: #fff;
     }
 }
 
 .App-logo {
-    max-height: 30vh;
-    max-width: 30vh;
+    height: $header-height;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+
+    &__text {
+        margin: 0;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: .3rem;
+        text-align: center;
+    }
 }
+
+
 
 .App-body {
-    background-color: #f9f9f9;
     color: #000;
     padding: 0;
-    padding-left: $sidenav-width;
 }
 
-.table {
-    width: 100%;
-    font-size: 16px;
-    border-collapse: collapse;
-    margin-bottom: 1em;
-
-    td {
-        padding: .25em .5em;
-        border-right: $bc-light;
-        border-bottom: $bc-light;
-    }
-
-    td:first-child {
-        border-left: $bc-light;
-    }
-
-    th {
-        text-align: left;
-        background-color: #f1f1f1;
-        padding: .5em;
-        border-right: $bc-light;
-    }
-}
-
-
-
-.btn {
-    font-size: 1rem;
-    font-weight: 600;
-    height: 2.5rem;
-    background-color: darken($bc-light, 10);
-    // border: 1px solid darken($bc-light, 20);
-    border: 0;
-    border-radius: 2px;
-    padding: .75rem 1.5rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-
-
-    &:hover {
-        background-color: darken($bc-light, 15);
-        // cursor: pointer;
-    }
-
-    &--block {
-        width: 100%;
-    }
-
-    &--primary {
-        color: #fff;
-        background-color: $bc-water;
-        border-color: darken($bc-water, 5);
-
-        &:hover {
-            background-color: darken($bc-water, 10);
-        }
-    }
-
-    svg {
-        margin-top: -4px;
-        margin-right: 5px;
+@media (min-width: $medium-device) {
+   .App-body {
+        padding-left: $sidenav-width;
     }
 }

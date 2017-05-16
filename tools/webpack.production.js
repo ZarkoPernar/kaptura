@@ -20,7 +20,7 @@ module.exports = function (env) {
             vendor: ['preact', 'preact-compat', 'redux', 'preact-redux'], // reselect, recompose, others...
         },
         output: {
-            path: CONFIG.CLIENT_OUTPUT_PATH,
+            path: path.resolve(__dirname, CONFIG.CLIENT_OUTPUT_PATH),
             filename: 'bundle-[chunkhash].js',
         },
         resolve: {

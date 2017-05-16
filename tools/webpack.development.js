@@ -2,6 +2,7 @@ let path = require('path')
 let webpack = require('webpack')
 let HtmlWebpackPlugin = require('html-webpack-plugin')
 let ExtractTextPlugin = require('extract-text-webpack-plugin')
+let WebpackNotifierPlugin = require('webpack-notifier')
 
 let CONFIG = require('./config')
 
@@ -29,6 +30,7 @@ module.exports = {
   },
   devServer: CONFIG.WEBPACK_DEV_SERVER_CONFIG,
   plugins: [
+    new WebpackNotifierPlugin(),
     new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin(CONFIG.HtmlWebpackPlugin),
     new webpack.HotModuleReplacementPlugin(),

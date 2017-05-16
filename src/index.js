@@ -10,6 +10,14 @@ function init() {
     root = render( < App /> , document.querySelector('#app'), root)
 }
 
+
+
+if ('production' !== process.env.NODE_ENV) {
+    window.addEventListener('message', e => {
+        console.clear()
+    })
+}
+
 init()
 
 if (module.hot) {

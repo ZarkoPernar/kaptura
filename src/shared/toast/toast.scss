@@ -1,0 +1,45 @@
+// @import '../app';
+
+@keyframes fadeInSlideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+
+
+.toaster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    // z-index: $toaster-z-index;
+    z-index: 99;
+}
+.toast-list {
+    padding: 10px;
+    list-style: none;
+    margin: 0;
+}
+
+.toast {
+    color: #fff;
+    background-color: rgba(0,0,0,.85);
+    border-radius: 3px;
+    padding: 12px 16px;
+    margin-bottom: 5px;
+
+    animation: fadeInSlideDown;
+    animation-iteration-count: 1;
+    animation-timing-function: ease;
+    animation-duration: 0.3s;
+
+    &--closed {
+        display: none;
+    }
+}

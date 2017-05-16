@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "description": "My react, redux, and webpack boilerplate",
   "main": "server/index.js",
+  "types": "server/index",
   "scripts": {
     "start": "node server",
     "test:mocha": "mocha --compilers js:babel-register -w test/testSetup.js src/**/*.spec.js",
     "test": "jest --watch",
     "serve": "nodemon -w server",
-    "build:live": "nodemon --exec ts-node -- ./server/index.ts",
-    "devserver": "cross-env NODE_ENV=development webpack-dev-server --config ./tools/webpack.config.js",
+    "build:live": "nodemon --exec ts-node -- ./server/index.ts --config ./tsconfig.json",
+    "devserver": "cross-env NODE_ENV=development webpack-dev-server --open --config ./tools/webpack.config.js",
     "dev": "npm-run-all --parallel build:live devserver mongo",
     "mongo": "mongod",
     "build": "rimraf ./public && SET NODE_ENV=production && webpack --config ./tools/webpack.config.js -p --colors --profile --progress",
@@ -33,6 +34,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@glimpse/glimpse": "^0.20.8",
     "@kadira/storybook": "^2.35.3",
     "@types/node": "^7.0.18",
     "babel-core": "^6.23.1",
@@ -82,9 +84,12 @@
     "typescript": "^2.3.2",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.1",
-    "webpack-hot-middleware": "^2.17.1"
+    "webpack-hot-middleware": "^2.17.1",
+    "webpack-notifier": "^1.5.0"
   },
   "dependencies": {
+    "@types/express": "^4.0.35",
+    "@types/mongoose": "^4.7.11",
     "body-parser": "1.17.1",
     "dotenv": "4.0.0",
     "express": "4.15.2",
@@ -94,6 +99,7 @@
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "mongoose": "^4.9.8",
+    "morgan": "^1.8.1",
     "normalize.css": "5.0.0",
     "preact": "8.1.0",
     "preact-compat": "3.16.0",
@@ -103,7 +109,9 @@
     "react-datepicker": "^0.46.0",
     "react-dom": "^15.5.4",
     "react-icons": "^2.2.5",
+    "react-places-autocomplete": "^5.0.0",
     "react-router-dom": "^4.1.1",
+    "react-select": "^1.0.0-rc.3",
     "react-skylight": "^0.4.1",
     "redux": "3.6.0",
     "uuid": "^3.0.1"
