@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import SkyLight from 'react-skylight'
-import { MdAdd, MdDelete } from 'react-icons/lib/md'
+import MdAdd from 'react-icons/lib/md/add'
 
-import http from '../shared/httpService'
+import * as apiService from '../shared/apiService'
 import ProjectList from '../projects/list/ProjectList'
 import EditProjectForm from '../projects/edit/Form'
 import DeleteProjectDialog from '../projects/edit/DeleteProjectDialog'
-import updateById from '../utils/updateById'
+import { findByIdAndReplace } from '../utils/array.utils'
 import projectValidator from '../projects/validator'
 import Toaster from '../shared/toast/Toaster'
 
@@ -20,17 +20,33 @@ const dialogStyles = {
     allowRemoval: false,
 }
 
-const confirmDeleteDialogStyles = Object.assign({}, dialogStyles, {
+const confirmDeleteDialogStyles = {
+    ...dialogStyles,
+    // width: null,
+    // height: null,
+    // position: null,
+    // top: null,
+    // left: null,
+    // marginTop: null,
+    // marginLeft: null,
+    // background:  null,
+    // border: null,
+    // zIndex: null,
+    // padding: null,
+    // boxShadow: null,
+    // fontSize: null,
+    // display: null,
+}
 
-})
-
-export default class C extends Component {
+export default class ProjectPage extends Component {
     state = {
         projects: [],
         toasts: [],
         projectForEdit: null,
         projectForDelete: null,
         isModalOpen: false,
+        pageSize: 25,
+        pageNumber: 1,
     }
 
     componentWillMount = () => {
@@ -38,9 +54,25 @@ export default class C extends Component {
     }
 
     getProjects = () => {
-        getProjects().then((res) => {
+        getProjects({
+            pages: {
+                pageSize: this.state.pageSize,
+                pageNumber: this.state.pageNumber,
+            }
+        })
+        .then((res) => {
             this.setState({projects: res})
         })
+        .catch(console.error)
+    }
+
+    nextPage = () => {
+        this.setState(state => ({ pageNumber: state.pageNumber + 1 }), this.getProjects)
+    }
+
+    prevPage = () => {
+        if (this.state.pageNumber === 1) return
+        this.setState(state => ({ pageNumber: state.pageNumber - 1 }), this.getProjects)
     }
 
     createProject = (project) => {
@@ -65,7 +97,6 @@ export default class C extends Component {
     }
 
     handleCreateProjectError = (err) => {
-        console.log(err)
         this.setState(state => ({
             toasts: [...state.toasts, {
                 description: err.message
@@ -77,7 +108,7 @@ export default class C extends Component {
         this.modal.hide()
 
         this.setState(({ projects }) => ({
-            projects: updateById(project, projects),
+            projects: findByIdAndReplace(projects, project),
             projectForEdit: null,
         }))
 
@@ -156,7 +187,7 @@ export default class C extends Component {
 
     render() {
         return (
-            <div className="Projekti">
+            <div className="Projekti page--padding">
                 <Toaster key="toaster" remove={this.removeToast} toasts={this.state.toasts} />
                 <SkyLight dialogStyles={dialogStyles} hideOnOverlayClicked afterClose={this._executeAfterModalClose} ref={el => { this.modal = el }} key="modal">
                     {(
@@ -188,25 +219,28 @@ export default class C extends Component {
                     activeProject={this.state.projectForEdit}
                     key="table"
                     rowRemove={this.askForRemove}
-                    rowClick={this.openProject} />
+                    rowClick={this.openProject}
+                    pageNumber={this.state.pageNumber}
+                    pageSize={this.state.pageSize}
+                    nextPage={this.nextPage}
+                    prevPage={this.prevPage} />
             </div>
         )
     }
 }
 
-function getProjects() {
-    return fetch('/api/v1/project/list')
-        .then(res => res.json())
+function getProjects(params) {
+    return apiService.post('/project/list', params)
 }
 
 function createProject(project) {
-    return http.post('/project/create', project)
+    return apiService.post('/project/create', project)
 }
 
 function updateProject(project) {
-    return http.post('/project/update', project)
+    return apiService.post('/project/update', project)
 }
 
 function removeProject(project) {
-    return http.post('/project/remove', project)
+    return apiService.post('/project/remove', project)
 }

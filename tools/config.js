@@ -25,7 +25,10 @@ module.exports = {
         proxy: {
             '/api': {
                 target: 'http://localhost:5000'
-            }
+            },
+            '/auth': {
+                target: 'http://localhost:5000'
+            },
         },
 
         // IMPORTANT: this option must come after proxy settings for react-router to work on reload

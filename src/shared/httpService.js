@@ -1,40 +1,22 @@
-const API_URL = '/api/v1'
+export default {
+    get,
+    post,
+}
 
-export default function http(params) {
-    return fetch(API_URL + params.url, {
-        credentials: 'include',
-        method: params.method,
-        body: JSON.stringify(params.body),
-        headers: new Headers({
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        })
+export function get(url, requestOptions) {
+    return fetch(url, {
+        credentials: 'same-origin',
+        method: 'GET',
+        ...requestOptions,
     })
-    .then(handleJSON)
 }
 
-http.get = function(url, options) {
-    return http({ url, method: 'GET'})
+export function post(url, data, requestOptions) {
+    return fetch(url, {
+        credentials: 'same-origin',
+        method: 'POST',
+        body: JSON.stringify(data),
+        ...requestOptions,
+    })
 }
 
-http.post = function(url, body, options) {
-    return http({ url, body, method: 'POST'})
-}
-
-function handleJSON(res) {
-    try {
-        const result = res.json()
-
-        if (!res.ok) {
-            return result.then(handleJSONErrorResolve)
-        }
-        return result
-
-    } catch(err) {
-        throw err
-    }
-}
-
-function handleJSONErrorResolve(res) {
-    throw res
-}

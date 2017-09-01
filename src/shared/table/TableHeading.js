@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
 
-class TableHeadingComponent extends Component {
+class TableHeadingComponent extends PureComponent {
     render() {
         return (
             <th className="table__heading">

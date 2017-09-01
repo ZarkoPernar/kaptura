@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
+import classnames from 'classnames'
 
 import appLinks from './const/appLinks'
 
@@ -20,7 +21,9 @@ const renderedLinks = appLinks.map(link => {
 export default class AppSidenav extends Component {
     render() {
         return (
-            <div className="App-sidenav">
+            <div className={classnames('App-sidenav', {
+                'App-sidenav--is-open': this.props.isOpen,
+            })}>
                 <div className="App-sidenav__container">
                     <div className="App-logo">
                         <h2 className="App-logo__text">
@@ -31,6 +34,10 @@ export default class AppSidenav extends Component {
                     <nav className="App-sidenav__nav">
                         { renderedLinks }
                     </nav>
+
+                    <div key="logout" className="App-sidenav__logout">
+                        <a href="/auth/logout" className="btn btn--block text-center">Log Out</a>
+                    </div>
                 </div>
             </div>
         )

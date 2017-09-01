@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 
-export default class C extends Component {
-    componentDidMount() {
-        console.log('home')
-    }
+import Card from '../shared/Card'
 
+export default class C extends Component {
     render() {
         return (
-            <div>
-                Pocetna
+            <div className="page--padding">
+                <Card>
+                    Pocetna
+                </Card>
             </div>
         )
     }

@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
 import classnames from 'classnames'
 
 const DEFAULT_POSITION = 'translate3d(0, -105%, 0)'
 
-class TableRowOverlayComponent extends Component {
+class TableRowOverlayComponent extends PureComponent {
     static propTypes = {
         active: PropTypes.bool,
         offsetTop: PropTypes.number,

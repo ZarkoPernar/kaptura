@@ -1,13 +1,14 @@
 const STR_TYPE = 'string'
 
-export default function convertDates(obj: any) {
-    if (isString(obj.start_date)) {
-        obj.start_date = covertStrToDate(obj.start_date)
-    }
+export default function convertDates(obj: any, names: string[]): any {
+    return names.reduce(convert, obj)
+}
 
-    if (isString(obj.end_date)) {
-        obj.end_date = covertStrToDate(obj.end_date)
+function convert(obj, name) {
+    if (isString(obj[name])) {
+        obj[name] = covertStrToDate(obj[name])
     }
+    return obj
 }
 
 function covertStrToDate(date: string): Date {
@@ -17,3 +18,4 @@ function covertStrToDate(date: string): Date {
 function isString(val): boolean {
     return typeof val === STR_TYPE
 }
+

@@ -1,0 +1,15 @@
+@import '../App';
+
+.page {
+    &--padding {
+        padding: $page-padding-sm;
+    }
+}
+
+@media (min-width: $medium-device) {
+    .page {
+        &--padding {
+            padding: $page-padding-md;
+        }
+    }
+}

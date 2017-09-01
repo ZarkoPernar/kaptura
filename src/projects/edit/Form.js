@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { v4 as uid } from 'uuid'
+import { geocodeByPlaceId } from 'react-places-autocomplete'
 
 import FormGroup from '../../shared/form/FormGroup'
 import Button from '../../shared/Button'
@@ -61,11 +62,24 @@ class EditProjectForm extends Component {
     }
 
     inputChanged = (value, name) => {
-        console.log(value, name)
-        this.setState({
-            project: {
-                [name]: value
-            }
+        this.setState((prevState) => ({
+                project: Object.assign(prevState.project, {
+                    [name]: value
+                })
+            })
+        )
+    }
+
+    _onAddressSelect = ({ address, placeId }) => {
+        geocodeByPlaceId(placeId, (err, latLng, results) => {
+            console.log(latLng, results)
+            const res = results[0]
+            this.setState({
+                project: {
+                    latitude: latLng.lat,
+                    longitude: latLng.lng,
+                }
+            })
         })
     }
 
@@ -82,7 +96,7 @@ class EditProjectForm extends Component {
                 </h3>
                 <input key="_id" name="_id" defaultValue={this.props.project._id} type="text" hidden />
 
-                <FormGroup label="Ime" name="name" key="name" onChange={this.inputChanged}  value={this.props.project.name}/>
+                <FormGroup label="Ime" name="name" key="name" onChange={this.inputChanged} value={this.props.project.name}/>
 
                 <FormGroup label="Šifra" name="number" key="number" onChange={this.inputChanged} value={this.props.project.number} />
 
@@ -94,7 +108,9 @@ class EditProjectForm extends Component {
 
                 <FormGroup label="Završava" name="end_date" key="end_date" type="date" onChange={this.inputChanged} value={this.props.project.end_date} />
 
-                <FormGroup label="Adresa" name="google_address" key="google_address" type="address" onChange={this.inputChanged} value={this.props.project.google_address} />
+                <FormGroup label="Adresa" name="google_address" key="google_address" type="address"
+                    onAddressSelect={this._onAddressSelect}
+                    onChange={this.inputChanged} value={this.props.project.google_address} />
 
                 <div style={actionStyles} key="actions">
                     <Button key="yes" color="primary" type="submit">

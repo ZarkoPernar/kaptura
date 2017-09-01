@@ -1,0 +1,18 @@
+@import '../App.scss';
+
+.Korisnik-page {
+
+}
+
+.login-container {
+    background-color: #fff;
+    padding: 2rem 3rem;
+    box-shadow: 3px 3px 0 rgba(70,70,70,.15);
+    border: 1px solid #ddd;
+}
+
+.login-actions {
+    .btn {
+        margin-right: 1rem;
+    }
+}

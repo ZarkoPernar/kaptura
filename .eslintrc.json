@@ -22,7 +22,6 @@
     "jest": true
   },
   "rules": {
-    "linebreak-style": ["error", "windows"],
     "quotes": 0,
     "no-console": 1,
     "no-debugger": 1,

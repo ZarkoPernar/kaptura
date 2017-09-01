@@ -63,7 +63,6 @@ class FormGroupComponent extends PureComponent {
 
     componentWillReceiveProps(nextProps) {
         if (hasValue(nextProps.value)) {
-            console.log('props: ' + this.props.name, formatValueForInput(nextProps.value, this.props.type))
             this.setState({
                 value: formatValueForInput(nextProps.value, this.props.type),
                 hasValue: true,
@@ -97,10 +96,10 @@ class FormGroupComponent extends PureComponent {
     }
 
     change = (value) => {
-        // this.setState({
-        //     value,
-        //     hasValue: hasValue(value),
-        // })
+        this.setState({
+            value,
+            hasValue: hasValue(value),
+        })
 
         this.notifyChange(formatValueForCallback(value), this.props.name)
     }
@@ -194,7 +193,7 @@ class FormGroupComponent extends PureComponent {
         if (!this.state.googleLoaded) return this.renderText()
 
         return (
-            <PlacesAutocomplete inputProps={inputProps} classNames={classNames} />
+            <PlacesAutocomplete onSelect={this.props.onAddressSelect} inputProps={inputProps} classNames={classNames} />
         )
     }
 

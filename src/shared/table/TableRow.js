@@ -1,11 +1,15 @@
-import React, { Component } from 'react'
+import React, { Component, PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
 import classnames from 'classnames'
 
-class TableRowComponent extends Component {
+class TableRowComponent extends PureComponent {
     static propTypes = {
 
+    }
+
+    componentWillUpdate() {
+        console.log('update', 'TableRowComponent')
     }
 
     render() {

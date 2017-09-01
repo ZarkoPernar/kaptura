@@ -25,7 +25,7 @@ export default class Toaster extends Component {
             <div key="toaster" className="toaster" hidden={!this.props.toasts.length}>
                 <ul className="toast-list">
                     { this.props.toasts.map((data) => {
-                        return (<Toast key={data.id | Math.random()}
+                        return (<Toast key={data.id || Math.random()}
                             toastData={data}
                             dismiss={this.props.remove} />
                         )

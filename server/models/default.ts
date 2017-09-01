@@ -1,22 +1,36 @@
+export interface ITimestampsSchema {
+    updated_at: Date
+    created_at: Date
+    deleted_at: Date
+}
 
+export interface IModifiedBySchema {
+    created_by: string
+    updated_by: string
+    deleted_by: string
+}
 
-export function timestamps(schema, options) {
+export interface ILocationSchema {
+    google_address: string,
+    address: string,
+    city: string,
+    state: string,
+    country: string,
+    country_code: string,
+    latitude: number,
+    longitude: number,
+    position: {
+        type: 'Point',
+        coordinates: number[],
+    }
+}
+
+export function modifiedBy(schema, options) {
     schema.add({
         created_by: String,
-        updated_at: Date,
-        created_at: Date,
-        deleted_at: Date,
+        updated_by: String,
+        deleted_by: String,
     })
-
-    schema.pre('save', function(next) {
-        this.created_at = this.created_at === undefined ? new Date() : this.created_at
-        this.updated_at = new Date()
-        next()
-    })
-
-    // if (options && options.index) {
-    //     schema.path('lastMod').index(options.index)
-    // }
 }
 
 export function location(schema, options) {
@@ -26,20 +40,16 @@ export function location(schema, options) {
         city: String,
         state: String,
         country: String,
-        lat: Number,
-        lng: Number,
-        // pos: {
-        //     type: {
-        //         type: String,
-        //         default: 'Point'
-        //     },
-        //     coordinates: [Number]
-        // }
+        country_code: String,
+        latitude: Number,
+        longitude: Number,
+        position: {
+            type: {
+                type: String,
+                // default: 'Point'
+            },
+            coordinates: [Number]
+        }
     })
-
-    // schema.pre('save', function(next) {
-    //     this.updated_at = new Date
-    //     next()
-    // })
 }
 

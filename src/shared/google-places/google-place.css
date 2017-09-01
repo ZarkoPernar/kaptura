@@ -1,0 +1,10 @@
+.google-address__addon {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 4;
+}
+
+.address-modal .angular-google-map-container {
+    height: 325px;
+}

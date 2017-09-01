@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
 import TableHeading from './TableHeading'
 
-class TableHeadComponent extends Component {
+class TableHeadComponent extends PureComponent {
     renderColumns = () => {
         const cols = []
         if (this.props.withindex) {

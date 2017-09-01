@@ -1,4 +1,18 @@
-import { MdDashboard, MdStore, MdAssignment, MdPeopleOutline, MdBook } from 'react-icons/lib/md'
+// import {
+//     MdDashboard,
+//     MdStore,
+//     MdAssignment,
+//     MdPeopleOutline,
+//     MdBook,
+// } from 'react-icons/lib/md'
+
+import MdDashboard from 'react-icons/lib/md/dashboard'
+import MdTimer from 'react-icons/lib/md/timer'
+import MdStore from 'react-icons/lib/md/store'
+import MdAssignment from 'react-icons/lib/md/assignment'
+import MdPeopleOutline from 'react-icons/lib/md/people-outline'
+import MdBook from 'react-icons/lib/md/book'
+
 
 export default [
     {
@@ -6,6 +20,11 @@ export default [
         key: 'home',
         title: 'Početna',
         icon: MdDashboard,
+    }, {
+        to: '/sati',
+        key: 'sati',
+        title: 'Sati',
+        icon: MdTimer,
     }, {
         to: '/projekti',
         key: 'projekti',

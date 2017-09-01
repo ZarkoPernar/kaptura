@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
 import classnames from 'classnames'
 
-class TableBodyComponent extends Component {
+class TableBodyComponent extends PureComponent {
 
     static propTypes = {
 
@@ -16,8 +16,10 @@ class TableBodyComponent extends Component {
 
     render() {
         return (
-            <td className={classnames('table__cell', { 'table__cell--active': this.props.active, })}>
-                {this.props.children}
+            <td className={classnames('table__cell', { 'table__cell--active': this.props.active, })} {...this.props}>
+                <div className="table__cell__content">
+                    {this.props.children}
+                </div>
             </td>
         )
     }

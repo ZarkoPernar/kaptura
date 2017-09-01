@@ -1,15 +1,21 @@
 @import '../../App.scss';
 
+$size: .5em;
+
+textarea {
+    display: block;
+}
+
 .form-group {
     font-size: 1rem;
     display: block;
-    margin-bottom: 10px;
-    padding-top: 2rem;
+    margin-bottom: 3 * $size;
+    padding-top: 2 * $size;
     position: relative;
 
     label {
         position: absolute;
-        bottom: .6em;
+        top: 3 * $size;
         left: 0;
         color: $bc-earth;
         font-weight: 500;
@@ -40,7 +46,7 @@
         }
 
         label {
-            transform: translate3d(0, -100%, 0) scale(1);
+            transform: translate3d(0, -(3 * $size), 0) scale(1);
             opacity: 1;
         }
     }
@@ -74,7 +80,7 @@
 .form-control {
     border: 0;
     width: 100%;
-    padding: .6em 0;
+    padding: $size 0;
     border-bottom: 1px solid #ccc;
     background-color: transparent;
 

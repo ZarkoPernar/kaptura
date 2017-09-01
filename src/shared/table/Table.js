@@ -1,10 +1,10 @@
-import React, { Component, Children } from 'react'
+import React, { PureComponent, Children } from 'react'
 import PropTypes from 'prop-types'
 
 import TableRowOverlay from './TableRowOverlay'
 import './table.scss'
 
-class TableComponent extends Component {
+class TableComponent extends PureComponent {
 
     render () {
         return (
