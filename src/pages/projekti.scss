@@ -1,4 +1,18 @@
+@import '../App.scss';
+
 .Projekti__controls {
-    margin-bottom: 1.5em;
+    margin-bottom: 1em;
     display: flex;
+    padding: 1em 0 0 1em;
 }
+
+@media (min-width: $medium-device) {
+    .Projekti__controls {
+        padding: 0;
+    }
+
+    .EditProject__form {
+        min-width: 36rem;
+    }
+}
+

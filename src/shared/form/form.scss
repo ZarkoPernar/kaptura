@@ -19,13 +19,14 @@ textarea {
         left: 0;
         color: $bc-earth;
         font-weight: 500;
-        transform: scale(.95);
+        // transform: scale(.95);
         opacity: .85;
         transition: .2s ease transform, .2s ease opacity;
         z-index: 2;
     }
 
-    &:after {
+    &:after,
+    .form-group__line {
         content: '';
         background-color: $bc-earth;
         position: absolute;
@@ -41,7 +42,8 @@ textarea {
     }
 
     &--active {
-        &:after {
+        &:after,
+        .form-group__line {
             transform: scaleX(1);
         }
 
@@ -61,7 +63,8 @@ textarea {
             border-color: $bc-fire;
         }
 
-        &:after {
+        &:after,
+        .form-group__line {
             background-color: $bc-fire;
         }
     }
@@ -88,6 +91,21 @@ textarea {
         outline: 0;
         border-color: $bc-earth;
     }
-
-
 }
+
+.rc-time-picker {
+    display: block;
+
+    &-input {
+        color: initial;
+        font-size: 1rem;
+        border: 0;
+        height: auto;
+        line-height: 1.15;
+        border-bottom: 1px solid #ccc;
+        background-color: transparent;
+        padding: $size 0;
+
+    }
+}
+

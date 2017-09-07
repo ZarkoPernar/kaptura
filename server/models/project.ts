@@ -15,8 +15,11 @@ export interface IProject extends ITimestampsSchema, ILocationSchema, IModifiedB
     end_date?: string
     completed: boolean
     project_status: number
+    offlineId?: string
     options: Object
 }
+
+const UPDATE_OPTIONS = { new: true }
 
 const ProjectSchema = new mongoose.Schema({
     name: {
@@ -32,6 +35,7 @@ const ProjectSchema = new mongoose.Schema({
     end_date: Date,
     completed: Boolean,
     project_status: Number,
+    offlineId: String,
     options: {
         type: Object,
         default: {},
@@ -62,9 +66,10 @@ export default {
             .equals(user.company_id)
     },
 
-    create({ item, user }: { item: IProject, user: IUser }) {
+    create({ item, user, offlineId }: { item: IProject, user: IUser, offlineId?: string }) {
         let newItem = {
             ...item,
+            offlineId,
             created_by: user._id,
             company_id: user.company_id,
         }
@@ -80,7 +85,7 @@ export default {
     },
 
     update({ item, user }: { item: IProject, user: IUser }) {
-        return Model.findByIdAndUpdate(item._id, { $set: item })
+        return Model.findByIdAndUpdate(item._id, { $set: item }, UPDATE_OPTIONS)
             .where('company_id')
             .equals(user.company_id)
     },

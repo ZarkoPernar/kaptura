@@ -3,23 +3,26 @@ import PropTypes from 'prop-types'
 
 import classnames from 'classnames'
 
+const FUNC = 'function'
 class TableRowComponent extends PureComponent {
     static propTypes = {
 
     }
 
-    componentWillUpdate() {
-        console.log('update', 'TableRowComponent')
+    onClick = (event) => {
+        this.props.onClick(this.props.item)
     }
 
     render() {
-        const { active, children, ...rest } = this.props
         return (
-            <tr className={classnames('table__row', {
-                'table__row--active': active === true,
-                'table__row--clickable': this.props.onClick !== undefined,
-            })} {...rest}>
-                {children}
+            <tr onClick={this.onClick} className={classnames('table__row', {
+                'table__row--striped': this.props.striped === true,
+                'table__row--condensed': this.props.condensed === true,
+                'table__row--hover': this.props.hover === true,
+                'table__row--bordered': this.props.bordered === true,
+                'table__row--clickable': typeof this.props.onClick === FUNC,
+            })}>
+                { this.props.children }
             </tr>
         )
     }

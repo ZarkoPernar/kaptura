@@ -17,3 +17,12 @@ $padd: .25em 1em;
         background-color: #eee;
     }
 }
+
+.dd__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 3;
+    background-color: #fff;
+}

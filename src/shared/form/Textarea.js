@@ -13,7 +13,7 @@ class TextareaComponent extends Component {
     }
 
     static defaultProps = {
-        rows: 3
+        rows: 2
     }
 
     constructor(props) {
@@ -22,6 +22,10 @@ class TextareaComponent extends Component {
         this.state = {
             rows: this.props.rows
         }
+    }
+
+    onChange = (e) => {
+        this.props.onChange(e.target.value, this.props.name)
     }
 
     onKeyDown = (event) => {
@@ -38,7 +42,7 @@ class TextareaComponent extends Component {
 
     render() {
         return (
-            <textarea {...this.props} onKeyDown={this.onKeyDown} rows={this.state.rows} />
+            <textarea className="form-control" {...this.props} onKeyDown={this.onKeyDown} rows={this.state.rows} onChange={this.onChange} />
         )
     }
 }

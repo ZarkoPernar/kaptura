@@ -106,8 +106,8 @@ describe('Clock', () => {
 
         it('returns true if last log is unfinished', () => {
             const logs = [
-                checkOut(checkIn()),
                 checkIn(),
+                checkOut(checkIn()),
             ]
             const actualResult = isUnfinished(logs)
             const expectedResult = true

@@ -4,10 +4,11 @@ import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom'
 import MdPersonOutline from 'react-icons/lib/md/person-outline'
 import moment from 'moment'
 import 'moment/locale/hr'
+import classnames from 'classnames'
 
 moment.locale('hr')
-import MdMenu from 'react-icons/lib/md/menu'
 
+import MdMenu from 'react-icons/lib/md/menu'
 import appStore from './appStore'
 import AppSidenav from './AppSidenav'
 // import RegisterHistory from './RegisterHistory'
@@ -18,6 +19,8 @@ import KorisnikComponent from './pages/Korisnik'
 import ProjektiComponent from './pages/Projekti'
 import LoginComponent from './pages/Login'
 import Clock from './clock'
+import Button from './shared/Button'
+import ProjectChartsComponent from './projects/ProjectChartsComponent'
 
 import 'normalize.css'
 import './App.scss'
@@ -27,9 +30,13 @@ const toggleMenuOpen = ({ menuIsOpen }) => ({
     menuIsOpen: !menuIsOpen,
 })
 
+const TAB_KEY = 9
+
 export default class App extends Component {
     state = {
         menuIsOpen: false,
+        isTabbing: false,
+        isClicking: false,
     }
 
     toggleMenuOpen = (event) => {
@@ -37,43 +44,61 @@ export default class App extends Component {
         this.setState(toggleMenuOpen)
     }
 
-    closeMenu = () => {
+    onClick = () => {
         this.setState({
             menuIsOpen: false,
+            isClicking: true,
+            isTabbing: false,
         })
+    }
+
+    onKeyDown = (event) => {
+        if (event.keyCode === TAB_KEY) {
+            this.setState({
+                isTabbing: true,
+                isClicking: false,
+            })
+        }
     }
 
     render() {
         return (
             <Provider store={appStore}>
                 <Router basename="/">
-                    <div className="App" onClick={this.closeMenu}>
+                    <div className={classnames('App', {
+                        'App--is-tabbing': this.state.isTabbing,
+                        'App--is-clicking': this.state.isClicking,
+                    })} onClick={this.onClick} onKeyDown={this.onKeyDown}>
                         {/* <RegisterHistory key="history" /> */}
 
-                        <AppSidenav key="sidenav" isOpen={this.state.menuIsOpen} />
+                        <AppSidenav isOpen={this.state.menuIsOpen} />
 
-                        <div className="App-heading" key="header">
-                            <button className="App-heading__menu-btn" onClick={this.toggleMenuOpen}>
-                                <MdMenu />
-                            </button>
+                        <div className="App-heading">
+                            <span className="App-heading__menu-btn">
+                                <Button clear iconOnly large onClick={this.toggleMenuOpen}>
+                                    <MdMenu />
+                                </Button>
+                            </span>
 
-                            <div style={{ padding: '0.7rem 0px 0px 4rem'}}>
-                                <Clock />
-                            </div>
+                            <Clock />
 
-                            <NavLink to="/korisnik" className="App-heading__link" key="korisnik" activeClassName="App-heading__link--active" exact>
-                                <MdPersonOutline />
+                            <NavLink to="/korisnik" className="App-heading__link" activeClassName="App-heading__link--active" exact>
+                                <Button clear iconOnly large>
+                                    <MdPersonOutline />
+                                </Button>
                             </NavLink>
+
                         </div>
 
-                        <div className="App-body" key="body">
-                            <Route exact path="/" component={HomeComponent} key="home" />
-                            <Route path="/sati" component={SatiComponent} key="sati" />
-                            <Route path="/tvrtka" component={TvrtkaComponent} key="tvrtka" />
-                            <Route path="/korisnik" component={KorisnikComponent} key="korisnik" />
-                            <Route path="/projekti" component={ProjektiComponent} key="projekti" />
+                        <div className="App-body">
+                            <Route path="/" component={HomeComponent} exact />
+                            <Route path="/sati" component={SatiComponent} />
+                            <Route path="/tvrtka" component={TvrtkaComponent} />
+                            <Route path="/korisnik" component={KorisnikComponent} />
+                            <Route path="/projekti" component={ProjektiComponent} exact />
+                            <Route path="/projekti/charts" component={ProjectChartsComponent} exact />
 
-                            <Route path="/login" component={LoginComponent} key="login" />
+                            <Route path="/login" component={LoginComponent} />
                         </div>
                     </div>
                 </Router>

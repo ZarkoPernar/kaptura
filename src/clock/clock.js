@@ -1,5 +1,5 @@
 
-export const getLast = arr => arr[arr.length - 1]
+export const getLast = arr => arr[0]
 
 
 export function checkIn(log) {

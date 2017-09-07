@@ -1,56 +1,69 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { denormalize } from 'normalizr'
 
-import { updateLog, loadLogs } from '../clock/reducer'
-import { list, update } from '../clock/clock.api'
+import { updateLog } from '../clock/reducer'
 import Logs from '../clock/Logs'
-import { logsSchema } from '../clock/reducer'
+import EditTimeForm from '../clock/EditTimeForm'
+import { selector } from '../clock/reducer'
+import Modal from '../shared/modal'
 
 import './sati.scss'
 
+
 const mapStateToProps = state => {
     return {
-        logs: denormalize(state.logs.result, logsSchema, state.logs.entities)
+        logs: selector(state)
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        // loadLogs: () => dispatch(loadLogs()),
         updateLog: (log) => dispatch(updateLog(log)),
     }
 }
 
-
-
-const StoreLogs = connect(mapStateToProps, mapDispatchToProps)(Logs)
-
-export default class SatiPage extends Component {
-    componentWillMount() {
-        this.refresh()
+class SatiPage extends Component {
+    state = {
+        timeForEdit: null,
+        isEditModalOpen: false,
     }
 
-    refresh = () => {
-        // list().then((res) => {
-        //     // this.setState(state => ({
-        //     //     logs: res || state.logs
-        //     // }))
+    selectLog = (log) => {
+        this.setState({
+            timeForEdit: log,
+            isEditModalOpen: true,
+        })
+    }
 
-        //     appStore.dispatch({
-        //         type: 'ADD_LOGS',
-        //         payload: res
-        //     })
-        // })
+    _executeAfterModalClose = () => {
+        if (!this.state.isEditModalOpen) return
+
+        this.setState({
+            timeForEdit: null,
+            isEditModalOpen: false,
+        })
+    }
+
+    // TODO:
+    updateLog = (log) => {
+        this.props.updateLog(log)
+        this._executeAfterModalClose()
     }
 
     render() {
+        const timeForEdit = this.state.timeForEdit === null ? undefined : this.state.timeForEdit
         return (
             <div className="Sati page--padding">
-                <div className="table-holder">
-                    <StoreLogs />
-                </div>
+                <Modal isOpen={this.state.isEditModalOpen} onRequestClose={this._executeAfterModalClose}>
+                    <EditTimeForm timeLog={timeForEdit} onSubmit={this.updateLog} onDismiss={this._executeAfterModalClose} />
+                </Modal>
+
+                <Logs onSelect={this.selectLog} logs={this.props.logs} />
             </div>
         )
     }
 }
+
+const StoreSatiPage = connect(mapStateToProps, mapDispatchToProps)(SatiPage)
+
+export default StoreSatiPage

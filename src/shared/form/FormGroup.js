@@ -2,6 +2,7 @@ import React, { Component, PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import debounce from 'lodash/debounce'
 import DatePicker from 'react-datepicker'
+import TimePicker from 'rc-time-picker'
 import moment from 'moment'
 import { v4 as uid } from 'uuid'
 import PlacesAutocomplete from 'react-places-autocomplete'
@@ -11,14 +12,19 @@ import classnames from 'classnames'
 import { hasValue, formatValueForCallback, formatValueForInput } from './utils'
 
 import 'react-datepicker/dist/react-datepicker.css'
+import 'rc-time-picker/assets/index.css'
 import './form.scss'
 
 const DEFAULT_INPUT_TYPE = 'text'
 const DATE_TYPE = 'date'
 const DATE_SHORT_FORMAT = 'DD.MM.YYYY'
+const TIME_FORMAT = 'HH:mm';
+
+const NOW = moment().hour(0).minute(0)
 
 // import Select from './Select'
 // import Textarea from './Textarea'
+
 
 class FormGroupComponent extends PureComponent {
     static propTypes = {
@@ -47,10 +53,10 @@ class FormGroupComponent extends PureComponent {
             this.notifyChange = debounce(this.notifyChange, props.debounce)
         }
 
-        if (props.value) {
+        // if (props.value) {
             this.state.value = formatValueForInput(props.value, (props.type))
             this.state.hasValue = hasValue(props.value)
-        }
+        // }
 
         if (props.type === DATE_TYPE && Boolean(props.value)) {
             this.state.value = moment(props.value)
@@ -62,12 +68,12 @@ class FormGroupComponent extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (hasValue(nextProps.value)) {
+        // if (hasValue(nextProps.value)) {
             this.setState({
                 value: formatValueForInput(nextProps.value, this.props.type),
-                hasValue: true,
+                hasValue: hasValue(nextProps.value),
             })
-        }
+        // }
     }
 
     // componentWillUpdate() {
@@ -214,6 +220,24 @@ class FormGroupComponent extends PureComponent {
         )
     }
 
+    timeChange = (val) => {
+        this.change(
+            val,
+            this.props.name
+        )
+
+    }
+    renderTimepicker() {
+        return (
+            <TimePicker
+                showSecond={false}
+                value={this.state.value}
+                onChange={this.timeChange}
+                format={TIME_FORMAT}
+            />
+        )
+    }
+
     renderSelect = () => {
         /*return (
             <Select
@@ -259,6 +283,8 @@ class FormGroupComponent extends PureComponent {
                 return this.renderGroup(this.renderSelect())
             case 'date':
                 return this.renderGroup(this.renderDatepicker())
+            case 'time':
+                return this.renderGroup(this.renderTimepicker())
             case 'address':
                 return this.renderGroup(this.renderAddress())
             default:

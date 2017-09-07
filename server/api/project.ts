@@ -64,20 +64,19 @@ export async function create(request: IRequest, response: Response) {
     const item: IProject = request.body
 
     const newItem = convertDates(item, ['start_date', 'end_date'])
-
+    const offlineId = newItem._id
     delete newItem._id
 
     try {
         const result = await ProjectModel.create({
             item: newItem,
+            offlineId,
             user: request.user,
         })
         response.status(200).json(result)
     } catch(err) {
         response.status(412).json(err)
     }
-
-
 }
 
 export async function update(request: IRequest, response: Response) {

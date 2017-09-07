@@ -50,9 +50,9 @@ export async function list(request: IRequest, response: Response) {
     }
 
     const result = await query
-        // .sort({
-        //     created_at: -1,
-        // })
+        .sort({
+            check_in: -1,
+        })
         .skip(params.pages.pageSize * (params.pages.pageNumber - 1))
         .limit(params.pages.pageSize)
 
@@ -63,14 +63,16 @@ export async function create(request: IRequest, response: Response) {
     const item: ITimesheet = request.body
     console.log(request.body)
     const newItem = convertDates(item, ['check_in', 'check_out'])
-
+    const offlineId = newItem._id
     delete newItem._id
 
     try {
-        const result = await TimesheetModel.create({
+        const result: any = await TimesheetModel.create({
             item: newItem,
             user: request.user,
+            offlineId,
         })
+
         response.status(200).json(result)
     } catch(err) {
         response.status(412).json(err)

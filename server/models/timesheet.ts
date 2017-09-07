@@ -15,9 +15,12 @@ export interface ITimesheet extends ITimestampsSchema, IModifiedBySchema {
     description?: string
     check_in?: string
     check_out?: string
+    offlineId?: string
 }
 
-const UPDATE_OPTIONS = { new: true }
+const UPDATE_OPTIONS = {
+    new: true
+}
 
 const TimesheetSchema = new mongoose.Schema({
     company_id: {
@@ -36,6 +39,7 @@ const TimesheetSchema = new mongoose.Schema({
     description: String,
     check_in: Date,
     check_out: Date,
+    offlineId: String,
 }, {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 })
@@ -62,9 +66,10 @@ export default {
             .equals(user.company_id)
     },
 
-    create({ item, user }: { item: ITimesheet, user: IUser }) {
+    create({ item, user, offlineId }: { item: ITimesheet, user: IUser, offlineId?: string }) {
         let newItem = {
             ...item,
+            offlineId,
             created_by: user._id,
             company_id: user.company_id,
         }

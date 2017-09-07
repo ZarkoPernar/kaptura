@@ -2,10 +2,11 @@ import moment from 'moment'
 
 const STRING_TYPE = 'string'
 const NUMBER_TYPE = 'number'
-const OBJECT_TYPE = 'object'
+const OBJECT_TYPE = '[object Object]'
 
 const TEXT_INPUT_TYPE = 'text'
 const DATE_INPUT_TYPE = 'date'
+const TIME_INPUT_TYPE = 'time'
 
 export function hasValue(value) {
     switch(typeof value) {
@@ -45,7 +46,9 @@ export function formatValueForInput(value, type) {
         case NUMBER_TYPE:
             return value
         case DATE_INPUT_TYPE:
-            return moment(value)
+            return value === undefined ? value : moment(value)
+        case TIME_INPUT_TYPE:
+            return value === undefined ? value : moment(value)
         default:
             return value
     }

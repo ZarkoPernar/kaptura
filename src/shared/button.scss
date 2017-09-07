@@ -39,7 +39,8 @@ $button-default-border: 1px solid darken($bc-light, 20);
     }
 
     &:active {
-        transform: scale(.98);
+        // transform: scale(.98);
+        outline: none !important;
     }
 
     &--block {
@@ -77,18 +78,28 @@ $button-default-border: 1px solid darken($bc-light, 20);
         margin-right: 5px;
     }
 
-    &--icon-only {
-        padding: .5em;
-
-        svg {
-            font-size: 1.5em;
-            margin: 0;
-            margin-top: -4px;
-        }
-    }
 
     &--small {
         height: 2em;
+    }
+
+    &--large {
+        height: 3em;
+        padding: .9rem 1.5rem;
+    }
+
+    &--icon-only {
+        padding: .5em;
+
+        &--large {
+            padding: .5em;
+        }
+
+        svg {
+            font-size: 2em;
+            margin: 0;
+            margin-top: -4px;
+        }
     }
 
     &--small.btn--icon-only {
@@ -101,10 +112,32 @@ $button-default-border: 1px solid darken($bc-light, 20);
         background-color: transparent;
         box-shadow: none;
         outline-color: $bc-dark;
+        z-index: 1;
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background-color: rgba(70, 70, 70, .2);
+            opacity: 0;
+            transition: .3s ease opacity;
+        }
 
         &:hover {
-            background-color: rgba(70, 70, 70, .2);
+            background-color: transparent;
+
+            &:after {
+                opacity: 1;
+            }
         }
+    }
+
+    &--block {
+        width: 100%;
     }
 
     &--clear.btn--color-primary {
@@ -120,7 +153,30 @@ $button-default-border: 1px solid darken($bc-light, 20);
 
     // Social
 
+    &[disabled] {
+        cursor: not-allowed;
+
+    }
+
     &--google {
         background-color: #DD4B39;
     }
+}
+
+
+.ripples {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    z-index: -1;
+}
+.ripple {
+    position: absolute;
+    background-color: rgba(70, 70, 70, .5);
+    border-radius: 50%;
+    transition: .4s ease transform, .4s ease opacity;
+    z-index: -1;
 }

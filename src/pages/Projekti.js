@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
-import SkyLight from 'react-skylight'
 import MdAdd from 'react-icons/lib/md/add'
+import { v4 as uid } from 'uuid'
 
 import * as apiService from '../shared/apiService'
-import ProjectList from '../projects/list/ProjectList'
+import ProjectList from '../projects/ProjectList'
 import EditProjectForm from '../projects/edit/Form'
 import DeleteProjectDialog from '../projects/edit/DeleteProjectDialog'
 import { findByIdAndReplace } from '../utils/array.utils'
 import projectValidator from '../projects/validator'
 import Toaster from '../shared/toast/Toaster'
+import Modal from '../shared/modal'
+import Button from '../shared/Button'
 
 import './projekti.scss'
 
@@ -44,7 +46,8 @@ export default class ProjectPage extends Component {
         toasts: [],
         projectForEdit: null,
         projectForDelete: null,
-        isModalOpen: false,
+        isEditModalOpen: false,
+        isDeleteModalOpen: false,
         pageSize: 25,
         pageNumber: 1,
     }
@@ -71,22 +74,35 @@ export default class ProjectPage extends Component {
     }
 
     prevPage = () => {
-        if (this.state.pageNumber === 1) return
+        // if (this.state.pageNumber === 1) return
         this.setState(state => ({ pageNumber: state.pageNumber - 1 }), this.getProjects)
     }
 
-    createProject = (project) => {
-        this.modal.hide()
+    submitProject = (project) => {
+        if (project._id === undefined) {
+            this.createProject(project)
+        } else {
+            this.updateProject(project)
+        }
+    }
 
-        createProject(project)
+    createProject = (project) => {
+        this.dismiss()
+
+        const newProject = {
+            ...project,
+            _id: uid(),
+        }
+
+        createProject(newProject)
             .then(() => this.getProjects())
             .catch(this.handleCreateProjectError)
 
         try {
-            projectValidator(project)
-            this.setState(({ projects }) => ({ projects: [project, ...projects]}))
+            projectValidator(newProject)
+            this.setState(({ projects }) => ({ projects: [newProject, ...projects]}))
         } catch(err) {
-            // console.error(err)
+            console.error(err)
         }
     }
 
@@ -105,7 +121,7 @@ export default class ProjectPage extends Component {
     }
 
     updateProject = (project) => {
-        this.modal.hide()
+        this.dismiss()
 
         this.setState(({ projects }) => ({
             projects: findByIdAndReplace(projects, project),
@@ -118,41 +134,49 @@ export default class ProjectPage extends Component {
 
     _executeAfterModalClose = () => {
         this.setState({
-            projectForEdit: null
+            projectForEdit: null,
+            isEditModalOpen: false,
         })
     }
 
     openProject = (project) => {
         this.setState({
-            projectForEdit: project
+            projectForEdit: project,
+            isEditModalOpen: true,
         })
-        this.openModal()
     }
 
     openNew = () => {
         this.setState({
             projectForEdit: null,
+            isEditModalOpen: true,
         })
-        this.openModal()
     }
 
     askForRemove = (project) => {
         this.setState({
             projectForDelete: project
         })
-        this.deleteModalRef.show()
+
+        this.setState({
+            isDeleteModalOpen: true,
+        })
     }
 
     deleteConfirm = () => {
         this.remove()
-        this.deleteModalRef.hide()
+        this.setState({
+            isDeleteModalOpen: false,
+        })
     }
 
     deleteDismiss = () => {
         this.setState({
             projectForDelete: null
         })
-        this.deleteModalRef.hide()
+        this.setState({
+            isDeleteModalOpen: false,
+        })
     }
 
     remove = () => {
@@ -173,51 +197,40 @@ export default class ProjectPage extends Component {
         }))
     }
 
-    openModal = () => {
-        this.modal.show()
-    }
-
     dismiss = () => {
-        this.modal.hide()
-    }
-
-    getDeleteModalRef = (el) => {
-        this.deleteModalRef = el
+        this.setState({ isEditModalOpen: false })
     }
 
     render() {
+        const projectForEdit = this.state.projectForEdit === null ? undefined : this.state.projectForEdit
+
         return (
             <div className="Projekti page--padding">
-                <Toaster key="toaster" remove={this.removeToast} toasts={this.state.toasts} />
-                <SkyLight dialogStyles={dialogStyles} hideOnOverlayClicked afterClose={this._executeAfterModalClose} ref={el => { this.modal = el }} key="modal">
-                    {(
-                        this.state.projectForEdit ?
-                        <EditProjectForm project={this.state.projectForEdit} onSubmit={this.updateProject} onDismiss={this.dismiss} /> :
-                        <EditProjectForm onSubmit={this.createProject} onDismiss={this.dismiss} />
-                    )}
-                </SkyLight>
+                <Toaster remove={this.removeToast} toasts={this.state.toasts} />
 
-                <SkyLight dialogStyles={confirmDeleteDialogStyles}
-                    hideOnOverlayClicked
-                    ref={this.getDeleteModalRef} key="delete-modal">
+                <Modal isOpen={this.state.isEditModalOpen} onRequestClose={this._executeAfterModalClose}>
+                    <EditProjectForm
+                        project={projectForEdit}
+                        onSubmit={this.submitProject}
+                        onDismiss={this.dismiss} />
+                </Modal>
 
+                <Modal isOpen={this.state.isDeleteModalOpen}>
                     <DeleteProjectDialog
                         confirm={this.deleteConfirm}
                         dismiss={this.deleteDismiss}
                         project={this.state.projectForDelete} />
-                </SkyLight>
+                </Modal>
 
-                <div className="Projekti__controls" key="controls">
-                    <button className="btn btn--primary" onClick={this.openNew}>
+                <div className="Projekti__controls">
+                    <Button color="primary" onClick={this.openNew}>
                         <MdAdd />
                         Novi Projekt
-                    </button>
+                    </Button>
                 </div>
 
                 <ProjectList
                     projects={this.state.projects}
-                    activeProject={this.state.projectForEdit}
-                    key="table"
                     rowRemove={this.askForRemove}
                     rowClick={this.openProject}
                     pageNumber={this.state.pageNumber}

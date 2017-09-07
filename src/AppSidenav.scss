@@ -13,7 +13,7 @@
     opacity: 0;
     transition: .3s ease transform, .2s ease opacity;
     box-shadow: 2px 0 4px rgba(70, 70, 70, 0.3);
-    z-index: 10;
+    z-index: $app-sidenav-z;
 
     &--is-open {
         transform: none;
@@ -31,64 +31,10 @@
         background-color: $bc-dark;
         // border-right: 1px solid $nav-highlight;
     }
-    &__nav {
-        padding-top: 1rem;
-        display: flex;
-        flex-direction: column;
-        text-align: left;
-    }
-    &__link {
-        padding: 1rem 1.2rem;
-        text-decoration: none;
-        color: lighten($bc-dark, 35);
-        font-weight: 600;
-        font-size: 1rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-
-        &__icon {
-            font-size: 1.8rem;
-            margin-top: -4px;
-            margin-right: 1rem;
-        }
-        &__bg {
-            display: inline-block;
-            padding: 2px 4px;
-            padding-top: 5px;
-            position: relative;
-            //   &:before {
-            //     content: '';
-            //     position: absolute;
-            //     bottom: 2px;
-            //     height: 8px;
-            //     left: -1px;
-            //     right: -1px;
-            //     background-color: rgba($bc-fire, .3);
-            //     transform: scaleX(0);
-            //     transition: .2s ease transform;
-            //     transform-origin: left;
-            //   }
-        }
-
-        &:hover {
-            color: #fff;
-            background-color: rgb(57, 66, 84);
-            //   .App-sidenav__link__bg:before {
-            //     transform: scaleX(1);
-            //   }
-        }
-
-        &--active, &--active:hover {
-            // color: #fff;
-            // background-color: rgb(76, 90, 115);
-            color: $bc-dark;
-            background-color: $bc-warning;
-        }
-    }
 
     &__logout {
         margin-top: auto;
-        padding: 1rem 2rem;
+        padding: 1rem;
 
         .btn {
             color: rgba(255,255,255,.85);
@@ -107,7 +53,7 @@
 
 @media (min-width: $medium-device) {
    .App-sidenav {
-        transform: none;
-        opacity: 1;
+       transform: none;
+       opacity: 1;
     }
 }

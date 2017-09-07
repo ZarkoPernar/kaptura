@@ -56,7 +56,7 @@ export default class KorisnikPage extends Component {
 
     render() {
         return (
-            <div className="Korisnik-page">
+            <div className="Korisnik-page page--padding">
                 <Card>
                     <form onSubmit={this.onSubmit}>
 

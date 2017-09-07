@@ -5,6 +5,7 @@ import classnames from 'classnames'
 import './pagination.scss'
 
 import Button from './Button'
+import Input from './form/Input'
 
 class PaginationComponent extends Component {
     static propTypes = {
@@ -18,15 +19,17 @@ class PaginationComponent extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState(state => ({
+        this.setState({
             currentPage: nextProps.currentPage
-        }))
+        })
     }
 
-    onChange = (event) => {
-        const currentPage = parseInt(event.target.value)
+    onChange = (value) => {
+        const currentPage = parseInt(value)
+
         if (!currentPage) return
-        this.setState(state => ({ currentPage }))
+
+        this.setState({ currentPage })
     }
 
     onKeyDown = (event) => {
@@ -38,16 +41,26 @@ class PaginationComponent extends Component {
     render() {
         return (
             <div className="pagination">
-                <Button key="prev" onClick={this.props.prevPage}>
-                    Predhodna Stranica
+                <Button onClick={this.props.prevPage} disabled={this.props.currentPage === 1}>
+                    <span className="pagination__nav pagination__nav--long">
+                        Predhodna
+                    </span>
+                    <span className="pagination__nav pagination__nav--short">
+                        {'<'}
+                    </span>
                 </Button>
 
-                <span key="page">
-                    <input value={this.state.currentPage} onChange={this.onChange} onKeyDown={this.onKeyDown}/>
-                </span>
+                <div>
+                    <Input name="page" value={this.state.currentPage} onChange={this.onChange} onKeyDown={this.onKeyDown}/>
+                </div>
 
-                <Button key="next" onClick={this.props.nextPage}>
-                    Sljedeca Stranica
+                <Button onClick={this.props.nextPage}>
+                    <span className="pagination__nav pagination__nav--long">
+                        Sljedeca
+                    </span>
+                    <span className="pagination__nav pagination__nav--short">
+                        {'>'}
+                    </span>
                 </Button>
             </div>
         )

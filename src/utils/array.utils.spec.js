@@ -33,3 +33,12 @@ test('updates the element with the same _id', () => {
     expect(actualResult).toEqual(expectedResult)
 })
 
+test('updates the element with the offline _id', () => {
+    const array = [{ _id: 1, name: 1 }]
+    const expectedResult = 2
+    const updatedArray = findByIdAndReplace(array, { _id: 2, name: expectedResult, offlineId: 1 })
+    const actualResult = updatedArray[0].name
+
+    expect(actualResult).toEqual(expectedResult)
+})
+

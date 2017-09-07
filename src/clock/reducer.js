@@ -1,12 +1,15 @@
-import { normalize, denormalize, schema } from 'normalizr'
+import { createSelector } from 'reselect'
 
+import { fromStore, toStore } from '../utils/store.utils'
 import { list, add as addApi, update as updateApi } from './clock.api'
 import { findByIdAndReplace } from '../utils/array.utils'
 
-const logSchema = new schema.Entity('logs', {}, {
-    idAttribute: '_id'
-})
-export const logsSchema = new schema.Array(logSchema)
+export const selector = createSelector(state => state.logs, logs => fromStore(logs))
+
+// const logSchema = new schema.Entity('logs', {}, {
+//     idAttribute: '_id'
+// })
+// export const logsSchema = new schema.Array(logSchema)
 
 export const LOAD_LOGS = 'LOAD_LOGS'
 export const LOAD_LOGS_SUCCESS = 'LOAD_LOGS_SUCCESS'
@@ -23,11 +26,11 @@ export const EDIT_LOG_ERROR = 'EDIT_LOG_ERROR'
 export default function reducer(state={}, { payload, type }) {
     switch(type) {
         case LOAD_LOGS_SUCCESS:
-            return normalize(payload, logsSchema)
+            return toStore(payload)
         case ADD_LOG:
             return add(payload, state)
         case ADD_LOG_SUCCESS:
-            return updateLast(payload, state)
+            return updateById(payload, state)
 
         case EDIT_LOG:
             return updateById(payload, state)
@@ -40,26 +43,18 @@ export default function reducer(state={}, { payload, type }) {
 }
 
 function add(payload, state) {
-    const denormalized = denormalize(state.result, logsSchema, state.entities)
-    const updatedLogs = [...denormalized, payload]
+    const logs = fromStore(state)
+    const updatedLogs = [payload, ...logs]
 
-    return normalize(updatedLogs, logsSchema)
-}
-
-function updateLast(payload, state) {
-    const denormalized = denormalize(state.result, logsSchema, state.entities)
-    const updatedLogs = denormalized.slice(0, denormalized.length - 1)
-    updatedLogs.push(payload)
-
-    return normalize(updatedLogs, logsSchema)
+    return toStore(updatedLogs)
 }
 
 function updateById(payload, state) {
-    const denormalized = denormalize(state.result, logsSchema, state.entities)
+    const logs = fromStore(state)
 
-    const updatedLogs = findByIdAndReplace(denormalized, payload)
+    const updatedLogs = findByIdAndReplace(logs, payload)
 
-    return normalize(updatedLogs, logsSchema)
+    return toStore(updatedLogs)
 }
 
 export function loadLogs() {

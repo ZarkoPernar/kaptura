@@ -10,7 +10,10 @@ class TableComponent extends PureComponent {
         return (
             <div className="table-holder">
                 <table className="table">
-                    {this.props.children}
+                    {this.props.children[0]}
+                    <tbody>
+                        {this.props.children[1]}
+                    </tbody>
                 </table>
             </div>
         )

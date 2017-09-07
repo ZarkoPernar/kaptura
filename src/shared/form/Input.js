@@ -2,37 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 class EnhancedInput extends Component {
-    componentWillMount() {
-
-    }
-
-    componentDidMount() {
-
-    }
-
-    componentWillReceiveProps(nextProps) {
-
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-
-    }
-
-    componentWillUpdate(nextProps, nextState) {
-
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-
-    }
-
-    componentWillUnmount() {
-
+    onChange = (e) => {
+        this.props.onChange(e.target.value, this.props.name)
     }
 
     render() {
         return (
-            <input {...this.props} />
+            <input className="form-control" {...this.props} onChange={this.onChange} />
         )
     }
 }

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { denormalize } from 'normalizr'
 import MdPlay from 'react-icons/lib/md/play-arrow'
+import MdStop from 'react-icons/lib/md/stop'
 import { v4 as uid } from 'uuid'
 
 import * as apiService from '../shared/apiService'
@@ -9,20 +9,10 @@ import Button from '../shared/Button'
 import appTitle from '../shared/appTitle'
 
 import { isUnfinished, getLast, inOut } from './clock'
-import { update } from './clock.api'
-import { logsSchema, loadLogs, addLog } from './reducer'
+import { selector, loadLogs, addLog, updateLog } from './reducer'
 import DisplayDuration from './DisplayDuration'
 
 import './clock.scss'
-
-const redDot = {
-    display: 'inline-block',
-    width: '8px',
-    height: '8px',
-    margin: '2px 8px',
-    borderRadius: '50%',
-    backgroundColor: 'red',
-}
 
 const DEFAULT_TITLE = 'Clock'
 
@@ -71,7 +61,7 @@ export class Clock extends PureComponent {
             // TODO: use props dispatch
             // this.setState(updateLastLog(log))
 
-            update(log).then(this.refresh)
+            this.props.updateLog(log)
         } else {
             const log = inOut()
 
@@ -89,19 +79,23 @@ export class Clock extends PureComponent {
 
 
         return (
-            <div className="">
-                <Button onClick={this.click} clear>
-                    { hasUnfinished ? 'Stop' : 'Start' }
-
+            <div className="clock-holder">
+                <Button onClick={this.click} clear large>
                     {
                         hasUnfinished ? (
-                            <span>
-                                <span style={redDot} />
+                            <span className="flex">
+                                { hasUnfinished ? 'Stop' : 'Start' }
+
+                                <MdStop className="clock-toggle__icon clock-toggle__icon--stop" />
+
                                 <DisplayDuration>{getLast(logs).check_in}</DisplayDuration>
                             </span>
                         ) : (
                             <span className="flex">
+                                { hasUnfinished ? 'Stop' : 'Start' }
+
                                 <MdPlay className="clock-toggle__icon clock-toggle__icon--start" />
+
                                 0:00:00
                             </span>
                         )
@@ -114,8 +108,7 @@ export class Clock extends PureComponent {
 
 const mapStateToProps = state => {
     return {
-        // logs: state.logs.result ? state.logs.result.map(id => state.logs.entities.logs[id]) : []
-        logs: denormalize(state.logs.result, logsSchema, state.logs.entities),
+        logs: selector(state),
     }
 }
 
@@ -123,6 +116,7 @@ const mapDispatchToProps = dispatch => {
     return {
         loadLogs: () => dispatch(loadLogs()),
         addLog: (log) => dispatch(addLog(log)),
+        updateLog: (log) => dispatch(updateLog(log)),
     }
 }
 

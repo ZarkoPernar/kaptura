@@ -30,6 +30,11 @@ export default [
         key: 'projekti',
         title: 'Projekti',
         icon: MdStore,
+        // sublinks: [{
+        //     to: '/projekti/charts',
+        //     key: 'charts',
+        //     title: 'Charts',
+        // }]
     }, {
         to: '/tvrtka',
         key: 'tvrtka',

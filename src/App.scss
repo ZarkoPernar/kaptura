@@ -14,8 +14,12 @@ $sidenav-z-index: 3;
 
 $nav-highlight: darken($bc-light, 5);
 
-$page-padding-sm: 1.5rem;
+$page-padding-sm: 0;
 $page-padding-md: 2rem 3rem;
+
+$app-sidenav-z: 10;
+$modal-portal-z: 11;
+
 
 *, *:after, *:before {
     box-sizing: border-box;
@@ -34,6 +38,19 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: stretch;
+
+    &--is-clicking {
+        .btn {
+            outline-width: 0 !important;
+        }
+    }
+
+    &--is-tabbing {
+        .btn:focus {
+            outline-width: 1px;
+        }
+    }
+
 }
 
 .App-flex {
@@ -58,8 +75,8 @@ body {
 
     &__menu-btn {
         position: absolute;
-        top: 10px;
-        left: 10px;
+        top: 8px;
+        left: 8px;
         display: inline-block;
         background-color: transparent;
         border: 0;
@@ -71,9 +88,10 @@ body {
         padding-left: 1.65rem;
     }
     &__link {
+        color: $bc-primary;
         position: absolute;
-        top: .5rem;
-        right: 2rem;
+        top: 8px;
+        right: 8px;
     }
 }
 
@@ -94,7 +112,10 @@ body {
     }
 }
 
-
+.ReactModalPortal {
+    position: relative;
+    z-index: $modal-portal-z;
+}
 
 .App-body {
     color: #000;
@@ -109,6 +130,10 @@ body {
 
         &__menu-btn {
             display: none;
+        }
+
+        &__link {
+            right: 2rem;
         }
     }
 

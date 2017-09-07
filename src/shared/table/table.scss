@@ -3,7 +3,7 @@
 
 $table-br: 2px;
 
-$table-heading-padding: 1em 1.5em;
+$table-heading-padding: 1em 2.25em;
 $table-heading-padding-half: .5em .75em;
 $table-heading-bg-color: #fff;
 
@@ -48,26 +48,23 @@ $table-cell-padding-half: .5em .75em;
         }
     }
 
-    &__body {
-        &--hover {
-            .table__row:hover {
-                .table__cell {
-                    background-color: $table-row-hover-bg-color !important;
-                }
+
+    &__row {
+        &--hover:hover {
+            .table__cell {
+                background-color: $table-row-hover-bg-color !important;
             }
         }
 
         &--condensed {
             .table__cell {
-                padding: .5em .75em;
+                padding: $table-cell-padding-half;
             }
         }
 
-        &--bordered {
-            .table__row:first-child {
-                .table__cell {
-                    border-top-width: 1px;
-                }
+        &--bordered:first-child {
+            .table__cell {
+                border-top-width: 1px;
             }
 
             .table__cell {
@@ -75,15 +72,13 @@ $table-cell-padding-half: .5em .75em;
             }
         }
 
-        &--striped {
-            .table__row:nth-child(odd) {
-                .table__cell {
-                    background-color: #f9f9f9;
-                }
+        &--striped:nth-child(odd) {
+            .table__cell {
+                background-color: #f9f9f9;
             }
         }
 
-        .table__row:last-child {
+        &:last-child {
             .table__cell:first-child {
                 border-bottom-left-radius: $table-br;
             }
@@ -92,9 +87,6 @@ $table-cell-padding-half: .5em .75em;
                 border-bottom-right-radius: $table-br;
             }
         }
-    }
-
-    &__row {
 
         &--active {
             .table__cell {
@@ -110,7 +102,7 @@ $table-cell-padding-half: .5em .75em;
 
     &__cell {
         background-color: #fff;
-        padding: $table-cell-padding-half;
+        padding: $table-cell-padding;
         border-color: $table-cell-br-color;
         border-width: 0 0 1px 0;
         border-style: solid;
