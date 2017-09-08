@@ -7,6 +7,7 @@ import Input from '../../shared/form/Input'
 import Textarea from '../../shared/form/Textarea'
 import FiGi from '../../shared/form/FG'
 import Button from '../../shared/Button'
+import Datepicker from '../../shared/Datepicker'
 
 const actionStyles = {
     display: 'flex',
@@ -113,7 +114,9 @@ class EditProjectForm extends Component {
 
                 {/*<FormGroup label="Kategorija" name="category" type="multiselect" onChange={this.inputChanged} value={this.state.project.category} />*/}
 
-                <FormGroup label="Počinje" name="start_date" type="date" onChange={this.inputChanged} value={this.state.project.start_date} />
+                <FiGi label="Počinje">
+                    <Datepicker name="start_date" onChange={this.inputChanged} value={this.state.project.start_date} />
+                </FiGi>
 
                 <FormGroup label="Završava" name="end_date" type="date" onChange={this.inputChanged} value={this.state.project.end_date} />
 
