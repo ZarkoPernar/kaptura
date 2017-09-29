@@ -32,7 +32,7 @@ module.exports = {
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.DefinePlugin({
             "process.env": {
-                "BUILD_TARGET": JSON.stringify("src")
+                "BUILD_TARGET": JSON.stringify("src/web")
             }
         }),
         new ExtractTextPlugin('styles.css'),

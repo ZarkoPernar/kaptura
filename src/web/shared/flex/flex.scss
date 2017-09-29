@@ -1,0 +1,41 @@
+
+.flex {
+    display: flex;
+
+    &--center {
+        align-items: center;
+        justify-content: center;
+    }
+
+    &-reverse {
+        flex-direction: row-reverse;
+    }
+
+    &--column {
+        flex-direction: column;
+
+        &.flex--reverse {
+            flex-direction: column-reverse;
+        }
+    }
+
+    &.space-between {
+        justify-content: space-between;
+    }
+
+    &.space-around {
+        justify-content: space-around;
+
+    }
+
+    &.flex--grid {
+        margin-left: -.5rem;
+        margin-right: -.5rem;
+    }
+
+    &.flex--grid > * {
+        padding: 0 .5rem;
+    }
+
+
+}

@@ -7,7 +7,9 @@
     "react"
   ],
   "plugins": [
+    "transform-decorators-legacy",
     "transform-class-properties",
+    "syntax-dynamic-import",
     [
       "transform-react-jsx"
     ]

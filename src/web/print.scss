@@ -1,0 +1,29 @@
+@media print {
+    @page {
+        size: A4;
+        /* auto is the initial value */
+        /* this affects the margin in the printer settings */
+        margin: 0mm 0mm 0mm 0mm;
+    }
+
+    html, body {
+        padding: 0;
+        margin: 0 !important;
+    }
+
+    .App {
+        padding-top: 0 !important;
+    }
+
+    .App-heading {
+        display: none;
+    }
+
+    .page {
+        padding: 0 !important;
+
+        &__controls {
+            display: none !important;
+        }
+    }
+}

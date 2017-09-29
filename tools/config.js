@@ -1,13 +1,13 @@
 module.exports = {
-    APP_PATH: './src',
-    SERVER_APP_PATH: './server',
+    APP_PATH: './src/web',
+    SERVER_APP_PATH: './src/server',
 
     CLIENT_ENTRY_FILE: '/index.js',
     CLIENT_OUTPUT_PATH: 'public',
 
     HtmlWebpackPlugin: {
         title: 'React Boilerplate',
-        template: './src/index.html',
+        template: './src/web/index.html',
     },
 
     WEBPACK_DEV_SERVER_CONFIG: {

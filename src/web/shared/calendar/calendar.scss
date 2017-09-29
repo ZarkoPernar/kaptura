@@ -1,0 +1,33 @@
+@import '../../App';
+@import '../../mixins';
+
+.rbc-month-view {
+    background-color: transparent;
+    // @include square-shadow;
+}
+
+.rbc-header > span {
+    display: block;
+    padding: .5rem;
+}
+
+.rbc-toolbar .rbc-toolbar-label:first-letter {
+    text-transform: uppercase;
+}
+
+.rbc-event {
+    color: $bc-dark;
+    border-radius: 2px;
+    @include square-shadow;
+    background-color: #fff;
+
+    &.rbc-selected {
+        color: #fff;
+        background-color: $bc-fire;
+    }
+}
+
+.rbc-today {
+    background-color: rgba(86, 97, 119, 0.22);
+
+}

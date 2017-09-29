@@ -1,0 +1,36 @@
+@import '../App.scss';
+
+
+.clock-toggle {
+
+    &__icon {
+        font-size: 30px;
+        margin: -5px 10px 0 !important;
+
+        &--start {
+            color: #fff;
+            background-color: green;
+            border-radius: 50%;
+        }
+
+        &--stop {
+            color: #fff;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+    }
+}
+
+.clock-holder {
+    padding-top: .5rem;
+    padding-left: 4rem;
+}
+
+@media (min-width: $medium-device) {
+    .clock-holder {
+        padding-top: .5rem;
+
+        padding-left: 3rem;
+    }
+}

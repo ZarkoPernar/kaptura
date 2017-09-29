@@ -1,0 +1,76 @@
+@import '../App';
+@import '../mixins.scss';
+
+.page {
+
+    &--has-subheader {
+        padding-top: $header-height;
+    }
+
+    &--padding {
+        padding: $page-padding-sm;
+    }
+
+    &__sub-header {
+        position: fixed;
+        display: flex;
+        top: $header-height;
+        height: $header-height;
+        left: 0;
+        width: 100%;
+        margin-top: -1px;
+        background-color: $bc-light;
+        border-top: 1px solid #eee;
+        box-shadow: 0 3px 1px rgba(70, 70, 70, 0.09);
+        border-bottom: 1px solid #d2d2d2;
+        z-index: 3;
+
+        &__controls {
+            height: 100%;
+            width: 100%;
+            padding: 0 $page-padding-side;
+            display: flex;
+            align-items: center;
+
+            & > * {
+                margin: 0;
+
+                &:not(:first-child) {
+                    margin-left: 2rem;
+                }
+            }
+
+            .tabs {
+                margin-top: auto;
+            }
+        }
+    }
+
+    &__controls {
+        margin-bottom: 1em;
+        display: flex;
+        padding: 1em 0 0 1em;
+    }
+
+}
+
+@media (min-width: $medium-device) {
+    .page {
+        &--padding {
+            padding: $page-padding-md;
+        }
+
+        &__sub-header {
+            padding-left: $sidenav-width;
+        }
+
+        &__controls {
+            padding: 0;
+        }
+
+    }
+
+    .EditProject__form {
+        min-width: 36rem;
+    }
+}

@@ -1,0 +1,13 @@
+@import '../mixins.scss';
+
+.card {
+    @include square-shadow;
+
+    background-color: #fff;
+
+    &__body {
+        padding: 1rem 2rem;
+    }
+
+    margin-bottom: 1rem;
+}

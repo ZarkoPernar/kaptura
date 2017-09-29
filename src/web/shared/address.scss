@@ -1,0 +1,17 @@
+@import '../mixins.scss';
+
+.autocomplete {
+    &-root {
+        width: 100%;
+    }
+
+    &-container {
+        background-color: #fff;
+        position: absolute;
+        top: 100%;
+        width: 100%;
+        left: 0;
+        @include square-shadow;
+        z-index: 14;
+    }
+}

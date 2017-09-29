@@ -1,10 +1,10 @@
-let path = require('path')
-let webpack = require('webpack')
-let HtmlWebpackPlugin = require('html-webpack-plugin')
-let ExtractTextPlugin = require('extract-text-webpack-plugin')
-let WebpackNotifierPlugin = require('webpack-notifier')
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const WebpackNotifierPlugin = require('webpack-notifier')
 
-let CONFIG = require('./config')
+const CONFIG = require('./config')
 
 module.exports = {
     devtool: 'source-map',

@@ -18,6 +18,7 @@ module.exports = function (env) {
         },
         output: {
             path: path.resolve(CONFIG.CLIENT_OUTPUT_PATH),
+            chunkFilename: '[name].bundle-[chunkhash].js',
             filename: 'bundle-[chunkhash].js',
         },
         resolve: {
@@ -26,7 +27,7 @@ module.exports = function (env) {
             //     'react': 'inferno-compat',
             //     'react-dom': 'inferno-compat',
             //     'react-redux': 'inferno-redux',
-            // }
+            // },
         },
         devServer: CONFIG.WEBPACK_DEV_SERVER_CONFIG,
         plugins: [
