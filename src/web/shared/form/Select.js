@@ -7,9 +7,9 @@ import './select.scss'
 
 const SELECT_OPTION_TYPE = PropTypes.shape({
     label: PropTypes.string,
-    value: SELECT_OPTION_VALUE_TYPE,
+    value: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
 })
-const SELECT_OPTION_VALUE_TYPE = SELECT_OPTION_TYPE
+const SELECT_OPTION_VALUE_TYPE = PropTypes.oneOf([SELECT_OPTION_TYPE, PropTypes.string])
 
 const GO_UP = 38
 const GO_DOWN = 40
@@ -53,10 +53,10 @@ function  searchLabel(option) {
 
 class SelectComponent extends Component {
     static propTypes = {
-        options: PropTypes.arrayOf(SELECT_OPTION_TYPE),
+        // options: PropTypes.arrayOf(SELECT_OPTION_TYPE),
         multi: PropTypes.bool,
         name: PropTypes.string,
-        value: SELECT_OPTION_VALUE_TYPE,
+        // value: SELECT_OPTION_VALUE_TYPE,
         onChange: PropTypes.func,
         onFocus: PropTypes.func,
         onBlur: PropTypes.func,

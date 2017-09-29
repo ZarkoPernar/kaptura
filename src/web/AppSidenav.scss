@@ -1,6 +1,11 @@
 @import './App.scss';
 @import './mixins.scss';
 
+.App--menuIsOpen .App-sidenav {
+    transform: none;
+    opacity: 1;
+}
+
 .App-sidenav {
     color: $bc-light;
     position: fixed;
@@ -15,11 +20,6 @@
     box-shadow: 2px 0 4px rgba(70, 70, 70, 0.3);
     z-index: $app-sidenav-z;
     will-change: transform;
-
-    &--is-open {
-        transform: none;
-        opacity: 1;
-    }
 
     &__container {
         display: flex;

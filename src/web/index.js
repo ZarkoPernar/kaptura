@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import 'rxjs'
 
-import App from './App'
+import RootCmp from './Root'
 
 let root
 
@@ -15,9 +15,8 @@ import './index.css'
 
 
 function init() {
-    root = render( < App /> , document.querySelector('#app'), root)
+    root = render( <RootCmp /> , document.querySelector('#app'), root)
 }
-
 
 
 // if ('production' !== process.env.NODE_ENV) {

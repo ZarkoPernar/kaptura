@@ -1,0 +1,70 @@
+@import './App';
+
+.App-heading {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: $bc-light;
+    color: $bc-earth;
+    font-size: 2rem;
+    z-index: 2;
+    height: $header-height;
+    // box-shadow: 0 1px 3px rgba(70,70,70,.3);
+    box-shadow: 0 3px 1px rgba(70, 70, 70, 0.09);
+    border-bottom: 1px solid #d2d2d2;
+
+    &__inner {
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 .5rem;
+    }
+
+    &__menu-btn {
+        display: inline-block;
+        background-color: transparent;
+        border: 0;
+    }
+
+    h2 {
+        font-weight: 400;
+        text-align: left;
+        padding-left: 1.65rem;
+    }
+    &__link {
+        color: $bc-primary;
+    }
+}
+
+.App-logo {
+    height: $header-height;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+
+    &__text {
+        margin: 0;
+        margin-top: .25em;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: .3rem;
+        text-align: center;
+    }
+}
+
+
+@media (min-width: $medium-device) {
+    .App-heading {
+        padding-left: $sidenav-width;
+
+        &__menu-btn {
+            display: none;
+        }
+
+        &__inner {
+            padding: 0 3rem;
+        }
+    }
+}
