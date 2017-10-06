@@ -6,6 +6,7 @@ mongoose.Promise = global.Promise;
 mongoose.set('debug', JSON.parse(process.env.MONGO_DEBUG));
 mongoose.plugin(default_1.modifiedBy);
 function init(mongoUrl) {
+    console.log(mongoUrl);
     return mongoose.connect(mongoUrl);
 }
 exports.default = init;

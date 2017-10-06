@@ -14,7 +14,7 @@ function initMiddleware(app) {
     app.use(cookieParser());
     app.use(expressSession({
         store: new MongoDBStore({
-            uri: 'mongodb://localhost:27017/kaptura',
+            uri: process.env.MONGO_URL + '/kaptura',
             collection: 'mySessions'
         }),
         secret: process.env.EXPRESS_SESSION_SECRET,

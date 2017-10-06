@@ -24,8 +24,7 @@ listen_1.default(app, http, { port: PORT });
 // ==============================================
 socket_1.default({ io: exports.io });
 // Connect MongoDB
-// ==============================================
-console.log(MONGO_URL)
+// ==============================================)
 db_1.default(MONGO_URL);
 // Init express session, mongo session, logging etc.
 // ==============================================
