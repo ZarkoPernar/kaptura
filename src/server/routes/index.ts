@@ -17,8 +17,6 @@ import authRoutes from './auth'
 import employeeRoutes from './employee'
 import companyRoutes from './company'
 
-import sendIndex from '../views/react'
-
 const loginFileLocation = path.resolve(__dirname + '/../views/login.html')
 const registerFileLocation = path.resolve(__dirname + '/../views/register.html')
 const indexFileLocation = path.resolve(__dirname + '/../../../public/index.html')

@@ -15,12 +15,12 @@ export default function initMiddleware(app) {
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(cookieParser())
     app.use(expressSession({
-        store: new MongoDBStore(
-            {
-                uri: process.env.MONGO_URL,
-                collection: 'mySessions'
-            }
-        ),
+        // store: new MongoDBStore(
+        //     {
+        //         uri: process.env.MONGO_URL,
+        //         collection: 'mySessions'
+        //     }
+        // ),
 
         secret: process.env.EXPRESS_SESSION_SECRET,
         resave: false,
