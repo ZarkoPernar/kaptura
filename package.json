@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "My react, redux, and webpack boilerplate",
   "main": "server/index.js",
+  "engines": {
+      "node": "8.5.0"
+  },
   "types": "server/index",
   "scripts": {
     "start": "npm run dev",
