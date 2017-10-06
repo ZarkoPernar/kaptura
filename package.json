@@ -8,7 +8,7 @@
   },
   "types": "server/index",
   "scripts": {
-    "start": "npm run dev",
+    "start": "node server",
     "test:mocha": "mocha --compilers js:babel-register -w test/testSetup.js src/**/*.spec.js",
     "test": "react-scripts test --env=jsdom",
     "serve": "nodemon -w server",
