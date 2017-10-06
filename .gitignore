@@ -3,7 +3,7 @@ platforms
 hooks
 plugins
 cache
-
+package-lock.json
 debug.log
 .env
 
