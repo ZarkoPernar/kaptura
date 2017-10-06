@@ -4,13 +4,13 @@ import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/filter'
 
 import { get, post } from '../shared/apiService'
-import { mapCollection, createWatchCollection, getDataFromDocument } from '../utils/firebase'
-import firebase, { db } from '../firebase'
+// import { mapCollection, createWatchCollection, getDataFromDocument } from '../utils/firebase'
+// import firebase, { db } from '../firebase'
+// const projects = db.collection('projects')
 
 const base_url = '/project'
 const CHANGE_MODIFIED = 'modified'
 
-const projects = db.collection('projects')
 
 export function getById(id) {
     const url = base_url + '/get/' + id
