@@ -17,7 +17,7 @@ export default function initMiddleware(app) {
     app.use(expressSession({
         store: new MongoDBStore(
             {
-                uri: 'mongodb://localhost:27017/kaptura',
+                uri: process.env.MONGO_URL,
                 collection: 'mySessions'
             }
         ),
