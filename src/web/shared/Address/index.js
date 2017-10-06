@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import PlacesAutocomplete from 'react-places-autocomplete'
 import { geocodeByAddress, geocodeByPlaceId } from 'react-places-autocomplete'
+import PropTypes from 'prop-types'
 
-import googleLibService from './googleLibService'
-import Input from './form/Input'
+import getPlaceData from './getPlaceData'
+
+import googleLibService from '../googleLibService'
+import Input from '../form/Input'
 
 const classNames = {
     input: 'form-control',
@@ -13,18 +16,13 @@ const classNames = {
 
 import './address.scss'
 
-class Address extends Component {
+export default class Address extends Component {
+    static propTypes = {
+        onChange: PropTypes.func,
+        onSelect: PropTypes.func,
+    }
     state = {
         googleLoaded: false
-    }
-
-    constructor(props) {
-        super(props)
-    }
-
-    componentWillUnmount() {
-        if (typeof this.unsubscribe !== 'function') return
-            this.unsubscribe()
     }
 
     componentDidMount() {
@@ -32,6 +30,12 @@ class Address extends Component {
             googleLoaded: Boolean(window.google)
         })
         this.unsubscribe = googleLibService.subscribe(this.googleLoaded)
+    }
+
+    componentWillUnmount() {
+        if (typeof this.unsubscribe === 'function') {
+            this.unsubscribe()
+        }
     }
 
     onChange = (value) => {
@@ -54,20 +58,25 @@ class Address extends Component {
         if (!results.length) return
 
         const result = results[0]
-        const latLng = result.geometry.location
 
-        if (!this.props.onPlaceChange) return
+        // console.log(getPlaceData(result));
 
-        this.props.onPlaceChange({
-            place_id: result.place_id,
-            google_formatted_address: result.formatted_address,
-            latitude: latLng.lat(),
-            longitude: latLng.lng(),
-        })
+        const _selected = getPlaceData(result)
+
+        this.setState({ _selected })
+
+        if (this.props.onSelect !== undefined) {
+            this.props.onSelect(_selected)
+        }
+
     }
 
     getPlaceDataError = (error) => {
         console.error(error)
+    }
+
+    onError = (error) => {
+
     }
 
     render() {
@@ -79,7 +88,7 @@ class Address extends Component {
 
     renderText = (inputProps) => {
         return (
-            <Input value={this.props.value} />
+            <Input {...inputProps} />
         )
     }
 
@@ -98,11 +107,10 @@ class Address extends Component {
 
         return (
             <PlacesAutocomplete
+                onError={this.onError}
                 onSelect={this.addressChange}
                 inputProps={inputProps}
                 classNames={classNames} />
         )
     }
 }
-
-export default Address

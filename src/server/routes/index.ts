@@ -4,15 +4,18 @@ import * as express from 'express'
 
 import { Response } from 'express'
 import { IRequest } from './request.interface'
+import apiLogging from '../middleware/apiLogging'
 
 import { localAuthMiddleware } from '../middleware/localAuth'
 import API_PREFIX from './prefix'
 import projectRoutes from './project'
 import clientRoutes from './client'
+import invoiceRoutes from './invoice'
 import timesheetRoutes from './timesheet'
 import userRoutes from './user'
 import authRoutes from './auth'
 import employeeRoutes from './employee'
+import companyRoutes from './company'
 
 import sendIndex from '../views/react'
 
@@ -37,13 +40,18 @@ export default function registerRoutes(app) {
     app.use('/', localAuthMiddleware, staticMiddleware)
 
     // protect api routes
-    app.all(API_PREFIX +  '/*', localAuthMiddleware)
+    app.all(API_PREFIX + '/*', localAuthMiddleware)
+
+    // log everything on api routes to mongo
+    // app.all(API_PREFIX + '/*', apiLogging)
 
     // api routes
     projectRoutes(app)
     clientRoutes(app)
+    invoiceRoutes(app)
     timesheetRoutes(app)
     userRoutes(app)
+    companyRoutes(app)
     employeeRoutes(app)
 
     app.all('/*', localAuthMiddleware, staticMiddleware, (req, res) => {

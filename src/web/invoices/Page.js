@@ -1,76 +1,187 @@
 import React, { Component } from 'react'
+import { v4 as uid } from 'uuid'
+import MdAdd from 'react-icons/lib/md/add-circle'
+import { connect } from 'react-redux'
 
-import 'react-grid-layout/css/styles.css'
-import 'react-resizable/css/styles.css'
+import Toaster from '../shared/toast/Toaster'
+import Modal from '../shared/modal'
+import Page from '../shared/Page'
+import PageSubheader from '../shared/PageSubheader'
+import PageBody from '../shared/PageBody'
+import Button from '../shared/Button'
 
-import Range from '../shared/form/Range'
-import FormGroup from '../shared/form/FormGroup'
-import MeasureDimensions from '../shared/MeasureDimensions'
+import List from './List'
+import EditProjectForm from './Form'
+import DeleteDialog from './DeleteDialog'
+import PageFilters from './PageFilters'
 
-import InvoiceLayout from './InvoiceLayout'
+import createStoreListComponent from '../shared/StoreList'
 
-import './a4.scss'
+import { storeItem } from './listReducer'
+import { storeItem as rootStoreItem } from './reducer'
 
-const DEFAULT_LAYOUT = [
-    { i: 'a', x: 0, y: 0, w: 1, h: 2 },
-    { i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
-    { i: 'c', x: 4, y: 0, w: 1, h: 2 },
-    { i: 'kaptura', x: 4, y: 23, w: 4, h: 1, static: true },
-];
-
-export default class InvoicePage extends Component {
+@connect(state => ({ company: state.companyInfo.data }))
+@createStoreListComponent({
+    storeName: storeItem.name,
+    actions: storeItem.actions,
+    rootStoreItem
+})
+export default class InvoicesPage extends Component {
     state = {
-        padding: 0,
-        layout: DEFAULT_LAYOUT,
+        forEdit: null,
+        forDelete: null,
+        isEditModalOpen: false,
+        isDeleteModalOpen: false,
+        pageSize: 25,
+        pageNumber: 1,
     }
-    constructor(props) {
-        super(props)
-        const stuff = JSON.parse(window.localStorage.getItem('layout-v1'))
-        if (stuff) {
-            this.state.padding = stuff.padding
-            this.state.layout = stuff.layout
+
+    componentWillMount = () => {
+        this.list()
+    }
+
+    applyFilters = (filters) => {
+        this.setState({
+            filters
+        })
+
+        this.list()
+    }
+
+    list = () => {
+        this.props.list({
+            filters: this.filters,
+            pages: {
+                pageSize: this.state.pageSize,
+                pageNumber: this.state.pageNumber,
+            }
+        })
+    }
+
+    submitProject = (project) => {
+        if (project._id === undefined) {
+            this.createProject(project)
+        } else {
+            this.updateProject(project)
         }
     }
 
-    padChange = (value) => {
-        this.setState({padding: value})
+    createProject = (project) => {
+        this.dismiss()
+
+        const newProject = {
+            ...project,
+            _id: uid(),
+        }
+
+        this.props.add(newProject)
+            .catch(this.handleProjectError)
+
     }
 
-    onLayoutChange = (layout) => {
-        // this will not work with async get
-        // since ReactGridLayout calls onLayoutChange after init
-        // so if we init with some layout it will be called with that
-        // and saved to localstorage
-        // TODO: initialize ReactGridLayout with DEFAULT_LAYOUT only after we check the
-        // server or storage for stored layouts
-        window.localStorage.setItem('layout-v1', JSON.stringify({padding: this.state.padding, layout}))
+    updateProject = (project) => {
+        this.dismiss()
+
+        this.setState({
+            forEdit: null,
+        })
+
+        this.props.update(project)
+            .catch(this.handleProjectError)
     }
 
-    onSlotSelect = (slot) => {
-        alert('select ' + slot.name);
+
+    handleProjectError = (err) => {
+        this.setState({
+            toasts: {
+                description: err.message
+            }
+        })
     }
 
-    onSlotDelete = (slot) => {
-        alert('delete ' + slot.name);
+    _executeAfterModalClose = () => {
+        this.setState({
+            forEdit: null,
+            isEditModalOpen: false,
+        })
+    }
+
+    openProject = (project) => {
+        this.setState({
+            forEdit: project,
+            isEditModalOpen: true,
+        })
+    }
+
+    openNew = () => {
+        this.setState({
+            forEdit: null,
+            isEditModalOpen: true,
+        })
+    }
+
+    askForRemove = (project) => {
+        this.setState({
+            forDelete: project,
+            isDeleteModalOpen: true,
+        })
+    }
+
+    deleteConfirm = () => {
+        this.props.remove(this.state.forDelete)
+
+        this.setState({
+            isDeleteModalOpen: false,
+        })
+    }
+
+    deleteDismiss = () => {
+        this.setState({
+            forDelete: null,
+            isDeleteModalOpen: false,
+        })
+    }
+
+    toggleRemoval = () => {
+        this.setState(state => ({
+            allowRemoval: !state.allowRemoval
+        }))
+    }
+
+    dismiss = () => {
+        this.setState({ isEditModalOpen: false })
     }
 
     render() {
+        const forEdit = this.state.forEdit === null ? undefined : this.state.forEdit
+
         return (
-            <div className="page page--padding">
-                <div className="page__controls">
-                    <FormGroup label={'Padding: ' + this.state.padding}>
-                        <Range name="padding" onChange={this.padChange} value={this.state.padding} />
-                    </FormGroup>
-                </div>
-                <MeasureDimensions>
-                    <InvoiceLayout
-                        onSlotSelect={this.onSlotSelect}
-                        onSlotDelete={this.onSlotDelete}
-                        padding={this.state.padding}
-                        onLayoutChange={this.onLayoutChange}
-                        layout={this.state.layout} />
-                </MeasureDimensions>
-            </div>
-        );
+            <Page name="Fakture">
+                <Toaster toasts={this.state.toasts} />
+                <Modal isOpen={this.state.isEditModalOpen} onRequestClose={this._executeAfterModalClose}>
+                    <EditProjectForm
+                        project={forEdit}
+                        onSubmit={this.submitProject}
+                        onDismiss={this.dismiss} />
+                </Modal>
+
+                <Modal isOpen={this.state.isDeleteModalOpen}>
+                    <DeleteDialog
+                        confirm={this.deleteConfirm}
+                        dismiss={this.deleteDismiss}
+                        project={this.state.forDelete} />
+                </Modal>
+
+                <PageSubheader>
+                    <PageFilters filters={this.state.filters} applyFilters={this.applyFilters} />
+                </PageSubheader>
+
+                <PageBody>
+                    {this.props.items.loading ? 'Loading...' : (
+                        this.props.error ? this.props.error.toString() : <List items={this.props.items} />
+                    )}
+                </PageBody>
+            </Page>
+        )
     }
 }

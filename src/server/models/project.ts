@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose'
+const { promisify } = require('util')
 
 import { IUser } from './user'
 import { location, ITimestampsSchema, ILocationSchema, IModifiedBySchema } from './default'
@@ -84,20 +85,19 @@ export default {
             company_id: user.company_id,
         }
 
-        if (item.latitude && item.longitude) {
-            newItem.position = {
-                type: 'Point',
-                coordinates: [item.longitude, item.latitude]
-            }
-        }
-
         return new Model(newItem).save()
     },
 
     update({ item, user }: { item: IProject, user: IUser }) {
-        return Model.findByIdAndUpdate(item._id, { $set: item }, UPDATE_OPTIONS)
+        return Model.findById(item._id)
             .where('company_id')
             .equals(user.company_id)
+            .then((doc) => {
+                Object.assign(doc, item)
+                // console.log(doc);
+
+                return doc.save()
+            })
     },
 
     remove({ item, user }: { item: IProject, user: IUser }) {

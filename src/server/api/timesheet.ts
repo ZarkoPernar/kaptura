@@ -32,26 +32,15 @@ export async function getItem(request: IRequest, response: Response) {
 export async function list(request: IRequest, response: Response) {
     const params: ITimesheetListRequestParams = request.body || defaultListParams
 
-    if (!params.pages) {
-        params.pages = defaultListParams.pages
-    }
+    params.pages = {...defaultListParams.pages, ...params.pages}
+
 
     const query = Model.find()
-            .where('company_id')
-            .equals(request.user.company_id)
-
-    if (!params.user_id) {
-        query
-            .where('user_id')
-            .equals(request.user.id)
-    } else if (params.user_id !== 'all') {
-        query
-            .where('user_id')
-            .equals(params.user_id)
-
-    }
+        .where('company_id')
+        .equals(request.user.company_id)
 
     applyFilters(params, query)
+    console.log(params.pages.pageSize, params.pages.pageSize * (params.pages.pageNumber - 1));
 
     const result = await query
         .sort({

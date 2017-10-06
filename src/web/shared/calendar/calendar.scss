@@ -23,11 +23,16 @@
 
     &.rbc-selected {
         color: #fff;
-        background-color: $bc-fire;
+        background-color: rgb(86, 97, 119);
     }
 }
 
 .rbc-today {
-    background-color: rgba(86, 97, 119, 0.22);
+    background-color: rgba(86, 97, 119, 0.12);
 
+}
+
+.rbc-date-cell.rbc-current {
+    color: $bc-danger;
+    font-weight: 700;
 }

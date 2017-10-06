@@ -1,5 +1,5 @@
-export default function initApp(app, { port }) {
-    app.listen(port, listenCb)
+export default function initApp(app, http, { port }) {
+    http.listen(port, listenCb)
 
     function listenCb(err: Error) {
         if (err) {

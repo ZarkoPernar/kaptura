@@ -1,4 +1,5 @@
-export function addClientToItem(item, client) {
+
+export function addClientData(item, client) {
     return {
         ...item,
         client_id: client._id,

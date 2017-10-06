@@ -40,15 +40,11 @@ export default class ProjectFilters extends Component {
         projectStatus: '',
     }
 
-    filters = {}
-
     applyFilter = (name, value, comparator = '=') => {
-        this.filters = {
-            ...this.filters,
+        this.props.applyFilters({
+            ...this.props.filters,
             [name]: value ? { comparator, value } : undefined
-        }
-
-        this.props.applyFilters(this.filters)
+        })
     }
 
     onClientSelect = (client) => {

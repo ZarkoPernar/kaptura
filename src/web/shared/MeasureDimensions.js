@@ -9,9 +9,13 @@ function attributeMutation(mutation) {
 
 class MeasureDimensions extends Component {
     static propTypes = {
-        children: PropTypes.element.isRequired
+        children: PropTypes.element.isRequired,
+        display: PropTypes.string,
     }
 
+    static defaultProps = {
+        display: 'block',
+    }
 
     state = {
         width: 0,
@@ -46,10 +50,18 @@ class MeasureDimensions extends Component {
 
         if (this.element.clientWidth === this.state.width && this.element.clientHeight === this.state.height) return
 
-        this.setState({
-            width: this.element.clientWidth,
-            height: this.element.clientHeight,
-        })
+        if (this.props.onMeasure) {
+            this.props.onMeasure({
+                width: this.element.clientWidth,
+                height: this.element.clientHeight,
+            })
+        } else {
+            this.setState({
+                width: this.element.clientWidth,
+                height: this.element.clientHeight,
+            })
+        }
+
     }
 
     getElementRef = (ref) => {
@@ -58,8 +70,10 @@ class MeasureDimensions extends Component {
 
     render() {
         return (
-            <div ref={this.getElementRef}>
+            <div ref={this.getElementRef} style={{display: this.props.display}}>
                 {
+                    this.props.onMeasure ?
+                    this.props.children :
                     React.cloneElement(this.props.children, {
                         hostWidth: this.state.width,
                         hostHeight: this.state.height,

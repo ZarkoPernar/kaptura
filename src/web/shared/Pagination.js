@@ -10,19 +10,38 @@ import FormGroup from './form/FormGroup'
 
 class PaginationComponent extends Component {
     static propTypes = {
+        pageSize: PropTypes.number,
         currentPage: PropTypes.number,
         nextPage: PropTypes.func,
         prevPage: PropTypes.func,
+        onChange: PropTypes.func,
+    }
+
+    static defaultProps = {
+        pageSize: 1,
+        currentPage: 1,
     }
 
     state = {
         currentPage: 1,
     }
 
-    componentWillReceiveProps({ currentPage }) {
-        if (currentPage === this.state.currentPage) return
+    next = () => {
+        const currentPage = this.state.currentPage + 1
+        this.setState({currentPage})
 
+        if (this.props.onChange) {
+            this.props.onChange(currentPage)
+        }
+    }
+
+    prev = () => {
+        const currentPage = this.state.currentPage - 1
         this.setState({ currentPage })
+
+        if (this.props.onChange) {
+            this.props.onChange(currentPage)
+        }
     }
 
     onChange = (value) => {
@@ -31,6 +50,10 @@ class PaginationComponent extends Component {
         if (!currentPage) return
 
         this.setState({ currentPage })
+
+        if (this.props.onChange !== undefined) {
+            this.props.onChange(this.state.currentPage)
+        }
     }
 
     onKeyDown = (event) => {
@@ -42,7 +65,7 @@ class PaginationComponent extends Component {
     render() {
         return (
             <div className="pagination">
-                <Button onClick={this.props.prevPage} disabled={this.props.currentPage === 1}>
+                <Button onClick={this.prev} disabled={this.state.currentPage === 1}>
                     <span className="pagination__nav pagination__nav--long">
                         Predhodna
                     </span>
@@ -55,7 +78,7 @@ class PaginationComponent extends Component {
                     <Input name="page" value={this.state.currentPage} onChange={this.onChange} onKeyDown={this.onKeyDown}/>
                 </FormGroup>
 
-                <Button onClick={this.props.nextPage}>
+                <Button onClick={this.next}>
                     <span className="pagination__nav pagination__nav--long">
                         Sljedeca
                     </span>

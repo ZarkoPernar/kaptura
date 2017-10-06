@@ -1,42 +1,57 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import MdPlay from 'react-icons/lib/md/play-arrow'
-import MdStop from 'react-icons/lib/md/stop'
 import { v4 as uid } from 'uuid'
 
 import { actions as userInfoActions} from '../userInfo.reducer'
-import Button from '../shared/Button'
 import appTitle from '../shared/appTitle'
+import createStoreListComponent from '../shared/StoreList'
 
 import { isUnfinished, getLast, inOut } from './clock'
-import { selector, loadLogs, addLog, updateLog } from './reducer'
-import DisplayDuration from './DisplayDuration'
+import { storeItem } from './reducer'
+import { storeItem as listStoreItem } from './timesheetReducer'
+import { storeItem as rootStoreItem } from '../timesheet/reducer'
+
+import ClockButton from './ClockButton'
 
 import './clock.scss'
 
 const DEFAULT_TITLE = 'Clock'
 
 @connect((state) => ({
-    logs: selector(state),
     user: state.userInfo && state.userInfo.user,
-}), (dispatch) => {
-    return {
-        loadUser: () => dispatch(userInfoActions.load()),
-        loadLogs: () => dispatch(loadLogs()),
-        addLog: (log) => dispatch(addLog(log)),
-        updateLog: (log) => dispatch(updateLog(log)),
-    }
+}), {
+    loadUser: userInfoActions.load,
+    sendToList: ({ payload }) => ({
+        type: listStoreItem.types.ADD_ITEM,
+        payload
+    })
+})
+@createStoreListComponent({
+    storeName: 'clock',
+    actions: storeItem.actions,
+    rootStoreItem,
 })
 export default class Clock extends PureComponent {
     static defaultProps = {
-        logs: [],
+        items: [],
+    }
+
+    _activeLog = null
+    _hasUnfinished = false
+
+    constructor(props) {
+        super(props)
+
+        if (props.items && props.items !== this.props.items) {
+            this._activeLog = getLast(props.items)
+            this._hasUnfinished = isUnfinished(props.items)
+        }
     }
 
     componentWillMount() {
-        this.refresh()
         this.getUser()
         // this.setState(state => ({
-        //     logs: getFromStorage(state.logs)
+        //     items: getFromStorage(state.items)
         // }))
     }
 
@@ -44,59 +59,62 @@ export default class Clock extends PureComponent {
         this.appTitle = appTitle(window.document)
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.user && nextProps.user !== this.props.user) {
+            this.getLogs(nextProps.user)
+        }
+
+        if (nextProps.items && nextProps.items !== this.props.items) {
+            this._activeLog = getLast(nextProps.items)
+            this._hasUnfinished = isUnfinished(nextProps.items)
+        }
+    }
+
+
     getUser = () => {
         this.props.loadUser()
     }
 
-    refresh = () => {
-        this.props.loadLogs()
+    getLogs = (user) => {
+        this.props.list({
+            filters: {
+                user_id: {
+                    comparator: '=',
+                    value: user._id,
+                }
+            },
+            pages: {
+                pageSize: 1,
+            }
+        })
     }
 
-    click = () => {
+    onToggle = () => {
         if (!this.props.user) return
 
-        if (isUnfinished(this.props.logs)) {
-            const log = inOut(getLast(this.props.logs))
+        if (isUnfinished(this.props.items)) {
+            const log = inOut(getLast(this.props.items))
 
             this.appTitle.setTitle(DEFAULT_TITLE)
             // TODO: use props dispatch
             // this.setState(updateLastLog(log))
 
-            this.props.updateLog(log)
+            this.props.update(log)
         } else {
             const log = inOut()
 
-            this.props.addLog({
+            this.props.add({
                 ...log,
                 _id: uid(),
                 user_id: this.props.user._id,
+            })
+            .then((res) => {
+                this.props.sendToList(res)
             })
         }
     }
 
     render() {
-        const { logs } = this.props
-        const hasUnfinished = isUnfinished(logs)
-
-        return (
-            <Button onClick={this.click} clear>
-                { hasUnfinished ? 'Stop' : 'Start' }
-                {
-                    (
-                        hasUnfinished ?
-                        <MdStop className="clock-toggle__icon clock-toggle__icon--stop" /> :
-                        <MdPlay className="clock-toggle__icon clock-toggle__icon--start" />
-                    )
-                }
-
-                {
-                    (
-                        hasUnfinished ?
-                            <DisplayDuration>{getLast(logs).check_in}</DisplayDuration> :
-                            '0:00:00'
-                    )
-                }
-            </Button>
-        )
+        return <ClockButton onToggle={this.onToggle} activeLog={this._activeLog} isActive={this._hasUnfinished} />
     }
 }

@@ -8,6 +8,7 @@ export interface IClient extends ITimestampsSchema, ILocationSchema, IModifiedBy
     company_id: string
     name: string
     account_number?: string
+    company_number: string
     notes?: string
     offlineId?: string
     options: Object
@@ -19,6 +20,7 @@ const ClientSchema = new mongoose.Schema({
         type: String
     },
     company_id: mongoose.Schema.Types.ObjectId,
+    company_number: String,
     account_number: String,
     notes: String,
     offlineId: String,
@@ -53,20 +55,18 @@ export default {
             company_id: user.company_id,
         }
 
-        if (item.latitude && item.longitude) {
-            newItem.position = {
-                type: 'Point',
-                coordinates: [item.longitude, item.latitude]
-            }
-        }
-
         return new Model(newItem).save()
     },
 
     update({ item, user }: { item: IClient, user: IUser }) {
-        return Model.findByIdAndUpdate(item._id, { $set: item }, UPDATE_OPTIONS)
+        return Model.findById(item._id)
             .where('company_id')
             .equals(user.company_id)
+            .then((doc) => {
+                Object.assign(doc, item)
+
+                return doc.save()
+            })
     },
 
     remove({ item, user }: { item: IClient, user: IUser }) {

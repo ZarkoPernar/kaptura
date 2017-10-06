@@ -11,7 +11,7 @@ class Modal extends Component {
                 contentLabel="Modal"
                 className="ReactModal__Content"
                 overlayClassName="ReactModal__Overlay"
-                shouldCloseOnOverlayClick={true}
+                shouldCloseOnOverlayClick
                 closeTimeoutMS={TIMEOUT_MS}
                 {...this.props}>
                 { this.props.children }

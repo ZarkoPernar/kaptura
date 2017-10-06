@@ -1,0 +1,29 @@
+.App-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: auto;
+    transform: translateX(-102%);
+    transition: .3s ease transform;
+    box-shadow: 2px 0 4px rgba(70, 70, 70, 0.3);
+    z-index: 3;
+    will-change: transform;
+
+    &--right {
+        left: auto;
+        right: 0;
+        transform: translateX(102%);
+        box-shadow: -2px 0 4px rgba(70, 70, 70, 0.3);
+    }
+
+    &--is-open {
+        transform: none;
+    }
+
+    &__inner {
+        width: 100%;
+        height: 100%;
+        background-color: #fff;
+    }
+}

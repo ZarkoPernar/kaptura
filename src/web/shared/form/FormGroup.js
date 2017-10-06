@@ -80,13 +80,13 @@ class FormGroup extends PureComponent {
                     'form-group--icon-left': this.props.itemLeft !== undefined,
                 })} style={this.props.style}>
 
-                    { labelElement }
+                { labelElement }
 
-                    <div className="input-group">
-                        { itemLeft }
-                        { inputElement }
-                        { itemRight }
-                    </div>
+                <div className="input-group">
+                    { itemLeft }
+                    { inputElement }
+                    { itemRight }
+                </div>
             </div>
         )
     }

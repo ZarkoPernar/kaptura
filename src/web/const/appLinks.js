@@ -12,7 +12,8 @@ import MdStore from 'react-icons/lib/md/store'
 import MdAssignment from 'react-icons/lib/md/assignment'
 import MdPeopleOutline from 'react-icons/lib/md/people-outline'
 import MdBook from 'react-icons/lib/md/book'
-
+import MdPersonOutline from 'react-icons/lib/md/person-outline'
+import MdReceipt from 'react-icons/lib/md/receipt'
 
 export default [
     {
@@ -59,6 +60,11 @@ export default [
         to: '/fakture',
         key: 'fakture',
         title: 'Fakture',
-        icon: MdBook,
+        icon: MdReceipt,
+    }, {
+        to: '/korisnik',
+        key: 'korisnik',
+        title: 'Korisnik',
+        icon: MdPersonOutline,
     },
 ]

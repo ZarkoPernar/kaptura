@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { v4 as uid } from 'uuid'
 import MdAdd from 'react-icons/lib/md/add-circle'
+import { connect } from 'react-redux'
 
 import Toaster from '../shared/toast/Toaster'
 import Modal from '../shared/modal'
@@ -9,6 +10,7 @@ import Page from '../shared/Page'
 import PageSubheader from '../shared/PageSubheader'
 import PageBody from '../shared/PageBody'
 import Button from '../shared/Button'
+import Map from '../shared/Map'
 
 import ProjectList from './ProjectList'
 import EditProjectForm from './Form'
@@ -16,19 +18,30 @@ import DeleteProjectDialog from './DeleteProjectDialog'
 import PageFilters from './PageFilters'
 import ProjectTabs from './ProjectTabs'
 
-import * as api from './api'
+import invoiceApi from '../invoices/api'
 
-import CreateStoreItemComponent from '../shared/StoreList'
+import createStoreListComponent from '../shared/StoreList'
 
-import { storeItem } from './reducer'
+import { storeItem } from './listReducer'
+import { storeItem as rootStoreItem } from './reducer'
 
 import './projekti.scss'
 
-@CreateStoreItemComponent({
-    storeName: 'projects',
-    actions: storeItem.actions
+@connect(state => ({ company: state.companyInfo.data }))
+@createStoreListComponent({
+    storeName: storeItem.name,
+    actions: storeItem.actions,
+    rootStoreItem
 })
 export default class ProjectPage extends Component {
+    static defaultProps = {
+        items: [],
+        list: () => {},
+        add: () => {},
+        update: () => {},
+        remove: () => {},
+    }
+
     state = {
         projectForEdit: null,
         projectForDelete: null,
@@ -46,13 +59,12 @@ export default class ProjectPage extends Component {
     }
 
     applyFilters = (filters) => {
-        api.list({
-            filters,
+        this.setState({
+            filters
         })
-        .then((res) => {
-            this.setState({
-                projects: res
-            })
+
+        this.props.list({
+            filters,
         })
     }
 
@@ -170,6 +182,16 @@ export default class ProjectPage extends Component {
         }))
     }
 
+    createInvoice = () => {
+        invoiceApi.add({
+            _id: uid(),
+            project_id: this.state.projectForEdit._id,
+            user_id: this.state.projectForEdit.created_by,
+            client_id: this.state.projectForEdit.client_id,
+        })
+        this.dismiss()
+    }
+
     dismiss = () => {
         this.setState({ isEditModalOpen: false })
     }
@@ -189,6 +211,10 @@ export default class ProjectPage extends Component {
             prevPage={this.prevPage} />
     )
 
+    renderMap = () => {
+        return null
+    }
+
 
     render() {
         const projectForEdit = this.state.projectForEdit === null ? undefined : this.state.projectForEdit
@@ -198,10 +224,26 @@ export default class ProjectPage extends Component {
 
         return (
             <Page name="Projekti">
+                <Toaster toasts={this.state.toasts} />
+                <Modal isOpen={this.state.isEditModalOpen} onRequestClose={this._executeAfterModalClose}>
+                    <EditProjectForm
+                        project={projectForEdit}
+                        onSubmit={this.submitProject}
+                        createInvoice={this.createInvoice}
+                        onDismiss={this.dismiss} />
+                </Modal>
+
+                <Modal isOpen={this.state.isDeleteModalOpen}>
+                    <DeleteProjectDialog
+                        confirm={this.deleteConfirm}
+                        dismiss={this.deleteDismiss}
+                        project={this.state.projectForDelete} />
+                </Modal>
+
                 <PageSubheader>
                     <ProjectTabs activeTab={this.state.activeTab} selectTab={this.selectTab} />
 
-                    <PageFilters applyFilters={this.applyFilters} />
+                    <PageFilters filters={this.state.filters} applyFilters={this.applyFilters} />
 
                     <Button flat color="primary" onClick={this.openNew}>
                         <MdAdd />
@@ -211,24 +253,17 @@ export default class ProjectPage extends Component {
 
 
                 <PageBody>
-                    <Toaster toasts={this.state.toasts} />
-
-                    <Modal isOpen={this.state.isEditModalOpen} onRequestClose={this._executeAfterModalClose}>
-                        <EditProjectForm
-                            project={projectForEdit}
-                            onSubmit={this.submitProject}
-                            onDismiss={this.dismiss} />
-                    </Modal>
-
-                    <Modal isOpen={this.state.isDeleteModalOpen}>
-                        <DeleteProjectDialog
-                            confirm={this.deleteConfirm}
-                            dismiss={this.deleteDismiss}
-                            project={this.state.projectForDelete} />
-                    </Modal>
-
                     { renderContent }
                 </PageBody>
+
+                {
+                    this.state.activeTab === 'Map' ? (
+                        <Map
+                            locations={projects}
+                            center={this.props.company && this.props.company.position}
+                            height="calc(100vh - 128px)" />
+                    ) : null
+                }
             </Page>
         )
     }

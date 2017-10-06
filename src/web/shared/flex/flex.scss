@@ -1,6 +1,12 @@
+@import '../../App';
 
 .flex {
     display: flex;
+
+
+    & > * {
+        flex: 1 1;
+    }
 
     &--center {
         align-items: center;
@@ -29,13 +35,13 @@
     }
 
     &.flex--grid {
-        margin-left: -.5rem;
-        margin-right: -.5rem;
+        flex-wrap: wrap;
+
+
+        & > * {
+            flex: 0 0 auto;
+            padding: 0 .5rem;
+            width: 100%;
+        }
     }
-
-    &.flex--grid > * {
-        padding: 0 .5rem;
-    }
-
-
 }

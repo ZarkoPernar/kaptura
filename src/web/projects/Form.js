@@ -9,7 +9,9 @@ import Datepicker from '../shared/Datepicker'
 import Select from '../shared/form/Select'
 import Address from '../shared/Address'
 import SearchClient from '../clients/SearchClient'
-import { addClientToItem } from '../clients/utils'
+
+import { addClientData } from '../clients/utils'
+import addLocationData from '../shared/Address/addLocationData'
 
 const actionStyles = {
     display: 'flex',
@@ -108,13 +110,18 @@ class EditProjectForm extends Component {
 
     onClientSelect = (client) => {
         this.setState((prevState) => ({
-            project: addClientToItem(prevState.project, client),
+            project: addLocationData(addClientData(prevState.project, client), client),
         }))
     }
 
     dismiss = (e) => {
         e.preventDefault()
         this.props.onDismiss()
+    }
+
+    createInvoice = (e) => {
+        e.preventDefault()
+        this.props.createInvoice()
     }
 
     render() {
@@ -158,13 +165,17 @@ class EditProjectForm extends Component {
                     </FormGroup>
 
                     <FormGroup label="Adresa">
-                        <Address name="google_address" onChange={this.inputChanged} onPlaceChange={this.onPlaceChange} value={this.state.project.google_address} />
+                        <Address name="google_address" onChange={this.inputChanged} onSelect={this.onPlaceChange} value={this.state.project.google_address} />
                     </FormGroup>
 
                     <FormGroup label="Status">
                         <Select name="status" onChange={this.inputChanged} value={this.state.project.status}
                             options={statusOptions} />
                     </FormGroup>
+
+                    <Button flat onClick={this.createInvoice}>
+                        Stvori Fakturu
+                    </Button>
 
                     {/* <div style={actionStyles}> */}
                     <div className="modal__controls">

@@ -30,7 +30,7 @@ export default class ProjectTabs extends Component {
                 <Tab onClick={this.selectCalendarTab} isActive={this.props.activeTab === 'Calendar'}>
                     Kalendar
                 </Tab>
-                <Tab onClick={this.selectMapTab} isActive={this.props.activeTab === 'Map'} disabled>
+                <Tab onClick={this.selectMapTab} isActive={this.props.activeTab === 'Map'}>
                     Karta
                 </Tab>
             </Tabs>

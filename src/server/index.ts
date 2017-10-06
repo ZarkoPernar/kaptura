@@ -1,28 +1,34 @@
-// if (process.env.NODE_ENV !== 'production') {
-//     require('@glimpse/glimpse').init()
-// }
-
+// Get environment variables
+// ==============================================
 require('dotenv').config()
+const MONGO_URL = process.env.MONGO_URL
+const PORT = process.env.PORT || 5000
+
 
 import * as express from 'express'
 import { Express } from 'express'
 
-import initMiddleware from './middleware/index'
+import initMiddleware from './middleware'
 import listen from './listen'
+import socket from './socket'
 import initDB from './db'
 import registerAllRoutes from './routes'
 import registerAuthStrategies from './auth'
 
-const MONGO_URL = process.env.MONGO_URL
-const PORT = process.env.PORT || 5000
 
 // INIT App
 // ==============================================
 const app: Express = express()
+const http = require('http').Server(app)
+export const io = require('socket.io')(http)
 
 // Start server
 // ==============================================
-listen(app, { port: PORT })
+listen(app, http, { port: PORT })
+
+// Start socket
+// ==============================================
+socket({ io })
 
 // Connect MongoDB
 // ==============================================

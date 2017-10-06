@@ -8,7 +8,7 @@ import CompanyModel from '../models/company'
 export async function userInfo(request: IRequest, response: Response): Promise<void> {
     const [company, employees] = await Promise.all([
         CompanyModel
-            .findById(request.user.company_id),
+            .getItem(request.user.company_id),
         UserModel.find()
             .where('company_id')
             .equals(request.user.company_id)])

@@ -25,12 +25,10 @@ export function post(path, data) {
 }
 
 function transformToJSON(response) {
-    try {
-        const data = response.json()
-        return data
-    } catch(err) {
-        throw new Error('Response was not a valid JSON string.')
-    }
+    return response.json()
+        .catch((err) => {
+            throw new Error('Response was not a valid JSON string.')
+        })
 }
 
 function handleError(error) {

@@ -43,7 +43,7 @@ function formatPart(val) {
     return val.toString()
 }
 
-function diff(last, first) {
+export function diff(last, first) {
     return new Date(Date.parse(last)) - new Date(Date.parse(first))
 }
 

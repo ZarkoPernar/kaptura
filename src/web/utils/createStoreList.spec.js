@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk'
 
-import createStoreItem from './createStoreItem'
+import createStoreList from './createStoreList'
 
 const middleware = applyMiddleware(thunk)
 
@@ -9,7 +9,7 @@ let storeItem
 let store
 
 beforeEach(() => {
-    storeItem = createStoreItem('test', {
+    storeItem = createStoreList('test', {
         api: {
             list(params) {
                 if (params && params.reject) return Promise.reject(new Error('Bad request'))
@@ -51,7 +51,7 @@ beforeEach(() => {
 describe('it', () => {
     test('throws when no name', () => {
         expect(() => {
-            createStoreItem()
+            createStoreList()
         }).toThrow()
     })
 
@@ -60,18 +60,18 @@ describe('it', () => {
             actions: expect.any(Object),
             reducer: expect.any(Function),
         })
-        const actualResult = createStoreItem('test')
+        const actualResult = createStoreList('test')
 
         expect(actualResult).toEqual(expectedResult)
     })
 
     test('add action exists', () => {
-        const storeItem = createStoreItem(name)
+        const storeItem = createStoreList(name)
         expect(storeItem.actions.add).toBeDefined()
     })
 
     test('add action returns a function', () => {
-        const { add } = createStoreItem(name).actions
+        const { add } = createStoreList(name).actions
 
         expect(typeof add()).toEqual('function')
     })
@@ -112,7 +112,7 @@ describe('it', () => {
     })
 
     test('list action returns a function', () => {
-        const { list } = createStoreItem(name).actions
+        const { list } = createStoreList(name).actions
 
         expect(typeof list()).toEqual('function')
     })
@@ -164,7 +164,7 @@ describe('it', () => {
     })
 
     test('update action returns a function', () => {
-        const { update } = createStoreItem(name).actions
+        const { update } = createStoreList(name).actions
 
         expect(typeof update()).toEqual('function')
     })

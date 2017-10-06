@@ -1,10 +1,10 @@
-import { addClientToItem } from './utils'
+import { addClientData } from './utils'
 
-test('addClientToItem exists', () => {
-    expect(addClientToItem).toBeDefined()
+test('addClientData exists', () => {
+    expect(addClientData).toBeDefined()
 })
 
-test('addClientToItem returns a new object with fields added', () => {
+test('addClientData returns a new object with fields added', () => {
     const initialItem = {
         test: 1,
         hello: 'world',
@@ -18,7 +18,7 @@ test('addClientToItem returns a new object with fields added', () => {
         client_id: 34,
         client_name: 'Test 34',
     }
-    const actualResult = addClientToItem(initialItem, client)
+    const actualResult = addClientData(initialItem, client)
 
     expect(actualResult).toEqual(expectedResult)
 })

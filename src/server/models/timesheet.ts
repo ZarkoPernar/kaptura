@@ -74,13 +74,6 @@ export default {
             company_id: user.company_id,
         }
 
-        // if (item.latitude && item.longitude) {
-        //     newItem.position = {
-        //         type: 'Point',
-        //         coordinates: [item.longitude, item.latitude]
-        //     }
-        // }
-
         return new Model(newItem).save()
     },
 

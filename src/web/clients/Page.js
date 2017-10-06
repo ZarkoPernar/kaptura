@@ -8,11 +8,11 @@ import DeleteDialog from './DeleteDialog'
 import Toaster from '../shared/toast/Toaster'
 import Modal from '../shared/modal'
 import Button from '../shared/Button'
-import CreateStoreItemComponent from '../shared/StoreList'
+import createStoreListComponent from '../shared/StoreList'
 
 import { storeItem } from './reducer'
 
-@CreateStoreItemComponent({
+@createStoreListComponent({
     storeName: 'clients',
     actions: storeItem.actions
 })

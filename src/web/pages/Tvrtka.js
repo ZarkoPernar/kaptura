@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
 
-import Card, { CardBody } from '../shared/Card'
+import Page from '../shared/Page'
+import PageBody from '../shared/PageBody'
+import CompanyInfo from '../company/CompanyInfo'
 
-export default class TvrtkaPageComponent extends Component {
+
+export default class TvrtkaPage extends Component {
     render() {
         return (
-            <div className="page--padding">
-                <Card>
-                    <CardBody>
-                        <h2>Tvrtka</h2>
-                    </CardBody>
-                </Card>
-            </div>
+            <Page>
+                <PageBody>
+                    <CompanyInfo company={this.props.company} />
+                </PageBody>
+            </Page>
         )
     }
 }

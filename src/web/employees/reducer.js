@@ -1,9 +1,9 @@
-import createStoreItem from '../utils/createStoreItem'
+import createStoreList from '../utils/createStoreList'
 import api from './api'
 
 import { LOAD_USER_INFO_SUCCESS } from '../userInfo.reducer'
 
-export const storeItem = createStoreItem('employees', { api })
+export const storeItem = createStoreList('employees', { api })
 
 export function employeesEpic(action$) {
     return action$

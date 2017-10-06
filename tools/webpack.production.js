@@ -29,6 +29,9 @@ module.exports = function (env) {
             //     'react-redux': 'inferno-redux',
             // },
         },
+        stats: {
+            reasons: true,
+        },
         devServer: CONFIG.WEBPACK_DEV_SERVER_CONFIG,
         plugins: [
             new ExtractTextPlugin('styles.[chunkhash].css'),

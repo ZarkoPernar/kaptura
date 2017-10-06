@@ -6,6 +6,7 @@ import { Route } from 'react-router-dom'
 import AppHeader from './AppHeader'
 import AppSidenav from './AppSidenav'
 import AppBody from './AppBody'
+import AppChatSidebar from './AppChatSidebar'
 
 import './App.scss'
 import './print.scss'
@@ -18,6 +19,7 @@ export default class App extends Component {
         menuIsOpen: false,
         isTabbing: false,
         isClicking: false,
+        sidenavInstance: null,
     }
 
     componentDidMount() {
@@ -43,16 +45,22 @@ export default class App extends Component {
         }
     }
 
+    getSidenav = (sidenavInstance) => {
+        this.setState({sidenavInstance})
+    }
+
     render() {
         return (
             <div className="App">
                 {/* <RegisterHistory key="history" /> */}
 
-                <AppSidenav />
+                <AppSidenav ref={this.getSidenav} />
 
-                <AppHeader />
+                <AppHeader sidenavInstance={this.state.sidenavInstance} />
 
                 <AppBody />
+
+                <AppChatSidebar />
 
             </div>
         )

@@ -43,12 +43,16 @@ module.exports = {
     module: {
         rules: [{
                 test: /\.js$/,
-                use: ['babel-loader'],
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: 'cache',
+                    }
+                },
                 include: [
-                    path.resolve('src'),
+                    path.resolve('src/web'),
                 ],
-                exclude: ['.spec.']
-
+                exclude: ['.spec.'],
             }, {
                 test: /\.scss$/,
                 use: ['style-loader', 'css-loader', 'sass-loader']

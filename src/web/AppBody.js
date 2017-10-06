@@ -12,7 +12,7 @@ import LoginComponent from './pages/Login'
 import Zaposlenici from './employees/Page'
 import Projekti from './projects/Page'
 import Klijenti from './clients/Page'
-import InvoicePage from './invoices/Page'
+import InvoicesPage from './invoices/Page'
 
 export default class AppBody extends Component {
     render() {
@@ -27,8 +27,7 @@ export default class AppBody extends Component {
                 {/* <Route path="/projekti/charts" component={ProjectChartsComponent} exact /> */}
                 <Route path="/klijenti" component={Klijenti} exact />
 
-                <Route path="/fakture" component={InvoicePage} exact />
-
+                <Route path="/fakture" component={InvoicesPage} exact />
 
                 <Route path="/login" component={LoginComponent} />
             </main>

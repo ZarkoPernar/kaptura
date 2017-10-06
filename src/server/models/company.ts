@@ -6,6 +6,9 @@ import { location, ITimestampsSchema, ILocationSchema, IModifiedBySchema } from 
 export interface ICompany extends ITimestampsSchema, ILocationSchema, IModifiedBySchema {
     _id: string
     name: string
+    company_number?: string
+    bank_account?: string
+    email?: string
     options: Object
 }
 
@@ -14,6 +17,9 @@ const CompanySchema = new mongoose.Schema({
         required: true,
         type: String
     },
+    company_number: String,
+    bank_account: String,
+    email: String,
     options: {
         type: Object,
         default: {},
@@ -24,5 +30,17 @@ const CompanySchema = new mongoose.Schema({
 
 CompanySchema.plugin(location)
 
-const Model = mongoose.model('company', CompanySchema)
-export default Model
+export const Model = mongoose.model('company', CompanySchema)
+
+export default {
+    getItem(id) {
+        return Model.findById(id)
+    },
+    update({ company, user }) {
+        return Model.findById(company._id)
+            .then((doc) => {
+                Object.assign(doc, company)
+                return doc.save()
+            })
+    }
+}

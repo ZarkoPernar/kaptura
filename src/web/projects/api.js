@@ -1,6 +1,16 @@
+import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/observable/of'
+import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/filter'
+
 import { get, post } from '../shared/apiService'
+import { mapCollection, createWatchCollection, getDataFromDocument } from '../utils/firebase'
+import firebase, { db } from '../firebase'
 
 const base_url = '/project'
+const CHANGE_MODIFIED = 'modified'
+
+const projects = db.collection('projects')
 
 export function getById(id) {
     const url = base_url + '/get/' + id
@@ -8,8 +18,21 @@ export function getById(id) {
 }
 
 export function list(params) {
-    const url = base_url + '/list'
-    return post(url, params)
+    return post(base_url + '/list', params)
+
+    // return projects.get()
+    //     .then(mapCollection)
+    //     .catch(function (error) {
+    //         throw new Error("Error getting documents: ", error);
+    //     });
+}
+
+export function watch() {
+    return Observable.of([])
+    // return createWatchCollection(projects)
+    //     .filter(change => change.type === CHANGE_MODIFIED)
+    //     .map(change => change.doc)
+    //     .map(getDataFromDocument)
 }
 
 export function add(log) {

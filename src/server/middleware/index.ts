@@ -7,6 +7,7 @@ const connectMongodbSession = require('connect-mongodb-session')
 
 const MongoDBStore = connectMongodbSession(expressSession)
 
+import apiLogging from './apiLogging'
 
 export default function initMiddleware(app) {
     app.use(logger('tiny'))

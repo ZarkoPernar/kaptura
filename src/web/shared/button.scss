@@ -119,11 +119,12 @@ $button-default-border: 1px solid darken($bc-light, 20);
         .btn__inner {
             padding: .5em;
             padding-top: .55em;
+            width: 2.5rem;
         }
+
         svg {
-            font-size: 1.25em;
+            font-size: 1.75em;
             margin: 0;
-            margin-top: -2px;
         }
 
 
@@ -131,16 +132,12 @@ $button-default-border: 1px solid darken($bc-light, 20);
 
     &--large.btn--icon-only {
         .btn__inner {
-            height: 3em;
-            width: 3em;
-            padding: .5em;
-            padding-top: .55em;
+            height: 2.5em;
+            width: 2.5em;
         }
 
         svg {
             font-size: 2em;
-            margin: 0;
-            margin-top: -2px;
         }
 
     }
@@ -152,7 +149,7 @@ $button-default-border: 1px solid darken($bc-light, 20);
         }
 
         svg {
-            font-size: 1.05em;
+            font-size: 1.25em;
         }
     }
 

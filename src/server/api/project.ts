@@ -1,6 +1,8 @@
 import * as url from 'url'
 import {Request, Response} from 'express'
 
+import { io } from '../index'
+import { companyClients } from '../socket'
 import { IRequest } from './../routes/request.interface'
 import ProjectModel, { IProject, Model } from '../models/project'
 import convertDates from '../utils/convertDates'
@@ -37,15 +39,8 @@ export async function list(request: IRequest, response: Response) {
     }
 
     const query = Model.find()
-    if (!request.user.company_id) {
-        query
-            .where('created_by')
-            .equals(request.user._id)
-    } else {
-        query
-            .where('company_id')
-            .equals(request.user.company_id)
-    }
+        .where('company_id')
+        .equals(request.user.company_id)
 
     if (params.name !== undefined) {
         query.find({ name: { $regex: new RegExp(params.name, 'gi',) } })
@@ -84,6 +79,7 @@ export async function create(request: IRequest, response: Response) {
 
 export async function update(request: IRequest, response: Response) {
     const item: IProject = request.body
+    const company_id = request.user.company_id.toString()
 
     const newItem = convertDates(item, ['start_date', 'end_date'])
 
@@ -91,6 +87,18 @@ export async function update(request: IRequest, response: Response) {
         item: newItem,
         user: request.user,
     })
+
+    if (companyClients.has(company_id)) {
+        if (companyClients.get(company_id)) {
+            companyClients
+                .get(company_id)
+                .forEach(socket_id => {
+                    io.sockets.connected[socket_id].emit('project_update', result)
+                })
+
+        }
+    }
+
     response.status(200).json(result)
 }
 

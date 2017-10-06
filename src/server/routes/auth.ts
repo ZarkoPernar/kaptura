@@ -1,7 +1,7 @@
 import * as passport from 'passport'
 
 import UserModel from '../models/user'
-import CompanyModel from '../models/company'
+import {Model as CompanyModel} from '../models/company'
 import { localAuthenticate } from '../middleware/localAuth'
 
 const ROUTE_PREFIX = '/auth'

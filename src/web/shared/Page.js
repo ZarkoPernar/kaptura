@@ -7,7 +7,7 @@ import PageSubheader from './PageSubheader'
 export default function Page({ name, children }) {
     let hasSubheader = false
     React.Children.forEach(children, child => {
-        if (child.type === PageSubheader) {
+        if (child !== null && child.type === PageSubheader) {
             hasSubheader = true
         }
     })

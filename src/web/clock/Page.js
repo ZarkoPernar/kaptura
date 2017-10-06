@@ -1,47 +1,63 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
-import { updateLog } from '../clock/reducer'
-import Logs from '../clock/Logs'
-import * as api from '../clock/api'
-import EditTimeForm from '../clock/EditTimeForm'
-import { selector } from '../clock/reducer'
 import Modal from '../shared/modal'
 import Page from '../shared/Page'
 import PageSubheader from '../shared/PageSubheader'
+import Pagination from '../shared/Pagination'
 
+import LogPropType from './LogPropType'
 import PageFilters from './PageFilters'
+import Logs from './Logs'
+import EditTimeForm from './EditTimeForm'
+
+import createStoreListComponent from '../shared/StoreList'
+
+import { storeItem } from './timesheetReducer'
+import { storeItem as rootStoreItem } from '../timesheet/reducer'
 
 import './sati.scss'
 
-const mapStateToProps = state => {
-    return {
-        logs: selector(state)
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        updateLog: (log) => dispatch(updateLog(log)),
-    }
-}
-
-class SatiPage extends Component {
+@connect(state => ({ company: state.companyInfo.data }))
+@createStoreListComponent({
+    storeName: 'timesheetList',
+    actions: storeItem.actions,
+    rootStoreItem,
+})
+export default class SatiPage extends Component {
     state = {
         timeForEdit: null,
         isEditFormGroupOpen: false,
-        logs: [],
+        filters: {},
     }
 
-    applyFilters(filters) {
-        api.list({
+    componentDidMount() {
+        this.props.list()
+    }
+
+    applyFilters = (filters) => {
+        this.setState({
+            filters
+        })
+        this.props.list({
             filters,
+            pages: {
+                pageNumber: this.currentPage
+            }
         })
-        .then((res) => {
-            this.setState({
-                logs: res
-            })
+    }
+
+    onPageChange = (currentPage) => {
+        console.log(currentPage);
+
+        this.props.list({
+            filters: this.state.filters,
+            pages: {
+                pageNumber: currentPage
+            }
         })
+        this.currentPage = currentPage
     }
 
     selectLog = (log) => {
@@ -71,7 +87,7 @@ class SatiPage extends Component {
         return (
             <Page name="Sati">
                 <PageSubheader>
-                    <PageFilters applyFilters={this.applyFilters} />
+                    <PageFilters filters={this.state.filters} applyFilters={this.applyFilters} />
                 </PageSubheader>
 
                 <div className="page--padding">
@@ -80,13 +96,11 @@ class SatiPage extends Component {
                     </Modal>
 
 
-                    <Logs onSelect={this.selectLog} logs={this.state.logs.length ? this.state.logs : this.props.logs} />
+                    <Logs onSelect={this.selectLog} logs={this.props.items} />
+
+                    <Pagination onChange={this.onPageChange} />
                 </div>
             </Page>
         )
     }
 }
-
-const StoreSatiPage = connect(mapStateToProps, mapDispatchToProps)(SatiPage)
-
-export default StoreSatiPage

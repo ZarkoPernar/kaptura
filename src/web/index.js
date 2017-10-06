@@ -1,6 +1,10 @@
 import React from 'react'
 import { render } from 'react-dom'
-import 'rxjs'
+
+import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/observable/fromPromise'
+import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/mergeMap'
 
 import RootCmp from './Root'
 

@@ -19,9 +19,9 @@ textarea {
         top: 3 * $size;
         left: 0;
         color: $bc-earth;
-        font-weight: 500;
+        font-weight: 700;
         // transform: scale(.95);
-        opacity: .85;
+        opacity: .75;
         transition: .2s ease transform, .2s ease opacity;
         z-index: 2;
     }
@@ -46,11 +46,14 @@ textarea {
     &--is-focused {
         label {
             transform: translate3d(0, -(3 * $size), 0) scale(1);
-            opacity: 1;
         }
     }
 
     &--is-focused {
+        label {
+            opacity: 1;
+        }
+
         &:after,
         .form-group__line {
             transform: scaleX(1);
@@ -210,4 +213,9 @@ textarea {
     &:focus {
         background-color: rgba(86, 97, 119, 0.22);
     }
+}
+
+body *::selection {
+    color: #fff;
+    background-color: #8190AF;
 }

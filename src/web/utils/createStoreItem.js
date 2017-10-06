@@ -1,65 +1,90 @@
-import { fromStore, toStore } from './store.utils'
+import { fromStore, toStoreMerge } from './store.utils'
 import { findByIdAndReplace } from './array.utils'
 
 const SPLIT = '/'
 
-export const LOAD_LIST = 'LOAD_LIST'
-export const LOAD_LIST_SUCCESS = 'LOAD_LIST_SUCCESS'
-export const LOAD_LIST_ERROR = 'LOAD_LIST_ERROR'
-
-export const ADD_ITEM = 'ADD_ITEM'
-export const ADD_ITEM_SUCCESS = 'ADD_ITEM_SUCCESS'
-export const ADD_ITEM_ERROR = 'ADD_ITEM_ERROR'
+export const LOAD = 'LOAD'
+export const LOAD_SUCCESS = 'LOAD_SUCCESS'
+export const LOAD_ERROR = 'LOAD_ERROR'
 
 export const UPDATE_ITEM = 'UPDATE_ITEM'
-export const UPDATE_ITEM_SUCCESS = 'UPDATE_ITEM_SUCCESS'
-export const UPDATE_ITEM_ERROR = 'UPDATE_ITEM_ERROR'
+export const UPDATE_SUCCESS = 'UPDATE_SUCCESS'
+export const UPDATE_ERROR = 'UPDATE_ERROR'
 
 const TYPES = [
-    LOAD_LIST,
-    LOAD_LIST_SUCCESS,
-    LOAD_LIST_ERROR,
-    ADD_ITEM,
-    ADD_ITEM_SUCCESS,
-    ADD_ITEM_ERROR,
+    LOAD,
+    LOAD_SUCCESS,
+    LOAD_ERROR,
     UPDATE_ITEM,
-    UPDATE_ITEM_SUCCESS,
-    UPDATE_ITEM_ERROR,
+    UPDATE_SUCCESS,
+    UPDATE_ERROR,
 ]
 
-export default function createStoreItem(name=required('name'), { api } = {}) {
+export default function createStoreList(name=required('name'), { api, storeItem } = {}) {
     const ACTION_TYPES = TYPES.reduce((types, type) => {
         types[type] = name + SPLIT + type
         return types
     }, {})
 
     return {
+        name,
         types: ACTION_TYPES,
         actions: {
-            list,
-            add,
+            load,
             update,
         },
         reducer,
     }
 
-    function reducer(state = {}, action) {
+    function reducer(state = { loading: false }, action) {
         switch (action.type) {
-            case ACTION_TYPES.LOAD_LIST:
-                return toStore(action.payload)
+            case ACTION_TYPES.LOAD:
+                return {
+                    ...state,
+                    loading: true,
+                    updating: false,
+                }
 
-            case ACTION_TYPES.LOAD_LIST_SUCCESS:
-                return toStore(action.payload)
+            case ACTION_TYPES.LOAD_SUCCESS:
+                return {
+                    ...state,
+                    data: action.payload,
+                    loading: false,
+                }
 
-            case ACTION_TYPES.ADD_ITEM:
-                return addItemToList(state, action.payload)
-            case ACTION_TYPES.ADD_ITEM_SUCCESS:
-                return updateItemInList(state, action.payload)
+            case ACTION_TYPES.LOAD_ERROR:
+                return {
+                    ...state,
+                    error: action.error,
+                    loading: false,
+                }
 
             case ACTION_TYPES.UPDATE_ITEM:
-                return updateItemInList(state, action.payload)
-            case ACTION_TYPES.UPDATE_ITEM_SUCCESS:
-                return updateItemInList(state, action.payload)
+                return {
+                    ...state,
+                    data: {
+                        ...state.data,
+                        ...action.payload,
+                    },
+                    updating: true,
+                }
+
+            case ACTION_TYPES.UPDATE_SUCCESS:
+                return {
+                    ...state,
+                    data: {
+                        ...state.data,
+                        ...action.payload,
+                    },
+                    updating: false,
+                }
+
+            case ACTION_TYPES.UPDATE_ERROR:
+                return {
+                    ...state,
+                    error: action.error,
+                    updating: false,
+                }
 
             default:
                 return state
@@ -67,130 +92,72 @@ export default function createStoreItem(name=required('name'), { api } = {}) {
     }
 
 
-
-    // START UTILS
-    function addItemToList(state, payload) {
-        const logs = fromStore(state)
-        const updatedLogs = [payload, ...logs]
-
-        return toStore(updatedLogs)
-    }
-
-    function updateItemInList(state, payload) {
-        const logs = fromStore(state)
-
-        const updatedLogs = findByIdAndReplace(logs, payload)
-
-        return toStore(updatedLogs)
-    }
-    // :: END UTILS
-
     // START LOAD
-    function list(params, offlineList=[]) {
+    function load(params) {
         return dispatch => {
-            dispatch(loadListRequest(offlineList))
+            dispatch(loadRequest())
 
-            if (!api) {
-                dispatch(loadListSuccess(offlineList))
-            } else {
-                return api.list(params)
-                    .then(res => dispatch(loadListSuccess(res)))
-                    .catch(err => dispatch(loadListFailure(err)))
-            }
+            return api.getById(params)
+                .then(res => dispatch(loadSuccess(res)))
+                .catch(err => dispatch(loadFailure(err)))
         }
     }
 
-    function loadListRequest(payload) {
+    function loadRequest(payload) {
         return {
-            type: ACTION_TYPES.LOAD_LIST,
+            type: ACTION_TYPES.LOAD,
             payload,
         }
     }
 
-    function loadListSuccess(payload) {
+    function loadSuccess(payload) {
         return {
-            type: ACTION_TYPES.LOAD_LIST_SUCCESS,
+            type: ACTION_TYPES.LOAD_SUCCESS,
             payload
         }
     }
 
-    function loadListFailure(error) {
+    function loadFailure(error) {
         return {
-            type: ACTION_TYPES.LOAD_LIST_ERROR,
+            type: ACTION_TYPES.LOAD_ERROR,
             error
         }
     }
     // :: END LOAD
 
-    // START ADD
-    function add(item) {
-        return dispatch => {
-            dispatch(addItemRequest(item))
-
-            if (!api) {
-                dispatch(addItemSuccess(item))
-            } else {
-                return api.add(item)
-                    .then(res => dispatch(addItemSuccess(res)))
-                    .catch(err => dispatch(addItemFailure(err)))
-            }
-        }
-    }
-
-    function addItemRequest(payload) {
-        return {
-            type: ACTION_TYPES.ADD_ITEM,
-            payload,
-        }
-    }
-
-    function addItemSuccess(payload) {
-        return {
-            type: ACTION_TYPES.ADD_ITEM_SUCCESS,
-            payload
-        }
-    }
-
-    function addItemFailure(error) {
-        return {
-            type: ACTION_TYPES.ADD_ITEM_ERROR,
-            error
-        }
-    }
-    // :: END ADD
 
     // START UPDATE
     function update(item) {
         return dispatch => {
-            dispatch(updateItemRequest(item))
+            dispatch(updateRequest(item))
 
             if (!api) {
-                dispatch(updateItemSuccess(item))
+                dispatch(updateSuccess(item))
             } else {
                 return api.update(item)
-                    .then(res => dispatch(updateItemSuccess(res)))
-                    .catch(err => dispatch(updateItemFailure(err)))
+                    .then(res => dispatch(updateSuccess(res)))
+                    .catch(err => dispatch(updateFailure(err)))
             }
         }
     }
 
-    function updateItemRequest(payload) {
+    function updateRequest(payload) {
         return {
             type: ACTION_TYPES.UPDATE_ITEM,
             payload,
         }
     }
 
-    function updateItemSuccess(payload) {
+    function updateSuccess(payload) {
         return {
-            type: ACTION_TYPES.UPDATE_ITEM_SUCCESS,
+            type: ACTION_TYPES.UPDATE_SUCCESS,
             payload
         }
     }
 
-    function updateItemFailure(error) {
+    function updateFailure(error) {
         return {
-            type: ACTION_TYPES.UPDATE_ITEM_ERROR,
+            type: ACTION_TYPES.UPDATE_ERROR,
             error
         }
     }

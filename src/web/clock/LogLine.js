@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 
-import { formatDiff, formatTime } from './formatTime'
+import { formatDiff, formatTime, diff } from './formatTime'
 import TableRow from '../shared/table/TableRow'
 import TableCell from '../shared/table/TableCell'
 
@@ -28,7 +28,8 @@ class LogLine extends PureComponent {
 
     render() {
         const user = this.getUserById(this.props.item.user_id)
-
+        const diffInMs = (this.props.item.check_out && this.props.item.check_in) ? diff(this.props.item.check_out, this.props.item.check_in) : 0
+        const hours = diffInMs === 0 ? '' : (diffInMs / 3600000).toFixed(2)
         return (
             <TableRow onClick={this.props.onSelect} item={this.props.item} hover>
                 <TableCell>
@@ -44,7 +45,13 @@ class LogLine extends PureComponent {
                     {formatDiff(this.props.item.check_out, this.props.item.check_in)}
                 </TableCell>
                 <TableCell>
-                    {this.props.item.project_name || '-'}
+                    {hours}
+                </TableCell>
+                <TableCell>
+                    {this.props.item.project_name || ''}
+                </TableCell>
+                <TableCell>
+                    {this.props.item.client_name || ''}
                 </TableCell>
             </TableRow>
         )

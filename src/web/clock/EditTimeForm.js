@@ -5,7 +5,7 @@ import { v4 as uid } from 'uuid'
 import SearchClient from '../clients/SearchClient'
 import SearchProject from '../projects/SearchProject'
 import { addProjectToItem, addClientFromProjectToItem } from '../projects/utils'
-import { addClientToItem } from '../clients/utils'
+import { addClientData } from '../clients/utils'
 
 import FormGroup from '../shared/form/FormGroup'
 import Datepicker from '../shared/Datepicker'
@@ -84,7 +84,7 @@ class EditTimeForm extends Component {
 
     onClientSelect = (client) => {
         this.setState((prevState) => ({
-            timeLog: addClientToItem(prevState.timeLog, client)
+            timeLog: addClientData(prevState.timeLog, client)
         }))
     }
 
