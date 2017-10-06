@@ -14,8 +14,8 @@ const employee_1 = require("./employee");
 const company_1 = require("./company");
 const loginFileLocation = path.resolve(__dirname + '/../views/login.html');
 const registerFileLocation = path.resolve(__dirname + '/../views/register.html');
-const indexFileLocation = path.resolve(__dirname + '/../../../public/index.html');
-const staticMiddleware = express.static(path.resolve(__dirname + '/../../../public'));
+const indexFileLocation = path.resolve(process.cwd(), '../public/index.html');
+const staticMiddleware = express.static(path.resolve(process.cwd(), '../public'));
 console.log(indexFileLocation);
 function registerRoutes(app) {
     app.get('/login', function (req, res) {
