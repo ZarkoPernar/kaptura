@@ -146,6 +146,9 @@ export default function createStoreList(name = required('name'), { api, rootStor
     // START ADD
     function add(item) {
         return dispatch => {
+            if (rootStoreItem) {
+                dispatch(addItemRequest(item, rootStoreItem.types.ADD_ITEM))
+            }
             dispatch(addItemRequest(item))
 
             if (!api) {
@@ -154,7 +157,7 @@ export default function createStoreList(name = required('name'), { api, rootStor
                 return api.add(item)
                     .then(res => {
                         if (rootStoreItem) {
-                            dispatch(addItemSuccess(res, rootStoreItem.types.ADD_ITEM))
+                            dispatch(addItemSuccess(res, rootStoreItem.types.ADD_ITEM_SUCCESS))
                         }
                         return dispatch(addItemSuccess(res))
                     })
@@ -163,9 +166,9 @@ export default function createStoreList(name = required('name'), { api, rootStor
         }
     }
 
-    function addItemRequest(payload) {
+    function addItemRequest(payload, type=ACTION_TYPES.ADD_ITEM) {
         return {
-            type: ACTION_TYPES.ADD_ITEM,
+            type,
             payload,
         }
     }
@@ -188,6 +191,9 @@ export default function createStoreList(name = required('name'), { api, rootStor
     // START UPDATE
     function update(item) {
         return dispatch => {
+            if (rootStoreItem) {
+                dispatch(updateItemRequest(item, rootStoreItem.types.UPDATE_ITEM))
+            }
             dispatch(updateItemRequest(item))
 
             if (!api) {
@@ -205,9 +211,9 @@ export default function createStoreList(name = required('name'), { api, rootStor
         }
     }
 
-    function updateItemRequest(payload) {
+    function updateItemRequest(payload, type=ACTION_TYPES.UPDATE_ITEM_SUCCESS) {
         return {
-            type: ACTION_TYPES.UPDATE_ITEM,
+            type,
             payload,
         }
     }

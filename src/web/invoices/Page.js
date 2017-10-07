@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { v4 as uid } from 'uuid'
 import MdAdd from 'react-icons/lib/md/add-circle'
 import { connect } from 'react-redux'
+import { Route } from 'react-router-dom';
 
+import Box from '../shared/Box'
 import Toaster from '../shared/toast/Toaster'
 import Modal from '../shared/modal'
 import Page from '../shared/Page'
@@ -14,6 +16,7 @@ import List from './List'
 import EditProjectForm from './Form'
 import DeleteDialog from './DeleteDialog'
 import PageFilters from './PageFilters'
+import InvoiceDetail from './Detail'
 
 import createStoreListComponent from '../shared/StoreList'
 
@@ -152,25 +155,10 @@ export default class InvoicesPage extends Component {
         this.setState({ isEditModalOpen: false })
     }
 
-    render() {
-        const forEdit = this.state.forEdit === null ? undefined : this.state.forEdit
-
+    renderPage = () => {
         return (
             <Page name="Fakture">
                 <Toaster toasts={this.state.toasts} />
-                <Modal isOpen={this.state.isEditModalOpen} onRequestClose={this._executeAfterModalClose}>
-                    <EditProjectForm
-                        project={forEdit}
-                        onSubmit={this.submitProject}
-                        onDismiss={this.dismiss} />
-                </Modal>
-
-                <Modal isOpen={this.state.isDeleteModalOpen}>
-                    <DeleteDialog
-                        confirm={this.deleteConfirm}
-                        dismiss={this.deleteDismiss}
-                        project={this.state.forDelete} />
-                </Modal>
 
                 <PageSubheader>
                     <PageFilters filters={this.state.filters} applyFilters={this.applyFilters} />
@@ -182,6 +170,17 @@ export default class InvoicesPage extends Component {
                     )}
                 </PageBody>
             </Page>
+        )
+    }
+
+    render() {
+        const forEdit = this.state.forEdit === null ? undefined : this.state.forEdit
+
+        return (
+            <Box>
+                <Route component={InvoiceDetail} path="/fakture/:itemId" />
+                <Route render={this.renderPage} path="/fakture" exact />
+            </Box>
         )
     }
 }

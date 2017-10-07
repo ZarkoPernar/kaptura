@@ -27,7 +27,7 @@ const TYPES = [
     UPDATE_ITEM_ERROR,
 ]
 
-export default function createStoreList(name = required('name'), { api, rootStoreItem } = {}) {
+export default function createStoreList(name = required('name'), { api } = {}) {
     const ACTION_TYPES = TYPES.reduce((types, type) => {
         types[type] = name + SPLIT + type
         return types
@@ -96,9 +96,6 @@ export default function createStoreList(name = required('name'), { api, rootStor
             } else {
                 return api.list(params)
                     .then(res => {
-                        if (rootStoreItem) {
-                            dispatch(loadListSuccess(res, rootStoreItem.types.LOAD_LIST_SUCCESS))
-                        }
                         dispatch(loadListSuccess(res))
                     })
                     .catch(err => dispatch(loadListFailure(err)))
@@ -138,9 +135,6 @@ export default function createStoreList(name = required('name'), { api, rootStor
             } else {
                 return api.add(item)
                     .then(res => {
-                        if (rootStoreItem) {
-                            dispatch(addItemSuccess(res, rootStoreItem.types.ADD_ITEM))
-                        }
                         dispatch(addItemSuccess(res))
                     })
                     .catch(err => dispatch(addItemFailure(err)))
@@ -180,9 +174,6 @@ export default function createStoreList(name = required('name'), { api, rootStor
             } else {
                 return api.update(item)
                     .then(res => {
-                        if (rootStoreItem) {
-                            dispatch(updateItemSuccess(res, rootStoreItem.types.UPDATE_ITEM_SUCCESS))
-                        }
                         dispatch(updateItemSuccess(res))
                     })
                     .catch(err => dispatch(updateItemFailure(err)))

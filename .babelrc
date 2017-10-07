@@ -1,17 +1,32 @@
 {
-  "presets": [
-    ["es2015", {
-        "modules": false
-    }],
-    "stage-3",
-    "react"
-  ],
-  "plugins": [
-    "transform-decorators-legacy",
-    "transform-class-properties",
-    "syntax-dynamic-import",
-    [
-      "transform-react-jsx"
+    "presets": [
+        "react"
+    ],
+    "env": {
+        "production": {
+            "modules": false,
+              "useBuiltIns": true,
+              "targets": {
+                "browsers": [
+                  "Chrome >=60",
+                  "Safari >=10.1",
+                  "iOS >=10.3",
+                  "Firefox >=54",
+                  "Edge >=15"
+                ]
+            },
+            "presets": [
+                "minify"
+            ]
+        }
+    },
+    "plugins": [
+        "lodash",
+        "transform-object-rest-spread",
+        "transform-decorators-legacy",
+        "transform-class-properties",
+        "syntax-dynamic-import", [
+            "transform-react-jsx"
+        ]
     ]
-  ]
 }

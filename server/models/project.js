@@ -64,7 +64,6 @@ exports.default = {
             .equals(user.company_id)
             .then((doc) => {
             Object.assign(doc, item);
-            // console.log(doc);
             return doc.save();
         });
     },

@@ -7,10 +7,13 @@ const PORT = process.env.PORT || 5000
 
 import * as express from 'express'
 import { Express } from 'express'
+const app: Express = express()
+export const http = require('http').Server(app)
+
 
 import initMiddleware from './middleware'
+import './socket'
 import listen from './listen'
-import socket from './socket'
 import initDB from './db'
 import registerAllRoutes from './routes'
 import registerAuthStrategies from './auth'
@@ -18,17 +21,11 @@ import registerAuthStrategies from './auth'
 
 // INIT App
 // ==============================================
-const app: Express = express()
-const http = require('http').Server(app)
-export const io = require('socket.io')(http)
+
 
 // Start server
 // ==============================================
 listen(app, http, { port: PORT })
-
-// Start socket
-// ==============================================
-socket({ io })
 
 // Connect MongoDB
 // ==============================================

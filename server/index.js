@@ -6,23 +6,19 @@ require('dotenv').config();
 const MONGO_URL = process.env.MONGO_URL;
 const PORT = process.env.PORT || 5000;
 const express = require("express");
+const app = express();
+exports.http = require('http').Server(app);
 const middleware_1 = require("./middleware");
+require("./socket");
 const listen_1 = require("./listen");
-const socket_1 = require("./socket");
 const db_1 = require("./db");
 const routes_1 = require("./routes");
 const auth_1 = require("./auth");
 // INIT App
 // ==============================================
-const app = express();
-const http = require('http').Server(app);
-exports.io = require('socket.io')(http);
 // Start server
 // ==============================================
-listen_1.default(app, http, { port: PORT });
-// Start socket
-// ==============================================
-socket_1.default({ io: exports.io });
+listen_1.default(app, exports.http, { port: PORT });
 // Connect MongoDB
 // ==============================================
 db_1.default(MONGO_URL);

@@ -10,9 +10,15 @@ const InvoiceStatusSchema = new mongoose.Schema({
 const InvoiceSchema = new mongoose.Schema({
     company_id: mongoose.Schema.Types.ObjectId,
     client_id: mongoose.Schema.Types.ObjectId,
+    project_id: mongoose.Schema.Types.ObjectId,
     number: String,
     due_date: Date,
     issue_date: Date,
+    project: {
+        name: String,
+        address: String,
+        number: String,
+    },
     client: {
         name: String,
         address: String,
@@ -74,7 +80,6 @@ function createInvoiceModelActions(model) {
                 .equals(user.company_id)
                 .then((doc) => {
                 Object.assign(doc, item);
-                // console.log(doc);
                 return doc.save();
             });
         },

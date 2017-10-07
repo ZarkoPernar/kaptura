@@ -24,7 +24,6 @@ async function list(request, response) {
         .where('company_id')
         .equals(request.user.company_id);
     applyFilters_1.default(params, query);
-    console.log(params.pages.pageSize, params.pages.pageSize * (params.pages.pageNumber - 1));
     const result = await query
         .sort({
         created_at: -1,
@@ -36,7 +35,6 @@ async function list(request, response) {
 exports.list = list;
 async function create(request, response) {
     const item = request.body;
-    console.log(request.body);
     const newItem = convertDates_1.default(item, ['check_in', 'check_out']);
     const offlineId = newItem._id;
     delete newItem._id;

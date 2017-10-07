@@ -16,7 +16,6 @@ const loginFileLocation = path.resolve(__dirname + '/../views/login.html');
 const registerFileLocation = path.resolve(__dirname + '/../views/register.html');
 const indexFileLocation = path.resolve(process.cwd(), './public/index.html');
 const staticMiddleware = express.static(path.resolve(process.cwd(), './public'));
-console.log(indexFileLocation);
 function registerRoutes(app) {
     app.get('/login', function (req, res) {
         res.sendFile(loginFileLocation);
@@ -38,7 +37,7 @@ function registerRoutes(app) {
     user_1.default(app);
     company_1.default(app);
     employee_1.default(app);
-    app.all('/*', localAuth_1.localAuthMiddleware, staticMiddleware, (req, res) => {
+    app.all('*', localAuth_1.localAuthMiddleware, staticMiddleware, (req, res) => {
         res.sendFile(indexFileLocation);
     });
 }

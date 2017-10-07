@@ -4,8 +4,8 @@ const url = require("url");
 const invoice_1 = require("../models/invoice");
 const convertDates_1 = require("../utils/convertDates");
 const applyFilters_1 = require("../utils/applyFilters");
-const invoice_2 = require("../models/invoice");
 const user_1 = require("../models/user");
+const client_1 = require("../models/client");
 const project_1 = require("../models/project");
 const company_1 = require("../models/company");
 const defaultListParams = {
@@ -48,22 +48,19 @@ async function create(request, response) {
     const offlineId = newItem._id;
     delete newItem._id;
     const [client, project, company, user,] = await Promise.all([
-        invoice_2.default.getItem(item.client_id, request.user),
+        client_1.default.getItem(item.client_id, request.user),
         project_1.default.getItem(item.project_id, request.user),
         company_1.default.getItem(request.user.company_id),
         user_1.default.findById(request.user._id),
     ]);
-    const result = await invoice_1.default.create({
-        item: Object.assign({}, newItem, { client,
-            project,
-            company,
-            user }),
-        offlineId,
-        user: request.user,
-    });
     try {
         const result = await invoice_1.default.create({
-            item: newItem,
+            item: Object.assign({}, newItem, { client,
+                project,
+                company, issued_by: {
+                    user_id: user._id,
+                    name: user.full_name,
+                } }),
             offlineId,
             user: request.user,
         });

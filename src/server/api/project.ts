@@ -1,8 +1,7 @@
 import * as url from 'url'
 import {Request, Response} from 'express'
 
-import { io } from '../index'
-import { companyClients } from '../socket'
+import { emitCompanySocket } from '../socket/api'
 import { IRequest } from './../routes/request.interface'
 import ProjectModel, { IProject, Model } from '../models/project'
 import convertDates from '../utils/convertDates'
@@ -71,6 +70,13 @@ export async function create(request: IRequest, response: Response) {
             offlineId,
             user: request.user,
         })
+
+        emitCompanySocket(
+            request.user.company_id.toString(),
+            request.user._id.toString(),
+            { type: 'project_create', payload: result }
+        )
+
         response.status(200).json(result)
     } catch(err) {
         response.status(412).json(err)
@@ -79,7 +85,6 @@ export async function create(request: IRequest, response: Response) {
 
 export async function update(request: IRequest, response: Response) {
     const item: IProject = request.body
-    const company_id = request.user.company_id.toString()
 
     const newItem = convertDates(item, ['start_date', 'end_date'])
 
@@ -88,16 +93,11 @@ export async function update(request: IRequest, response: Response) {
         user: request.user,
     })
 
-    if (companyClients.has(company_id)) {
-        if (companyClients.get(company_id)) {
-            companyClients
-                .get(company_id)
-                .forEach(socket_id => {
-                    io.sockets.connected[socket_id].emit('project_update', result)
-                })
-
-        }
-    }
+    emitCompanySocket(
+        request.user.company_id.toString(),
+        request.user._id.toString(),
+        {type: 'project_update', payload: result}
+    )
 
     response.status(200).json(result)
 }

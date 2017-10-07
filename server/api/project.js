@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const url = require("url");
-const index_1 = require("../index");
-const socket_1 = require("../socket");
+const api_1 = require("../socket/api");
 const project_1 = require("../models/project");
 const convertDates_1 = require("../utils/convertDates");
 const applyFilters_1 = require("../utils/applyFilters");
@@ -51,6 +50,7 @@ async function create(request, response) {
             offlineId,
             user: request.user,
         });
+        api_1.emitCompanySocket(request.user.company_id.toString(), request.user._id.toString(), { type: 'project_create', payload: result });
         response.status(200).json(result);
     }
     catch (err) {
@@ -60,21 +60,12 @@ async function create(request, response) {
 exports.create = create;
 async function update(request, response) {
     const item = request.body;
-    const company_id = request.user.company_id.toString();
     const newItem = convertDates_1.default(item, ['start_date', 'end_date']);
     const result = await project_1.default.update({
         item: newItem,
         user: request.user,
     });
-    if (socket_1.companyClients.has(company_id)) {
-        if (socket_1.companyClients.get(company_id)) {
-            socket_1.companyClients
-                .get(company_id)
-                .forEach(socket_id => {
-                index_1.io.sockets.connected[socket_id].emit('project_update', result);
-            });
-        }
-    }
+    api_1.emitCompanySocket(request.user.company_id.toString(), request.user._id.toString(), { type: 'project_update', payload: result });
     response.status(200).json(result);
 }
 exports.update = update;

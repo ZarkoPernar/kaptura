@@ -14,15 +14,12 @@ function registerAuthRoutes(app) {
                 message: 'Company name is required'
             });
         }
-        console.log('CompanyModel.create start', request.body);
         company_1.Model.create({
             name: request.body.company_name,
         })
             .then((company) => {
-            console.log('CompanyModel.create done');
             company_id = company._id;
             request.body.username = request.body.email;
-            console.log('Company created');
             user_1.default.register(new user_1.default({
                 email: request.body.email,
                 username: request.body.username,
@@ -33,7 +30,6 @@ function registerAuthRoutes(app) {
                 if (err) {
                     return response.status(412).json({ err });
                 }
-                console.log('User created');
                 localAuth_1.localAuthenticate(request, response, function () {
                     response.status(200).json({ user, company });
                 });

@@ -40,7 +40,6 @@ export async function list(request: IRequest, response: Response) {
         .equals(request.user.company_id)
 
     applyFilters(params, query)
-    console.log(params.pages.pageSize, params.pages.pageSize * (params.pages.pageNumber - 1));
 
     const result = await query
         .sort({
@@ -54,7 +53,7 @@ export async function list(request: IRequest, response: Response) {
 
 export async function create(request: IRequest, response: Response) {
     const item: ITimesheet = request.body
-    console.log(request.body)
+
     const newItem = convertDates(item, ['check_in', 'check_out'])
     const offlineId = newItem._id
     delete newItem._id

@@ -15,9 +15,18 @@ export const storeItem = createRootStoreList('projects', { api })
 //     })
 // })
 
+Observable.fromEvent(socket, 'project_create')
+    .subscribe(payload => {
+        console.log('project_create', payload)
+        appStore.dispatch({
+            type: storeItem.types.UPDATE_ITEM_SUCCESS,
+            payload
+        })
+    })
+
 Observable.fromEvent(socket, 'project_update')
     .subscribe(payload => {
-        console.log(payload)
+        console.log('project_update', payload)
         appStore.dispatch({
             type: storeItem.types.UPDATE_ITEM_SUCCESS,
             payload

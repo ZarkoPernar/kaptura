@@ -7,10 +7,16 @@ import { location, ITimestampsSchema, IModifiedBySchema } from './default'
 export interface IInvoice extends ITimestampsSchema, IModifiedBySchema {
     _id: string
     company_id: string
+    project_id: string
     client_id: string
     number: string
     due_date: Date
     issue_date: Date
+    project: {
+        name: string
+        address: string
+        number: string
+    }
     client: {
         name: string
         address: string
@@ -44,9 +50,15 @@ const InvoiceStatusSchema = new mongoose.Schema({
 const InvoiceSchema = new mongoose.Schema({
     company_id: mongoose.Schema.Types.ObjectId,
     client_id: mongoose.Schema.Types.ObjectId,
+    project_id: mongoose.Schema.Types.ObjectId,
     number: String,
     due_date: Date,
     issue_date: Date,
+    project: {
+        name: String,
+        address: String,
+        number: String,
+    },
     client: {
         name: String,
         address: String,
@@ -120,7 +132,6 @@ export function createInvoiceModelActions(model) {
                 .equals(user.company_id)
                 .then((doc) => {
                     Object.assign(doc, item)
-                    // console.log(doc);
 
                     return doc.save()
                 })

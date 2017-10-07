@@ -22,12 +22,12 @@ export default class AppBody extends Component {
                 <Route path="/sati" component={SatiComponent} />
                 <Route path="/tvrtka" component={TvrtkaComponent} />
                 <Route path="/korisnik" component={KorisnikComponent} />
-                <Route path="/projekti" component={Projekti} exact />
-                <Route path="/zaposlenici" component={Zaposlenici} exact />
-                {/* <Route path="/projekti/charts" component={ProjectChartsComponent} exact /> */}
-                <Route path="/klijenti" component={Klijenti} exact />
+                <Route path="/projekti" component={Projekti} />
+                <Route path="/zaposlenici" component={Zaposlenici} />
+                {/* <Route path="/projekti/charts" component={ProjectChartsComponent} /> */}
+                <Route path="/klijenti" component={Klijenti} />
 
-                <Route path="/fakture" component={InvoicesPage} exact />
+                <Route path="/fakture" component={InvoicesPage} />
 
                 <Route path="/login" component={LoginComponent} />
             </main>

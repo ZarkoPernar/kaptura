@@ -9,26 +9,19 @@ let CONFIG = require('./config')
 module.exports = {
     devtool: 'source-map',
     entry: [
-        // 'react-hot-loader/patch',
-        // 'webpack-dev-server/client?http://localhost:8080',
-        // 'webpack/hot/only-dev-server',
         CONFIG.APP_PATH + CONFIG.CLIENT_ENTRY_FILE
     ],
     target: 'web',
     output: {
         path: path.resolve(CONFIG.CLIENT_OUTPUT_PATH),
         filename: 'bundle.js',
-        // publicPath: 'http://localhost:8080/',
     },
     resolve: {
         extensions: ['.js'],
     },
-    // devServer: CONFIG.WEBPACK_DEV_SERVER_CONFIG,
     plugins: [
         new WebpackNotifierPlugin(),
-        // new webpack.NamedModulesPlugin(),
         new HtmlWebpackPlugin(CONFIG.HtmlWebpackPlugin),
-        // new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.DefinePlugin({
             "process.env": {

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
-import MDSpinner from 'react-md-spinner'
 
 import './button.scss'
 
@@ -70,7 +69,7 @@ export default class ButtonLoaderComponent extends Component {
         return (
             <MeasureDimensions onMeasure={this.onMeasure} display="inline-block">
                 <Button color={this.state.hasColor ? this.state.color : this.props.color} {...rest} disabled={!this.state.loaded} style={{minWidth: this.minWidth}}>
-                        {this.state.loaded ? this.props.children : <MDSpinner size={20} />}
+                        {this.state.loaded ? this.props.children : 'Loading'}
                 </Button>
             </MeasureDimensions>
         )

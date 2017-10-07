@@ -23,6 +23,8 @@ $link-padding-md: 1rem 1.2rem;
         text-transform: uppercase;
         letter-spacing: 1px;
         padding: $link-padding-sm;
+        transition: .2s ease background-color, .2s ease color;
+
 
         &__icon {
             font-size: 1.4rem;

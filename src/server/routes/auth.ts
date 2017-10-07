@@ -18,17 +18,13 @@ export default function registerAuthRoutes(app) {
                 message: 'Company name is required'
             })
         }
-        console.log('CompanyModel.create start', request.body)
 
         CompanyModel.create({
             name: request.body.company_name,
         })
         .then((company) => {
-            console.log('CompanyModel.create done')
             company_id = company._id
             request.body.username = request.body.email
-
-            console.log('Company created')
 
             UserModel.register(new UserModel({
                 email : request.body.email,
@@ -40,8 +36,6 @@ export default function registerAuthRoutes(app) {
                 if (err) {
                     return response.status(412).json({ err })
                 }
-
-                console.log('User created')
 
                 localAuthenticate(request, response, function () {
                     response.status(200).json({ user, company })

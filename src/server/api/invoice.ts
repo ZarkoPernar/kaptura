@@ -6,8 +6,8 @@ import InvoiceActions, { IInvoice, Model } from '../models/invoice'
 import convertDates from '../utils/convertDates'
 import applyFilters from '../utils/applyFilters'
 
-import ClientActions from '../models/invoice'
 import UserModel from '../models/user'
+import ClientActions from '../models/client'
 import ProjectActions from '../models/project'
 import CompanyActions from '../models/company'
 
@@ -75,21 +75,18 @@ export async function create(request: IRequest, response: Response) {
         UserModel.findById(request.user._id),
     ])
 
-    const result = await InvoiceActions.create({
-        item: {
-            ...newItem,
-            client,
-            project,
-            company,
-            user,
-        },
-        offlineId,
-        user: request.user,
-    })
-
     try {
         const result = await InvoiceActions.create({
-            item: newItem,
+            item: {
+                ...newItem,
+                client,
+                project,
+                company,
+                issued_by: {
+                    user_id: user._id,
+                    name: user.full_name,
+                },
+            },
             offlineId,
             user: request.user,
         })

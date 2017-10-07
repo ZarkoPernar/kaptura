@@ -6,6 +6,7 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const MinifyPlugin = require("babel-minify-webpack-plugin");
 
 const CONFIG = require('./config')
 
@@ -34,10 +35,10 @@ module.exports = function (env) {
         },
         devServer: CONFIG.WEBPACK_DEV_SERVER_CONFIG,
         plugins: [
-            new ExtractTextPlugin('styles.[chunkhash].css'),
-
-            // eradicates unused locales
-            new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /nb/),
+            new webpack.DefinePlugin({
+                'process.env.NODE_ENV': JSON.stringify('production'),
+                // 'process.env.BABEL_ENV': JSON.stringify('production'),
+            }),
 
             new HtmlWebpackPlugin(Object.assign({}, CONFIG.HtmlWebpackPlugin, {
                 minify: {
@@ -54,6 +55,27 @@ module.exports = function (env) {
                 },
                 inject: true,
             })),
+
+            new ExtractTextPlugin('styles.[chunkhash].css'),
+
+            // eradicates unused locales
+            new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /nb/),
+
+            new MinifyPlugin(),
+
+            // new SWPrecacheWebpackPlugin({
+            //     cacheId: 'kaptura-v1',
+            //     filename: 'service-worker.js',
+            //     maximumFileSizeToCacheInBytes: 4194304,
+            //     minify: true,
+            //     staticFileGlobs: [
+            //         'public/**/*.css',
+            //         'public/**/*.js',
+            //         'public/**/*.html',
+            //     ],
+            //     stripPrefix: 'public/',
+            // }),
+
 
             new webpack.optimize.CommonsChunkPlugin({
                 name: 'vendor',
@@ -81,34 +103,17 @@ module.exports = function (env) {
             // TODO: works but generated manifest needs config
             // new FaviconsWebpackPlugin('./resources/logo.png'),
 
-            new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify('production')
-            }),
-
-            new SWPrecacheWebpackPlugin({
-                cacheId: 'kaptura-v1',
-                filename: 'service-worker.js',
-                maximumFileSizeToCacheInBytes: 4194304,
-                minify: true,
-                staticFileGlobs: [
-                    'public/**/*.css',
-                    'public/**/*.js',
-                    'public/**/*.html',
-                ],
-                stripPrefix: 'public/',
-            }),
 
             new BundleAnalyzerPlugin(),
         ],
         module: {
             rules: [{
                     test: /\.js$/,
-                    use: ['babel-loader'],
+                    use: 'babel-loader',
                     include: [
-                        path.resolve('src'),
+                        path.resolve('src/web'),
                     ],
-                    exclude: ['.spec.']
-
+                    exclude: ['.spec.'],
                 },
                 {
                     test: /\.scss$/,
