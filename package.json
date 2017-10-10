@@ -16,7 +16,7 @@
     "build:live": "nodemon --exec ts-node -- ./src/server/index.ts --config ./tsconfig.json",
     "devserver": "cross-env NODE_ENV=development webpack-dev-server --open --config ./tools/webpack.config.js",
     "development": "cross-env NODE_ENV=development webpack -w ./src/web --config ./tools/webpack.config.js",
-    "dev": "SET NODE_ENV=development && npm-run-all --parallel mongo build:live development",
+    "dev": "SET NODE_ENV=development && npm-run-all --parallel mongo build:live devserver",
     "mongo": "mongod",
     "build-storybook": "build-storybook",
     "storybook": "start-storybook -p 9001 -c .storybook"
@@ -95,6 +95,7 @@
     "bundle-loader": "^0.5.5",
     "connect-mongodb-session": "^1.3.0",
     "cookie-parser": "^1.4.3",
+    "date-fns": "^1.28.5",
     "dotenv": "4.0.0",
     "express": "4.15.2",
     "express-session": "^1.15.3",

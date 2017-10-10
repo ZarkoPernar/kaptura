@@ -21,6 +21,7 @@ class TableRowComponent extends PureComponent {
                 'table__row--hover': this.props.hover === true,
                 'table__row--bordered': this.props.bordered === true,
                 'table__row--clickable': typeof this.props.onClick === FUNC,
+                'table__row--bg-danger': this.props.color === 'danger',
             })}>
                 { this.props.children }
             </tr>

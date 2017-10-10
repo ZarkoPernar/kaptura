@@ -1,5 +1,6 @@
 import * as url from 'url'
 import {Request, Response} from 'express'
+import { startOfYear } from 'date-fns'
 
 import { IRequest } from './../routes/request.interface'
 import InvoiceActions, { IInvoice, Model } from '../models/invoice'
@@ -68,6 +69,18 @@ export async function create(request: IRequest, response: Response) {
     const offlineId = newItem._id
     delete newItem._id
 
+    const invoiceCount = await Model
+        .find({
+            issue_date: {
+                $gte: startOfYear(new Date()),
+            }
+        })
+        .where('company_id')
+        .equals(request.user.company_id)
+        // .where('created_at')
+        // .gte(startOfYear(new Date()))
+        .count()
+
     const [client, project, company, user,] = await Promise.all([
         ClientActions.getItem(item.client_id, request.user),
         ProjectActions.getItem(item.project_id, request.user),
@@ -82,6 +95,7 @@ export async function create(request: IRequest, response: Response) {
                 client,
                 project,
                 company,
+                number: (invoiceCount + 1) + '/01/01',
                 issued_by: {
                     user_id: user._id,
                     name: user.full_name,

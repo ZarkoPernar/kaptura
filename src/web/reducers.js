@@ -10,7 +10,7 @@ import clients from './clients/reducer'
 import invoices from './invoices/reducer'
 import invoiceList from './invoices/listReducer'
 import userInfo from './userInfo.reducer'
-import employees from './employees/reducer'
+import employees, { onlineEmployees } from './employees/reducer'
 
 export default combineReducers({
     userInfo,
@@ -24,5 +24,6 @@ export default combineReducers({
     invoices,
     invoiceList,
     employees,
+    onlineEmployees: onlineEmployees.reducer,
 })
 

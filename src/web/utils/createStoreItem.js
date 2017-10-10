@@ -95,11 +95,15 @@ export default function createStoreList(name=required('name'), { api, storeItem 
     // START LOAD
     function load(params) {
         return dispatch => {
-            dispatch(loadRequest())
+            dispatch(loadRequest(params))
 
-            return api.getById(params)
-                .then(res => dispatch(loadSuccess(res)))
-                .catch(err => dispatch(loadFailure(err)))
+            if (!api) {
+                dispatch(loadSuccess(params))
+            } else {
+                return api.getById(params)
+                    .then(res => dispatch(loadSuccess(res)))
+                    .catch(err => dispatch(loadFailure(err)))
+            }
         }
     }
 

@@ -6,7 +6,7 @@ import './sidebar.scss'
 
 const Sidebar = ({ isOpen, right, className, children }) => {
     return (
-        <aside tabIndex={isOpen === true ? 0 : -1} className={classnames('App-sidebar', className, {
+        <aside className={classnames('App-sidebar', className, {
             'App-sidebar--is-open': isOpen,
             'App-sidebar--right': right,
         })}>
@@ -18,7 +18,7 @@ const Sidebar = ({ isOpen, right, className, children }) => {
 };
 
 Sidebar.propTypes = {
-    isOpen: PropTypes.bool.isRequired,
+    isOpen: PropTypes.bool,
     right: PropTypes.bool,
     className: PropTypes.string,
 };

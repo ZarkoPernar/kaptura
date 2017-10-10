@@ -27,12 +27,12 @@ export function isUnfinished(logOrLogs) {
     return isLogUnfinished(logOrLogs)
 }
 
-export function isValidDate(d) {
+export function isValidDate(value) {
     // is it a date obj
-    if (Object.prototype.toString.call(d) !== "[object Date]") return false
-
+    // if (Object.prototype.toString.call(d) !== "[object Date]") return false
+    const date = new Date(Date.parse(value))
     // is it a date obj with valid time
-    if (Number.isNaN(d.getTime())) return false
+    if (Number.isNaN(date.getTime())) return false
 
     return true
 }
@@ -45,7 +45,7 @@ function addTime(name, log={}) {
 }
 
 export function getTime(date=new Date()) {
-    return date
+    return date.toISOString()
 }
 
 

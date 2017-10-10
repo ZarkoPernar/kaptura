@@ -17,17 +17,17 @@ $link-padding-md: 1rem 1.2rem;
     &__link {
         display: block;
         text-decoration: none;
-        color: lighten($bc-dark, 35);
+        color: $nav-c;
         font-weight: 600;
-        font-size: 1rem;
+        font-size: .95rem;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
         padding: $link-padding-sm;
         transition: .2s ease background-color, .2s ease color;
 
 
         &__icon {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin-top: -3px;
             margin-right: 1rem;
         }
@@ -50,8 +50,11 @@ $link-padding-md: 1rem 1.2rem;
             //   }
         }
         &:hover {
-            color: #fff;
-            background-color: rgb(57, 66, 84); //   .App-sidenav__link__bg:before {
+            color: $nav-c-hover;
+            // background-color: rgb(57, 66, 84);
+            background-color: $nav-bg-hover;
+
+            //   .App-sidenav__link__bg:before {
             //     transform: scaleX(1);
             //   }
         }
@@ -60,8 +63,13 @@ $link-padding-md: 1rem 1.2rem;
             // color: $bc-dark;
             // background-color: $bc-warning;
 
-            color: $bc-warning;
-            background-color: #566177;
+            color: $nav-c-active;
+            background-color: $nav-bg-active;
+            border-right: 2px solid $bc-dark;
+
+            // color: $bc-warning;
+            // background-color: #566177;
+
         }
     }
 

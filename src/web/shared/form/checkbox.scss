@@ -1,0 +1,90 @@
+@import '../../App';
+
+.checkbox {
+    height: 54px;
+    padding-top: 1.35em;
+    padding-left: 2.5em;
+    position: relative;
+    z-index: 1;
+
+    input[type="checkbox"] {
+        position: absolute;
+        top: 1em;
+        width: 1.65em;
+        height: 1.65em;
+        opacity: 0;
+    }
+
+    label {
+        user-select: none;
+        font-weight: 700;
+        opacity: .75;
+    }
+
+    &__check {
+        position: absolute;
+        left: 0;
+        top: 1em;
+        display: inline-block;
+        width: 1.65em;
+        height: 1.65em;
+        background-color: #ddd;
+        border: 2px solid #ddd;
+        border-radius: 2px;
+        z-index: -1;
+        transition: .3s ease background-color;
+
+        &:after,
+        &:before {
+            content: '';
+            position: absolute;
+            background-color: white;
+            width: 3px;
+        }
+
+        &:before {
+            left: 3px;
+            bottom: -1px;
+
+            height: 9px;
+            transition: none;
+            transform: rotate(-50deg) scale(0);
+            transform-origin: top left;
+        }
+
+        &:after {
+            left: 8px;
+            bottom: 4px;
+
+            transition-delay: .2s;
+            height: 18px;
+            transition: none;
+            transform: rotate(30deg) scale(0);
+            transform-origin: bottom left;
+
+        }
+    }
+
+    input[type="checkbox"]:focus ~ label {
+        opacity: 1;
+    }
+
+    input[type="checkbox"]:focus~.checkbox__check {
+        border-color: $bc-dark !important;
+    }
+
+    input[type="checkbox"]:checked~.checkbox__check {
+        background-color: lighten($bc-dark, 40);
+        border-color: lighten($bc-dark, 40);
+    }
+
+    input[type="checkbox"]:checked ~ .checkbox__check:before {
+        transform: rotate(-50deg) scale(1);
+        transition: .3s ease transform;
+    }
+    input[type="checkbox"]:checked ~ .checkbox__check:after {
+        transform: rotate(30deg) scale(1);
+        transition: .3s ease transform;
+    }
+
+}

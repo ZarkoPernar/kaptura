@@ -1,5 +1,5 @@
 const production = require('./webpack.production')
-const development = require('./webpack.development')
+const development = require('./webpack.devserver')
 
 const DEV_ENV = process.env.NODE_ENV && process.env.NODE_ENV.trim() === 'production'
 

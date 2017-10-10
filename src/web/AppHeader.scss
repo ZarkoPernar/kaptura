@@ -41,10 +41,11 @@
     flex-direction: column;
     justify-content: center;
     background-color: $sidenav-bg;
-    border-bottom: 1px solid rgba(255,255,255,.1);
+    border-right: $logo-br-right;
+    border-bottom: $logo-br-bottom;
 
     h2 {
-        color: #fff;
+        color: $logo-color;
         font-weight: 400;
         text-align: center;
     }
@@ -61,8 +62,10 @@
 
 
 @media (min-width: $medium-device) {
-    .App-heading {
+    .App-logo {
         display: flex;
+    }
+    .App-heading {
         left: 0;//$sidenav-width;
 
         &__menu-btn {

@@ -10,7 +10,9 @@
     color: $bc-light;
     width: $sidenav-width;
     top: $header-height;
-    z-index: $sidenav-z;
+    z-index: 4;
+    border-right: $sidenav-br-right;
+    box-shadow: 3px 2px 1px rgba(70, 70, 70, 0.09);
 
     &__container {
         display: flex;
@@ -19,7 +21,7 @@
         top: 0;
         left: 0;
         bottom: 0;
-        width: $sidenav-width;
+        width: 100%;
         background-color: $sidenav-bg;
         // border-right: 1px solid $nav-highlight;
     }
@@ -28,18 +30,18 @@
         margin-top: auto;
         padding: 1rem;
 
-        .btn {
-            color: rgba(255,255,255,.85);
-            background-color: rgba(0,0,0,.3);
-            border-color: rgba(0,0,0,.4);
-            @include square-shadow;
+        // .btn {
+        //     color: rgba(255,255,255,.85);
+        //     background-color: rgba(0,0,0,.3);
+        //     border-color: rgba(0,0,0,.4);
+        //     @include square-shadow;
 
-            &:hover {
-                color: rgba(255,255,255,1);
-                background-color: rgba(0,0,0,.5);
-                border-color: rgba(0,0,0,.6);
-            }
-        }
+        //     &:hover {
+        //         color: rgba(255,255,255,1);
+        //         background-color: rgba(0,0,0,.5);
+        //         border-color: rgba(0,0,0,.6);
+        //     }
+        // }
     }
 }
 
@@ -47,5 +49,6 @@
    .App-sidenav.App-sidebar {
        transform: none;
        opacity: 1;
+       z-index: $sidenav-z;
     }
 }

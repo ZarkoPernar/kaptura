@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import {  } from 'react-router-dom';
 
 import Page from '../shared/Page'
 import PageBody from '../shared/PageBody'
+import InvoicePage from './InvoicePage'
 
 class InvoiceDetail extends Component {
     render() {
         return (
             <Page>
                 <PageBody>
-                    <h1>Hello</h1>
-                    {this.props.location.state.invoice._id}
+                    <InvoicePage invoice={this.props.location.state.invoice} />
                 </PageBody>
             </Page>
         )

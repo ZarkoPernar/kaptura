@@ -9,11 +9,27 @@ import Button from './shared/Button'
 import './AppHeader.scss'
 
 export default class AppHeader extends Component {
+    componentDidMount() {
+        document.body.addEventListener('click', this.close)
+        this._btn.addEventListener('click', this.toggle)
+    }
+
+    componentWillUnmount() {
+        document.body.removeEventListener('click', this.close)
+        this._btn.removeEventListener('click', this.toggle)
+    }
+
+    getBtnRef = (ref) => {
+        this._btn = ref
+    }
+
+    close = () => {
+        document.body.classList.remove('App--menuIsOpen')
+    }
 
     toggle = (event) => {
         event.stopPropagation()
-
-        this.props.sidenavInstance.toggle()
+        document.body.classList.toggle('App--menuIsOpen')
     }
 
     openChat = () => {
@@ -30,14 +46,14 @@ export default class AppHeader extends Component {
                 <div className="App-logo">
                     <h2 className="App-logo__text">
                         Kaptura
-                        </h2>
+                    </h2>
                 </div>
 
                 <div className="App-heading__inner">
                     <span className="App-heading__menu-btn">
-                        <Button clear iconOnly large onClick={this.toggle}>
+                        <button className="btn btn--clear btn--icon-only btn--large" ref={this.getBtnRef}>
                             <MdMenu />
-                        </Button>
+                        </button>
                     </span>
 
                     <Clock />

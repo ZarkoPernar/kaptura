@@ -1,9 +1,20 @@
+import { Observable } from 'rxjs/Observable'
+
+import appStore from '../appStore'
 import createStoreList from '../utils/createStoreList'
+import createStoreItem from '../utils/createStoreItem'
 import api from './api'
 
+import socket, { connection } from '../socket'
 import { LOAD_USER_INFO_SUCCESS } from '../userInfo.reducer'
 
 export const storeItem = createStoreList('employees', { api })
+export const onlineEmployees = createStoreItem('onlineEmployees')
+
+const onlineEmployees$ = Observable.fromEvent(socket, 'online_users')
+    .subscribe((val) => {
+        appStore.dispatch(onlineEmployees.actions.load(val))
+    })
 
 export function employeesEpic(action$) {
     return action$

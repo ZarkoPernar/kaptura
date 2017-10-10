@@ -12,21 +12,23 @@ export interface IInvoice extends ITimestampsSchema, IModifiedBySchema {
     number: string
     due_date: Date
     issue_date: Date
+    issue_place: string
     project: {
         name: string
-        address: string
+        google_address: string
         number: string
     }
     client: {
         name: string
-        address: string
+        google_address: string
         number: string
         bank_number: string
+        company_number: string
     }
     company: {
         name: string
-        address: string
-        number: string
+        google_address: string
+        company_number: string
         bank_number: string
     }
     issued_by: {
@@ -34,8 +36,12 @@ export interface IInvoice extends ITimestampsSchema, IModifiedBySchema {
         user_id: string
     }
     description?: string
+    notes?: string
+    terms?: string
     issued: boolean
     payment_received: boolean
+    payment_type: string
+    payment_information: string
     status: number
     offlineId?: string
     options: Object
@@ -54,30 +60,36 @@ const InvoiceSchema = new mongoose.Schema({
     number: String,
     due_date: Date,
     issue_date: Date,
+    issue_place: String,
     project: {
         name: String,
-        address: String,
         number: String,
+        google_address: String,
     },
     client: {
         name: String,
-        address: String,
         number: String,
         bank_number: String,
+        company_number: String,
+        google_address: String,
     },
     company: {
         name: String,
-        address: String,
-        number: String,
+        company_number: String,
         bank_number: String,
+        google_address: String,
     },
     issued_by: {
         name: String,
         user_id: mongoose.Schema.Types.ObjectId,
     },
-    desciption: String,
+    description: String,
+    notes: String,
+    terms: String,
     issued: Boolean,
     payment_received: Boolean,
+    payment_type: String,
+    payment_information: String,
     status: {
         type: InvoiceStatusSchema,
         default: {

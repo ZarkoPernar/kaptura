@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import MdAdd from 'react-icons/lib/md/add'
 import { v4 as uid } from 'uuid'
+import { connect } from 'react-redux'
 
 import EmployeeList from './List'
 import EditEmployeeForm from './Form'
@@ -12,6 +13,14 @@ import createStoreListComponent from '../shared/StoreList'
 
 import { storeItem } from './reducer'
 
+const combine = (employees, online) => {
+    return employees.map(user => ({
+        ...user,
+        isOnline: online[user.id] === true,
+    }))
+}
+
+@connect(state => ({online: state.onlineEmployees.data || {}}))
 @createStoreListComponent({
     storeName: 'employees',
     actions: storeItem.actions
@@ -27,8 +36,19 @@ export default class EmployeesPage extends Component {
         pageNumber: 1,
     }
 
+    constructor(props) {
+        super(props)
+        this._employees = combine(props.items, props.online)
+    }
+
     componentWillMount = () => {
         this.getProjects()
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.items !== this.props.items || nextProps.online !== this.props.online) {
+            this._employees = combine(nextProps.items, nextProps.online)
+        }
     }
 
     getProjects = () => {
@@ -176,7 +196,7 @@ export default class EmployeesPage extends Component {
                 </div>
 
                 <EmployeeList
-                    employees={this.props.items}
+                    employees={this._employees}
                     rowRemove={this.askForRemove}
                     rowClick={this.openProject}
                     pageNumber={this.state.pageNumber}

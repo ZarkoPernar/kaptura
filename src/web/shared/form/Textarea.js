@@ -13,7 +13,7 @@ class TextareaComponent extends Component {
     }
 
     static defaultProps = {
-        rows: 2
+        rows: 1
     }
 
     constructor(props) {

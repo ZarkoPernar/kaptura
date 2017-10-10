@@ -120,24 +120,25 @@ export default class CompanyInfo extends Component {
                                         </FormGroup>
                                     </Cell>
                                 </Flex>
+                                <Flex grid>
+                                    <Cell>
+                                        <FormGroup label="Email">
+                                            <Input type="email" name="email" value={this.state.company.email} onChange={this.onChange} />
+                                        </FormGroup>
+                                    </Cell>
 
-                                <Cell>
-                                    <FormGroup label="Email">
-                                        <Input type="email" name="email" value={this.state.company.email} onChange={this.onChange} />
-                                    </FormGroup>
-                                </Cell>
+                                    <Cell>
+                                        <FormGroup label="IBAN">
+                                            <Input name="bank_account" value={this.state.company.bank_account} onChange={this.onChange} />
+                                        </FormGroup>
+                                    </Cell>
 
-                                <Cell>
-                                    <FormGroup label="IBAN">
-                                        <Input name="bank_account" value={this.state.company.bank_account} onChange={this.onChange} />
-                                    </FormGroup>
-                                </Cell>
-
-                                <Cell>
-                                    <FormGroup label="Adresa">
-                                        <SearchAddress name="google_address" onSelect={this.onAddressSelect} value={this.state.company.google_address} onChange={this.onChange} />
-                                    </FormGroup>
-                                </Cell>
+                                    <Cell>
+                                        <FormGroup label="Adresa">
+                                            <SearchAddress name="google_address" onSelect={this.onAddressSelect} value={this.state.company.google_address} onChange={this.onChange} />
+                                        </FormGroup>
+                                    </Cell>
+                                </Flex>
 
                                 <ButtonLoader loading={this.props.updating} onClick={this.save}>
                                     Spremi Promjene

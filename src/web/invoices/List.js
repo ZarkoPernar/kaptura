@@ -1,26 +1,42 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import MdDelete from 'react-icons/lib/md/delete'
+import MdCheck from 'react-icons/lib/md/check'
 import { Link } from 'react-router-dom'
 
-import TimeFormat from '../shared/TimeFormat'
+import DisplayDate from '../shared/DisplayDate'
 import Pagination from '../shared/Pagination'
 import Table from '../shared/table/Table'
-import Button from '../shared/Button'
 import TableHead from '../shared/table/TableHead'
+import TableHeading from '../shared/table/TableHeading'
 import TableRow from '../shared/table/TableRow'
 import TableCell from '../shared/table/TableCell'
 
-const projectListColumnNames = ['Projekt', 'Klijent', 'Izdao', 'Izdat', 'Dospjece', 'Zapis']
+import { isInvoicePassedDue } from './utils'
 
 const ProjectList = ({ items, rowClick, nextPage, prevPage, pageNumber, }) => (
     <div>
         <Table key="table">
-            <TableHead key="head" columns={projectListColumnNames} />
+            <TableHead key="head">
+                <TableHeading width="1%">
+                    Placeno
+                </TableHeading>
+                <TableHeading>Broj</TableHeading>
+                <TableHeading>Projekt</TableHeading>
+                <TableHeading>Klijent</TableHeading>
+                <TableHeading>Izdao</TableHeading>
+                <TableHeading>Datum izdavanja</TableHeading>
+                <TableHeading>Rok Placanja</TableHeading>
+                <TableHeading>Biljeske</TableHeading>
+            </TableHead>
             {
                 items.map(invoice => {
                     return (
-                        <TableRow key={invoice._id} hover condensed onClick={rowClick} item={invoice}>
+                        <TableRow key={invoice._id} hover condensed onClick={rowClick} item={invoice}
+                            color={!invoice.payment_received && isInvoicePassedDue(invoice.due_date) === true ? 'danger' : ''}>
+                            <TableCell center>
+                                <span style={{fontSize: '1.5rem', lineHeight: 0,}}>{invoice.payment_received === true ? <MdCheck /> : null}</span>
+                            </TableCell>
+
                             <TableCell>
                                 <Link className="" to={{
                                     pathname: '/fakture/' + invoice._id,
@@ -28,8 +44,12 @@ const ProjectList = ({ items, rowClick, nextPage, prevPage, pageNumber, }) => (
                                         invoice,
                                     },
                                 }}>
-                                    { invoice.project ? invoice.project.name : '' }
+                                    {invoice.number ? invoice.number : 'Nema Broj'}
                                 </Link>
+                            </TableCell>
+
+                            <TableCell>
+                                {invoice.project ? invoice.project.name : ''}
                             </TableCell>
 
                             <TableCell>
@@ -41,11 +61,11 @@ const ProjectList = ({ items, rowClick, nextPage, prevPage, pageNumber, }) => (
                             </TableCell>
 
                             <TableCell>
-                                { invoice.issue_date }
+                                <DisplayDate>{invoice.issue_date}</DisplayDate>
                             </TableCell>
 
                             <TableCell>
-                                { invoice.due_date }
+                                <DisplayDate>{invoice.due_date}</DisplayDate>
                             </TableCell>
 
                             <TableCell>

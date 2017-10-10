@@ -1,5 +1,16 @@
 @import '../../App';
 
+.row {
+    &>* {
+        flex-grow: 1;
+    }
+}
+.col {
+    width: 100%;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+
+}
 .flex {
     display: flex;
 

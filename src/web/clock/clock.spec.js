@@ -3,10 +3,10 @@ import { checkIn, checkOut, getDuration, getDurationInSeconds, getTime, isValidD
 let log
 
 describe('getTime', () => {
-    it('returns a Date object', () => {
+    it('returns a Date string', () => {
         const time = getTime()
-        const expectedResult = true
-        const actualResult = time instanceof Date
+        const expectedResult = 'string'
+        const actualResult = typeof time
 
         expect(actualResult).toEqual(expectedResult)
     })

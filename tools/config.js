@@ -11,7 +11,7 @@ module.exports = {
     },
 
     WEBPACK_DEV_SERVER_CONFIG: {
-        port: process.env.PORT || 8080,
+        port: process.env.LIVE_PORT || 8080,
         host: 'localhost',
         stats: 'errors-only',
         overlay: true,
@@ -28,6 +28,10 @@ module.exports = {
             },
             '/auth': {
                 target: 'http://localhost:5000'
+            },
+            '/napi/*': {
+                target: 'ws://localhost:5000',
+                ws: true,
             },
         },
 

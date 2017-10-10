@@ -3,7 +3,7 @@
 
 $table-br: 2px;
 
-$table-heading-padding: 1em 2.25em;
+$table-heading-padding: 1em 1.5em;
 $table-heading-padding-half: .5em .75em;
 $table-heading-bg-color: #fff;
 
@@ -52,7 +52,7 @@ $table-cell-padding-half: .5em .75em;
     &__row {
         &--hover:hover {
             .table__cell {
-                background-color: $table-row-hover-bg-color !important;
+                background-color: $table-row-hover-bg-color;
             }
         }
 
@@ -96,6 +96,20 @@ $table-cell-padding-half: .5em .75em;
 
         &--clickable {
             cursor: pointer;
+        }
+
+        &--bg-danger {
+            .table__cell {
+                // color: $bc-light;
+                background-color: lighten($bc-danger, 18);
+            }
+
+            &:hover {
+                .table__cell {
+                    // color: $bc-light;
+                    background-color: lighten($bc-danger, 10);
+                }
+            }
         }
 
     }

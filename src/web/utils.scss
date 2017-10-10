@@ -1,7 +1,18 @@
+@import './palette';
+
 .text {
     &-center {
         text-align: center;
     }
+
+    &-success {
+        color: $bc-success;
+    }
+
+    &-danger {
+        color: $bc-danger;
+    }
+
 }
 
 .padding-sm {

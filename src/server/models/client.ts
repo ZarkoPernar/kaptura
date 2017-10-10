@@ -7,8 +7,8 @@ export interface IClient extends ITimestampsSchema, ILocationSchema, IModifiedBy
     _id: string
     company_id: string
     name: string
-    account_number?: string
     company_number: string
+    account_number?: string
     notes?: string
     offlineId?: string
     options: Object

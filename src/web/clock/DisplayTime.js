@@ -1,14 +1,14 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 
 import { formatTime } from './formatTime'
 
-class DisplayTime extends PureComponent {
+class DisplayTime extends Component {
     shouldComponentUpdate(nextProps) {
         return nextProps.time !== this.props.time
     }
 
     render() {
-        return <span>{ formatTime(this.props.time) }</span>
+        return formatTime(this.props.time)
     }
 }
 

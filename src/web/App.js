@@ -10,7 +10,6 @@ import AppChatSidebar from './AppChatSidebar'
 
 import './App.scss'
 import './print.scss'
-import './pages/pages.scss'
 
 const TAB_KEY = 9
 
@@ -19,7 +18,6 @@ export default class App extends Component {
         menuIsOpen: false,
         isTabbing: false,
         isClicking: false,
-        sidenavInstance: null,
     }
 
     componentDidMount() {
@@ -45,18 +43,14 @@ export default class App extends Component {
         }
     }
 
-    getSidenav = (sidenavInstance) => {
-        this.setState({sidenavInstance})
-    }
-
     render() {
         return (
             <div className="App">
                 {/* <RegisterHistory key="history" /> */}
 
-                <AppSidenav ref={this.getSidenav} />
+                <AppSidenav />
 
-                <AppHeader sidenavInstance={this.state.sidenavInstance} />
+                <AppHeader />
 
                 <AppBody />
 

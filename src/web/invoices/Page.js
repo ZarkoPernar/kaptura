@@ -46,14 +46,12 @@ export default class InvoicesPage extends Component {
     applyFilters = (filters) => {
         this.setState({
             filters
-        })
-
-        this.list()
+        }, this.list)
     }
 
     list = () => {
         this.props.list({
-            filters: this.filters,
+            filters: this.state.filters,
             pages: {
                 pageSize: this.state.pageSize,
                 pageNumber: this.state.pageNumber,

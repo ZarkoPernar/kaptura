@@ -2,6 +2,7 @@ import 'rxjs'
 import { Observable } from 'rxjs/Observable'
 
 import { IUser } from '../models/user'
+import { emitCompanySocket } from './api'
 
 export const userClients = new Map()
 export const companyClients = new Map()
@@ -31,6 +32,18 @@ export default function initSocket({ io }): void {
                     companyClients.set(user.company_id, map)
                 }
 
+                // finally we send the newly connected user
+                // the full company roster of connected users
+                const hash = {}
+                companyClients.get(user.company_id).forEach((_, user_id) => {
+                    hash[user_id] = true
+                })
+
+                emitCompanySocket(user.company_id, {
+                    type: 'online_users',
+                    payload: hash,
+                })
+
             })
 
         socket.on('disconnect', function () {
@@ -38,6 +51,18 @@ export default function initSocket({ io }): void {
 
             userClients.delete(_user._id)
             companyClients.get(_user.company_id).delete(_user._id)
+
+            // finally we send the newly connected user
+            // the full company roster of connected users
+            const hash = {}
+            companyClients.get(_user.company_id).forEach((_, user_id) => {
+                hash[user_id] = true
+            })
+
+            emitCompanySocket(_user.company_id, {
+                type: 'online_users',
+                payload: hash,
+            })
         })
     })
 

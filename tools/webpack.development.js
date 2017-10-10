@@ -15,6 +15,7 @@ module.exports = {
     output: {
         path: path.resolve(CONFIG.CLIENT_OUTPUT_PATH),
         filename: 'bundle.js',
+        publicPath: '/',
     },
     resolve: {
         extensions: ['.js'],

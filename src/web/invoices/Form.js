@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import merge from 'lodash/merge'
+import set from 'lodash/set'
 
+import Flex from '../shared/flex'
+import Cell from '../shared/Cell'
 import Input from '../shared/form/Input'
 import Textarea from '../shared/form/Textarea'
 import FormGroup from '../shared/form/FormGroup'
+import Checkbox from '../shared/form/Checkbox'
 import Button from '../shared/Button'
 import Datepicker from '../shared/Datepicker'
 import Address from '../shared/Address'
@@ -18,23 +23,37 @@ const actionStyles = {
 
 class EditClientForm extends Component {
     static propTypes = {
-        client: PropTypes.object,
+        invoice: PropTypes.object,
         onSubmit: PropTypes.func,
         onDismiss: PropTypes.func,
     }
 
     static defaultProps = {
-        client: {}
+        invoice: {}
     }
 
     state = {
-        client: {},
+        invoice: {
+            number: '',
+            company: {
+                name: '',
+                company_number: '',
+                bank_number: '',
+                google_address: '',
+            },
+            client: {
+                name: '',
+                company_number: '',
+                bank_number: '',
+                google_address: '',
+            },
+        }
     }
 
     constructor(props) {
         super(props)
 
-        this.state.client = props.client || {}
+        this.state.invoice = merge(this.state.invoice, props.invoice)
     }
 
     getFormEl = (el) => {
@@ -50,34 +69,31 @@ class EditClientForm extends Component {
     _submit = (event) => {
         event.preventDefault()
 
-        const client = {
-            ...this.props.client, // Original
-            ...this.state.client, // Any edited fields
+        const invoice = {
+            ...this.props.invoice, // Original
+            ...this.state.invoice, // Any edited fields
         }
 
         // try {
-        //     this.validate(client)
+        //     this.validate(invoice)
         // } catch (err) {
         //     // TODO: add ui error notification
         //     return console.error(err)
         // }
 
-        this.props.onSubmit(client)
+        this.props.onSubmit(invoice)
     }
 
-    inputChanged = (value, name) => {
+    inputChanged = (value, path) => {
         this.setState((prevState) => ({
-            client: {
-                ...prevState.client,
-                [name]: value
-            }
+            invoice: set({...prevState.invoice}, path, value)
         }))
     }
 
     onPlaceChange = (data) => {
         this.setState((prevState) => ({
-            client: {
-                ...prevState.client,
+            invoice: {
+                ...prevState.invoice,
                 ...data
             }
         }))
@@ -90,34 +106,96 @@ class EditClientForm extends Component {
 
     render() {
         return (
-            <form style={{padding: '0 1rem'}} className="EditProject__form" ref={this.getFormEl} onSubmit={this._submit} method="POST" action={'/api/v1/client/' + (this.props.client._id ? 'update' : 'create')}>
-                <h2>{this.props.client._id ? 'Izmjeni informacije o klijentu' : 'Novi Klijent'}</h2>
+            <form style={{padding: '0 1rem'}} className="EditProject__form" ref={this.getFormEl} onSubmit={this._submit} method="POST" action={'/api/v1/invoice/' + (this.props.invoice._id ? 'update' : 'create')}>
+                <h2>{this.props.invoice._id ? 'Izmjeni informacije o racunu' : 'Novi Klijent'}</h2>
 
-                <input name="_id" defaultValue={this.props.client._id} type="text" hidden />
+                <input name="_id" defaultValue={this.props.invoice._id} type="text" hidden />
 
-                <FormGroup label="Ime">
-                    <Input name="name" onChange={this.inputChanged} value={this.state.client.name} />
-                </FormGroup>
+                <Flex grid>
+                    <Cell md="6">
+                        <FormGroup label="Ime Tvrtke">
+                            <Input name="company.name" onChange={this.inputChanged} value={this.state.invoice.company.name} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="3">
+                        <FormGroup label="OIB">
+                            <Input name="company.company_number" onChange={this.inputChanged} value={this.state.invoice.company.company_number} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="3">
+                        <FormGroup label="IBAN">
+                            <Input name="company.bank_number" onChange={this.inputChanged} value={this.state.invoice.company.bank_number} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="12">
+                        <FormGroup label="Adresa">
+                            <Address name="company.google_address" onChange={this.inputChanged} onSelect={this.onPlaceChange} value={this.state.invoice.company.google_address} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="6">
+                        <FormGroup label="Ime klijenta">
+                            <Input name="client.name" onChange={this.inputChanged} value={this.state.invoice.client.name} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="3">
+                        <FormGroup label="OIB klijenta">
+                            <Input name="client.company_number" onChange={this.inputChanged} value={this.state.invoice.client.company_number} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="3">
+                        <FormGroup label="IBAN klijenta">
+                            <Input name="client.bank_number" onChange={this.inputChanged} value={this.state.invoice.client.bank_number} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="12">
+                        <FormGroup label="Adresa klijenta">
+                            <Address name="client.google_address" onChange={this.inputChanged} onSelect={this.onPlaceChange} value={this.state.invoice.client.google_address} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="3">
+                        <FormGroup label="Datum Izdavanja">
+                            <Datepicker name="issue_date" onChange={this.inputChanged} value={this.state.invoice.issue_date} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="3">
+                        <FormGroup label="Datum Dospijeca">
+                            <Datepicker name="due_date" onChange={this.inputChanged} value={this.state.invoice.due_date} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="3">
+                        <FormGroup label="Nacin placanja">
+                            <Input name="payment_type" onChange={this.inputChanged} value={this.state.invoice.payment_type} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="3">
+                        <FormGroup label="Opis placanja">
+                            <Textarea name="payment_information" onChange={this.inputChanged} value={this.state.invoice.payment_information} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="6">
+                        <FormGroup label="Uvijeti">
+                            <Textarea name="terms" onChange={this.inputChanged} value={this.state.invoice.terms} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="6">
+                        <FormGroup label="Javne biljeske">
+                            <Textarea name="notes" onChange={this.inputChanged} value={this.state.invoice.notes} />
+                        </FormGroup>
+                    </Cell>
+                    <Cell md="6">
+                        <FormGroup label="Privatne biljeske">
+                            <Textarea name="notes" onChange={this.inputChanged} value={this.state.invoice.description} />
+                        </FormGroup>
+                    </Cell>
 
-                <FormGroup label="OIB">
-                    <Input name="company_number" onChange={this.inputChanged} value={this.state.client.company_number} />
-                </FormGroup>
-
-                <FormGroup label="Šifra (interni broj)">
-                    <Input name="account_number" onChange={this.inputChanged} value={this.state.client.account_number} />
-                </FormGroup>
-
-                <FormGroup label="Opis">
-                    <Textarea name="notes" onChange={this.inputChanged} value={this.state.client.notes} />
-                </FormGroup>
-
-                <FormGroup label="Adresa">
-                    <Address name="google_address" onChange={this.inputChanged} onSelect={this.onPlaceChange} value={this.state.client.google_address} />
-                </FormGroup>
+                    <Cell md="2">
+                        <Checkbox label="Placeno" name="payment_received" onChange={this.inputChanged} value={this.state.invoice.payment_received} />
+                    </Cell>
+                </Flex>
 
                 <div style={actionStyles}>
                     <Button color="primary" type="submit">
-                        {this.props.client._id ? 'Spremi' : 'Posalji'}
+                        {this.props.invoice._id ? 'Spremi' : 'Posalji'}
                     </Button>
 
                     <Button onClick={this.dismiss} clear style={{marginRight: '25px'}}>

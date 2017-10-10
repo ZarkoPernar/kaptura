@@ -29,13 +29,19 @@ export default class Address extends Component {
         this.setState({
             googleLoaded: Boolean(window.google)
         })
-        this.unsubscribe = googleLibService.subscribe(this.googleLoaded)
+        this.unsubscribe = googleLibService.subscribe(this.googleHasLoaded)
     }
 
     componentWillUnmount() {
         if (typeof this.unsubscribe === 'function') {
             this.unsubscribe()
         }
+    }
+
+    googleHasLoaded = () => {
+        this.setState({
+            googleLoaded: Boolean(window.google)
+        })
     }
 
     onChange = (value) => {

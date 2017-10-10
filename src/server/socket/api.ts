@@ -6,7 +6,7 @@ interface SocketAction {
     payload: any
 }
 
-export function emitCompanySocket(company_id, ignoreUser: string | string[], { type, payload }: SocketAction) {
+export function emitCompanySocket(company_id, { type, payload }: SocketAction, ignoreUser?: string | string[]) {
     const shouldIgnoreUser = Array.isArray(ignoreUser) ? uid => ignoreUser.includes(uid) : uid => uid === ignoreUser
 
     if (companyClients.has(company_id)) {

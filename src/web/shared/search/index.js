@@ -5,11 +5,14 @@ import classnames from 'classnames'
 
 import './search.scss'
 
-const proxyFunctions = (names, props, component) => {
-    return names.map(name => {
+const proxyFunctions = (names, ...rest) => {
+    return names.map(methodName => {
         return function(...args) {
-            props[name](...args)
-            component[name](...args)
+            rest.forEach((instance) => {
+                if (instance[methodName] !== undefined) {
+                    instance[methodName].call(...args)
+                }
+            })
         }
     })
 }
@@ -25,11 +28,14 @@ export default class Search extends PureComponent {
         results: [],
     }
 
-    componentWillMount() {
-        this.props.searchFn().then((results) => {
+    onFocus = () => {
+        this.props.searchFn({
+            pages: { pageSize: 10, pageNumber: 1 }
+        }).then((results) => {
             this.setState({
                 results,
             })
+            console.log(results);
         })
     }
 
@@ -65,7 +71,7 @@ export default class Search extends PureComponent {
         // have to spy on onFocus, onBlur, can't replace them
         // so we create new functions that call both component function
         // and the original fn from props
-        const [ onFocus, onBlur ] = proxyFunctions(['onFocus', 'onBlur'], props, this.props)
+        const [ onFocus, onBlur ] = proxyFunctions(['onFocus', 'onBlur'], props, this, this.props)
 
         return (
             <input id={this.props.id} className={classnames('form-control dd__input', this.props.className)} {...props} onFocus={onFocus} onBlur={onBlur} />

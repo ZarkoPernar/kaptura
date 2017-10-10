@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
+import MdBuild from 'react-icons/lib/md/build'
+
+import Button from '../shared/Button'
 
 const ils__inner = {
-    width: '100%',
-    height: '100%',
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    zIndex: 2,
 }
 class InvoiceLayoutSlot extends Component {
     static propTypes = {
@@ -28,10 +33,11 @@ class InvoiceLayoutSlot extends Component {
         return (
             <div {...rest}>
                 <div style={ils__inner}>
-                    <button onClick={this.onSelect}>Use this slot</button>
-                    <button onClick={this.onDelete}>Delete this slot</button>
-                    {this.props.children}
+                    <Button clear iconOnly small onClick={this.onSelect}>
+                        <MdBuild />
+                    </Button>
                 </div>
+                {this.props.children}
             </div>
         );
     }

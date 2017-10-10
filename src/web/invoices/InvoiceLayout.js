@@ -5,7 +5,6 @@ import ReactGridLayout from 'react-grid-layout'
 import Card from '../shared/Card'
 import InvoiceLayoutSlot from './InvoiceLayoutSlot'
 
-const kaptura = 'kaptura'
 const A4_RATIO = 1.4142
 
 export default class InvoiceLayout extends PureComponent {
@@ -35,16 +34,16 @@ export default class InvoiceLayout extends PureComponent {
                         margin={[0, 0]}
                         onLayoutChange={onLayoutChange}>
 
-                        <InvoiceLayoutSlot key={'c'}
-                            slot={{ name: 'Yo!', key: 'c', }}
-                            onSelect={onSlotSelect}
-                            onDelete={onSlotDelete}>
-                            Yo!
-                        </InvoiceLayoutSlot>
+                        {this.props.slots.map(slot => (
+                            <InvoiceLayoutSlot key={slot.key}
+                                slot={slot}
+                                onSelect={onSlotSelect}
+                                onDelete={onSlotDelete}>
+                                {slot.content}
+                            </InvoiceLayoutSlot>
+                        ))}
 
-                        <div key={'b'}>b</div>
-                        <div key={'a'}>c</div>
-                        <div key={kaptura}><h4 className="text-center">Made With Kaptura</h4></div>
+                        <div key={'kaptura'}><h4 className="text-center">Made With Kaptura</h4></div>
                     </ReactGridLayout>
                 </div>
             </Card>

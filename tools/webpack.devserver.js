@@ -18,7 +18,7 @@ module.exports = {
     output: {
         path: path.resolve(CONFIG.CLIENT_OUTPUT_PATH),
         filename: 'bundle.js',
-        publicPath: 'http://localhost:8080/',
+        publicPath: '/',
     },
     resolve: {
         extensions: ['.js'],
@@ -32,7 +32,7 @@ module.exports = {
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.DefinePlugin({
             "process.env": {
-                "BUILD_TARGET": JSON.stringify("src")
+                "BUILD_TARGET": JSON.stringify("src/web")
             }
         }),
         new ExtractTextPlugin('styles.css'),
@@ -43,9 +43,14 @@ module.exports = {
     module: {
         rules: [{
                 test: /\.js$/,
-                use: ['babel-loader'],
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: 'cache',
+                    }
+                },
                 include: [
-                    path.resolve('src'),
+                    path.resolve('src/web'),
                 ],
                 exclude: ['.spec.']
 

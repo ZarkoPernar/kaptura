@@ -4,8 +4,8 @@ import 'flexboxgrid'
 
 import './flex.scss'
 
-export default ({ className, children }) => (
-    <div className={classnames('flex', className)}>
+export default ({ className, children, grid }) => (
+    <div className={classnames('row', className)}>
         { children }
     </div>
 )

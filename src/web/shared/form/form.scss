@@ -140,6 +140,11 @@ textarea {
         border-color: $bc-earth;
     }
 
+    &[disabled] {
+        background-color: #eee;
+        cursor: not-allowed;
+    }
+
 }
 
 .rc-time-picker {

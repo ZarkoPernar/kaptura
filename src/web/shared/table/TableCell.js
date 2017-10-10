@@ -16,7 +16,12 @@ class TableBodyComponent extends PureComponent {
 
     render() {
         return (
-            <td className={classnames('table__cell', { 'table__cell--active': this.props.active, })} {...this.props}>
+            <td className={classnames('table__cell', {
+                'table__cell--active': this.props.active,
+                'text-center': this.props.center,
+                'text-success': this.props.color === 'success',
+                'text-danger': this.props.color === 'danger',
+            })}>
                 <div className="table__cell__content">
                     {this.props.children}
                 </div>

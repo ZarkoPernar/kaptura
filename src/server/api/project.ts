@@ -73,8 +73,8 @@ export async function create(request: IRequest, response: Response) {
 
         emitCompanySocket(
             request.user.company_id.toString(),
+            { type: 'project_create', payload: result },
             request.user._id.toString(),
-            { type: 'project_create', payload: result }
         )
 
         response.status(200).json(result)
@@ -95,8 +95,8 @@ export async function update(request: IRequest, response: Response) {
 
     emitCompanySocket(
         request.user.company_id.toString(),
+        {type: 'project_update', payload: result},
         request.user._id.toString(),
-        {type: 'project_update', payload: result}
     )
 
     response.status(200).json(result)
