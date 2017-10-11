@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const url = require("url");
+const date_fns_1 = require("date-fns");
 const invoice_1 = require("../models/invoice");
 const convertDates_1 = require("../utils/convertDates");
 const applyFilters_1 = require("../utils/applyFilters");
@@ -47,6 +48,15 @@ async function create(request, response) {
     const newItem = convertDates_1.default(item, ['issue_date', 'due_date']);
     const offlineId = newItem._id;
     delete newItem._id;
+    const invoiceCount = await invoice_1.Model
+        .find({
+        issue_date: {
+            $gte: date_fns_1.startOfYear(new Date()),
+        }
+    })
+        .where('company_id')
+        .equals(request.user.company_id)
+        .count();
     const [client, project, company, user,] = await Promise.all([
         client_1.default.getItem(item.client_id, request.user),
         project_1.default.getItem(item.project_id, request.user),
@@ -57,7 +67,7 @@ async function create(request, response) {
         const result = await invoice_1.default.create({
             item: Object.assign({}, newItem, { client,
                 project,
-                company, issued_by: {
+                company, number: (invoiceCount + 1) + '/01/01', issued_by: {
                     user_id: user._id,
                     name: user.full_name,
                 } }),

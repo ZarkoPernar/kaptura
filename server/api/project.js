@@ -50,7 +50,7 @@ async function create(request, response) {
             offlineId,
             user: request.user,
         });
-        api_1.emitCompanySocket(request.user.company_id.toString(), request.user._id.toString(), { type: 'project_create', payload: result });
+        api_1.emitCompanySocket(request.user.company_id.toString(), { type: 'project_create', payload: result }, request.user._id.toString());
         response.status(200).json(result);
     }
     catch (err) {
@@ -65,7 +65,7 @@ async function update(request, response) {
         item: newItem,
         user: request.user,
     });
-    api_1.emitCompanySocket(request.user.company_id.toString(), request.user._id.toString(), { type: 'project_update', payload: result });
+    api_1.emitCompanySocket(request.user.company_id.toString(), { type: 'project_update', payload: result }, request.user._id.toString());
     response.status(200).json(result);
 }
 exports.update = update;

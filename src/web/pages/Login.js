@@ -20,12 +20,15 @@ export default class LoginPage extends Component {
     }
 
     login = () => {
-        http.noApi.post('/auth/login', {
-            username: this.state.username,
-            password: this.state.password,
-            email: this.state.username,
+        const body = new FormData()
+        body.append('username', this.state.username)
+        body.append('email', this.state.username)
+        body.append('password', this.state.password)
 
-        })
+        fetch('/auth/login', {
+            method: 'POST',
+            body,
+         })
         .then(console.log)
         .catch(this.handleCreateProjectError)
     }

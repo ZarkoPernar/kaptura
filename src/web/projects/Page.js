@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
+import { Observable } from 'rxjs/Observable'
 import { v4 as uid } from 'uuid'
 import MdAdd from 'react-icons/lib/md/add-circle'
 import { connect } from 'react-redux'
 
+import appStore from '../appStore'
+import socketService from '../socket'
 import Toaster from '../shared/toast/Toaster'
 import Modal from '../shared/modal'
 import Calendar from '../shared/calendar'
@@ -56,7 +59,35 @@ export default class ProjectPage extends Component {
 
     componentWillMount = () => {
         this.getProjects()
+
+        this.create$$ = socketService.companySocket$
+            .filter(Boolean)
+            .mergeMap(socket => Observable.fromEvent(socket, 'project_create'))
+            .subscribe(payload => {
+                console.log('project_create', payload)
+                appStore.dispatch({
+                    type: storeItem.types.UPDATE_ITEM_SUCCESS,
+                    payload
+                })
+            })
+
+        this.update$$ = socketService.companySocket$
+            .filter(Boolean)
+            .mergeMap(socket => Observable.fromEvent(socket, 'project_update'))
+            .subscribe(payload => {
+                console.log('project_update', payload)
+                appStore.dispatch({
+                    type: storeItem.types.UPDATE_ITEM_SUCCESS,
+                    payload
+                })
+            })
     }
+
+    componentWillUnmount() {
+        this.create$$.unsubscribe()
+        this.update$$.unsubscribe()
+    }
+
 
     applyFilters = (filters) => {
         this.setState({

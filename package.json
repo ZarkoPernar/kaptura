@@ -12,7 +12,7 @@
     "build": "rimraf ./public && SET NODE_ENV=production && SET BABEL_ENV=production && webpack --config ./tools/webpack.config.js --colors --progress --profile",
     "test:mocha": "mocha --compilers js:babel-register -w test/testSetup.js src/**/*.spec.js",
     "test": "react-scripts test --env=jsdom",
-    "serve": "nodemon -w server",
+    "serve": "SET NODE_ENV=production && nodemon -w server",
     "build:live": "nodemon --exec ts-node -- ./src/server/index.ts --config ./tsconfig.json",
     "devserver": "cross-env NODE_ENV=development webpack-dev-server --open --config ./tools/webpack.config.js",
     "development": "cross-env NODE_ENV=development webpack -w ./src/web --config ./tools/webpack.config.js",

@@ -3,6 +3,11 @@ import io from 'socket.io-client'
 
 const socket = io('', { path: '/napi' })
 
+
+export function createCompanySocket(company_id) {
+    return io('/company/' + company_id, { path: '/napi' })
+}
+
 export const connection = new BehaviorSubject(function(observer) {
     socket.on('connect', function () {
         observer.next(true)
@@ -15,4 +20,16 @@ export const connection = new BehaviorSubject(function(observer) {
 
 
 
-export default socket
+export default {
+    socket,
+    connection,
+    companySocket$: new BehaviorSubject(null),
+    createCompany(company_id) {
+        if (this._companySocket === undefined) {
+            this.companySocket = createCompanySocket(company_id)
+            this.companySocket$.next(this.companySocket)
+        }
+
+        return this.companySocket
+    }
+}

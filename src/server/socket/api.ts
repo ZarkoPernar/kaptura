@@ -1,26 +1,20 @@
-import { companyClients } from './init'
+import { userClients, companyClients } from './init'
 import { io } from './index'
 
 interface SocketAction {
     type: string
     payload: any
+    room?: string
 }
 
-export function emitCompanySocket(company_id, { type, payload }: SocketAction, ignoreUser?: string | string[]) {
-    const shouldIgnoreUser = Array.isArray(ignoreUser) ? uid => ignoreUser.includes(uid) : uid => uid === ignoreUser
+export function emitCompanySocket(company_id, { type, payload, room }: SocketAction, ignoreUser?: string) {
+    const companySocketNS = io.of(`/company/${company_id}`)
+    const socketId = companyClients.get(ignoreUser)
+    const companySocketForUser = companySocketNS.connected[socketId]
 
-    if (companyClients.has(company_id)) {
-        if (companyClients.get(company_id)) {
-            companyClients
-                .get(company_id)
-                .forEach((socket_id, user_id) => {
-                    // this is the user that initiated the update
-                    // so we do not notify him
-                    if (shouldIgnoreUser(user_id)) return
-
-                    io.sockets.connected[socket_id].emit(type, payload)
-                })
-
-        }
+    if (ignoreUser !== undefined && companySocketForUser !== undefined) {
+        return companySocketNS.broadcast.emit(type, payload)
     }
+
+    return companySocketNS.emit(type, payload)
 }
