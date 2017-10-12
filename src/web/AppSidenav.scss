@@ -9,10 +9,6 @@
 .App-sidenav {
     color: $bc-light;
     width: $sidenav-width;
-    top: $header-height;
-    z-index: 4;
-    border-right: $sidenav-br-right;
-    box-shadow: 3px 2px 1px rgba(70, 70, 70, 0.09);
 
     &__container {
         display: flex;

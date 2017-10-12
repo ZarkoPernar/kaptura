@@ -1,25 +1,23 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import Sidebar from './shared/Sidebar'
 
-class AppChatSidebar extends Component {
-    state = {
-        isOpen: false,
-    }
+const AppChatSidebar = props => {
+    return (
+        <Sidebar isOpen={props.isOpen} right>
+            <div style={{minWidth: '200px', padding: '2rem 1rem'}}>
+                <div className="modal__header">
+                    <h3>Chat</h3>
+                </div>
+            </div>
 
-    render() {
-        return (
-            <Sidebar isOpen={this.state.isOpen} right>
-                <h2>Chat</h2>
-
-            </Sidebar>
-        );
-    }
+        </Sidebar>
+    )
 }
 
 AppChatSidebar.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+}
 
-};
-
-export default AppChatSidebar;
+export default AppChatSidebar

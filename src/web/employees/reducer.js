@@ -11,10 +11,6 @@ import { LOAD_USER_INFO_SUCCESS } from '../userInfo.reducer'
 export const storeItem = createStoreList('employees', { api })
 export const onlineEmployees = createStoreItem('onlineEmployees')
 
-const onlineEmployees$ = Observable.fromEvent(socketService.socket, 'online_users')
-    .subscribe((val) => {
-        appStore.dispatch(onlineEmployees.actions.load(val))
-    })
 
 export function employeesEpic(action$) {
     return action$

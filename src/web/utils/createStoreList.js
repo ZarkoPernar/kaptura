@@ -1,5 +1,5 @@
 import { fromStore, toStore } from './store.utils'
-import { findByIdAndReplace } from './array.utils'
+import { findByIdAndReplace, findByIdAndRemove } from './array.utils'
 
 const SPLIT = '/'
 
@@ -15,6 +15,10 @@ export const UPDATE_ITEM = 'UPDATE_ITEM'
 export const UPDATE_ITEM_SUCCESS = 'UPDATE_ITEM_SUCCESS'
 export const UPDATE_ITEM_ERROR = 'UPDATE_ITEM_ERROR'
 
+export const REMOVE_ITEM = 'REMOVE_ITEM'
+export const REMOVE_ITEM_SUCCESS = 'REMOVE_ITEM_SUCCESS'
+export const REMOVE_ITEM_ERROR = 'REMOVE_ITEM_ERROR'
+
 const TYPES = [
     LOAD_LIST,
     LOAD_LIST_SUCCESS,
@@ -25,6 +29,9 @@ const TYPES = [
     UPDATE_ITEM,
     UPDATE_ITEM_SUCCESS,
     UPDATE_ITEM_ERROR,
+    REMOVE_ITEM,
+    REMOVE_ITEM_SUCCESS,
+    REMOVE_ITEM_ERROR,
 ]
 
 export default function createStoreList(name = required('name'), { api, rootStoreItem } = {}) {
@@ -40,6 +47,7 @@ export default function createStoreList(name = required('name'), { api, rootStor
             list,
             add,
             update,
+            remove,
         },
         reducer,
     }
@@ -77,6 +85,11 @@ export default function createStoreList(name = required('name'), { api, rootStor
             case ACTION_TYPES.UPDATE_ITEM_SUCCESS:
                 return updateItemInList(state, action.payload)
 
+            case ACTION_TYPES.REMOVE_ITEM:
+                return removeItemInList(state, action.payload)
+            case ACTION_TYPES.REMOVE_ITEM_SUCCESS:
+                return removeItemInList(state, action.payload)
+
             default:
                 return state
         }
@@ -96,6 +109,14 @@ export default function createStoreList(name = required('name'), { api, rootStor
         const logs = fromStore(state)
 
         const updatedLogs = findByIdAndReplace(logs, payload)
+
+        return toStore(updatedLogs, state)
+    }
+
+    function removeItemInList(state, payload) {
+        const logs = fromStore(state)
+
+        const updatedLogs = findByIdAndRemove(logs, payload)
 
         return toStore(updatedLogs, state)
     }
@@ -232,7 +253,51 @@ export default function createStoreList(name = required('name'), { api, rootStor
         }
     }
 
-    // :: END UPDATE
+    // START REMOVE
+    function remove(item) {
+        return dispatch => {
+            if (rootStoreItem) {
+                dispatch(removeItemRequest(item, rootStoreItem.types.REMOVE_ITEM))
+            }
+            dispatch(removeItemRequest(item))
+
+            if (!api) {
+                dispatch(removeItemSuccess(item))
+            } else {
+                return api.remove(item)
+                    .then(res => {
+                        if (rootStoreItem) {
+                            dispatch(removeItemSuccess(res, rootStoreItem.types.REMOVE_ITEM_SUCCESS))
+                        }
+                        return dispatch(removeItemSuccess(res))
+                    })
+                    .catch(err => dispatch(removeItemFailure(err)))
+            }
+        }
+    }
+
+    function removeItemRequest(payload, type = ACTION_TYPES.REMOVE_ITEM_SUCCESS) {
+        return {
+            type,
+            payload,
+        }
+    }
+
+    function removeItemSuccess(payload, type = ACTION_TYPES.REMOVE_ITEM_SUCCESS) {
+        return {
+            type,
+            payload
+        }
+    }
+
+    function removeItemFailure(error) {
+        return {
+            type: ACTION_TYPES.REMOVE_ITEM_ERROR,
+            error
+        }
+    }
+
+    // :: END REMOVE
 }
 
 function required(name) {

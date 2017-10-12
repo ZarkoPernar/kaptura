@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/combineLatest'
+import 'rxjs/add/operator/filter'
 
 import * as apiService from './shared/apiService'
 import socketService from './socket'

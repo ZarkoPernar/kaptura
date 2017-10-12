@@ -62,7 +62,7 @@ export default function initSocket({ io }): void {
             const companyNS = io.of('/company/' + _user.company_id)
 
             userClients.delete(_user._id)
-            companyClients.get(_user._id)
+            companyClients.delete(_user._id)
 
             companyNS.emit('online_users', mapKeysToHash(companyClients))
         })

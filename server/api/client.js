@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const url = require("url");
 const client_1 = require("../models/client");
 const defaultListParams = {
     pages: {
@@ -9,8 +8,7 @@ const defaultListParams = {
     }
 };
 async function getItem(request, response) {
-    const urlParts = url.parse(request.url, true);
-    const id = urlParts.query.id;
+    const id = request.params.id;
     const result = await client_1.default.getItem(id, request.user);
     response.status(200).json(result);
 }

@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const url = require("url");
 const timesheet_1 = require("../models/timesheet");
 const convertDates_1 = require("../utils/convertDates");
 const applyFilters_1 = require("../utils/applyFilters");
@@ -11,8 +10,7 @@ const defaultListParams = {
     }
 };
 async function getItem(request, response) {
-    const urlParts = url.parse(request.url, true);
-    const id = urlParts.query.id;
+    const id = request.params.id;
     const result = await timesheet_1.default.getItem(id, request.user);
     response.status(200).json(result);
 }

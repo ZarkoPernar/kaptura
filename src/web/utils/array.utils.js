@@ -37,3 +37,8 @@ export function findByIdAndReplace(array, item) {
 
     return array
 }
+
+export function findByIdAndRemove(array, item) {
+    return array.filter(it => item._id !== it._id)
+}
+

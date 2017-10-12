@@ -1,24 +1,5 @@
-import { get, post } from '../shared/apiService'
+import createApi from '../utils/createApi'
 
 const base_url = '/timesheet'
 
-export function getById(id) {
-    const url = base_url + '/get/' + id
-    return get(url)
-}
-
-export function list(params) {
-    const url = base_url + '/list'
-    return post(url, params)
-}
-
-export function add(log) {
-    const url = base_url + '/create'
-    return post(url, log)
-}
-
-export function update(log) {
-    const url = base_url + '/update'
-    return post(url, log)
-}
-
+export default createApi(base_url)

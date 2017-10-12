@@ -151,6 +151,12 @@ body {
     border-radius: 0; }
   .btn--flat {
     box-shadow: none; }
+  .btn--outline {
+    color: #566177;
+    background-color: transparent;
+    box-shadow: none;
+    border: 1px solid #EFF0F4;
+    outline-color: #2E3645; }
   .btn--clear {
     background-color: transparent;
     box-shadow: none;
@@ -352,6 +358,83 @@ body {
   .App-body {
     padding-left: 16rem; } }
 
+.badge {
+  font-size: 80%;
+  font-family: -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.35;
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 2px;
+  padding: 0 4px;
+  background-color: #eee;
+  z-index: 1; }
+  .badge--danger {
+    color: #fcfcfc;
+    background-color: #FF7043; }
+@charset "UTF-8";
+/* Coolors Exported Palette - coolors.co/fcfcfc-303036-e8606e-424b54-6b7fd7 */
+/* HSL */
+/* RGB */
+/* Coolors Exported Palette - coolors.co/fcfcfc-303036-e8606e-424b54-6b7fd7 */
+/* HSL */
+/* RGB */
+.text-center {
+  text-align: center; }
+
+.text-success {
+  color: #4caf50; }
+
+.text-danger {
+  color: #FF7043; }
+
+.padding-sm {
+  padding: .5rem; }
+
+.padding-top {
+  padding-top: 1rem; }
+
+*, *:after, *:before {
+  box-sizing: border-box; }
+
+body {
+  color: #585A78;
+  background-color: #f6f7f9;
+  font-family: "Overpass", -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+
+.App {
+  height: 100%;
+  min-height: 400px;
+  padding-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch; }
+  .App--is-clicking .btn {
+    outline-width: 0 !important; }
+  .App--is-tabbing .btn:focus {
+    outline-width: 1px; }
+
+.App-flex {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.ReactModalPortal {
+  position: relative;
+  z-index: 11; }
+
+.App-body {
+  color: #585A78;
+  padding: 0;
+  min-height: 100%; }
+
+@media (min-width: 64rem) {
+  .App-body {
+    padding-left: 16rem; } }
+
 .App-heading {
   display: flex;
   position: fixed;
@@ -366,6 +449,7 @@ body {
   border-bottom: 1px solid #d2d2d2; }
   .App-heading__inner {
     height: 100%;
+    flex: 1 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -408,22 +492,86 @@ body {
       display: none; }
     .App-heading__inner {
       padding: 0 3rem; } }
+@charset "UTF-8";
+/* Coolors Exported Palette - coolors.co/fcfcfc-303036-e8606e-424b54-6b7fd7 */
+/* HSL */
+/* RGB */
+/* Coolors Exported Palette - coolors.co/fcfcfc-303036-e8606e-424b54-6b7fd7 */
+/* HSL */
+/* RGB */
+.text-center {
+  text-align: center; }
+
+.text-success {
+  color: #4caf50; }
+
+.text-danger {
+  color: #FF7043; }
+
+.padding-sm {
+  padding: .5rem; }
+
+.padding-top {
+  padding-top: 1rem; }
+
+*, *:after, *:before {
+  box-sizing: border-box; }
+
+body {
+  color: #585A78;
+  background-color: #f6f7f9;
+  font-family: "Overpass", -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+
+.App {
+  height: 100%;
+  min-height: 400px;
+  padding-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch; }
+  .App--is-clicking .btn {
+    outline-width: 0 !important; }
+  .App--is-tabbing .btn:focus {
+    outline-width: 1px; }
+
+.App-flex {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.ReactModalPortal {
+  position: relative;
+  z-index: 11; }
+
+.App-body {
+  color: #585A78;
+  padding: 0;
+  min-height: 100%; }
+
+@media (min-width: 64rem) {
+  .App-body {
+    padding-left: 16rem; } }
+
 .App-sidebar {
   position: fixed;
-  top: 0;
+  top: 4rem;
   left: 0;
   bottom: 0;
   width: auto;
   transform: translateX(-102%);
   transition: .3s ease transform;
-  box-shadow: 2px 0 4px rgba(70, 70, 70, 0.3);
-  z-index: 3;
+  border-right: 1px solid #d2d2d2;
+  box-shadow: 3px 2px 1px rgba(70, 70, 70, 0.09);
+  z-index: 4;
   will-change: transform; }
   .App-sidebar--right {
     left: auto;
+    border-right: 0;
+    border-left: 1px solid #d2d2d2;
     right: 0;
     transform: translateX(102%);
-    box-shadow: -2px 0 4px rgba(70, 70, 70, 0.3); }
+    box-shadow: -3px 2px 1px rgba(70, 70, 70, 0.09); }
   .App-sidebar--is-open {
     transform: none; }
   .App-sidebar__inner {
@@ -504,9 +652,9 @@ body {
     text-decoration: none;
     color: #6e7f9e;
     font-weight: 600;
-    font-size: .95rem;
+    font-size: 15px;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     padding: 0.7rem 1.2rem;
     transition: .2s ease background-color, .2s ease color; }
     .nav__link__icon {
@@ -609,11 +757,7 @@ body {
 
 .App-sidenav {
   color: #fcfcfc;
-  width: 16rem;
-  top: 4rem;
-  z-index: 4;
-  border-right: 1px solid #d2d2d2;
-  box-shadow: 3px 2px 1px rgba(70, 70, 70, 0.09); }
+  width: 16rem; }
   .App-sidenav__container {
     display: flex;
     flex-direction: column;
@@ -1865,6 +2009,7 @@ body {
   .checkbox input[type="checkbox"] {
     position: absolute;
     top: 1em;
+    left: 0;
     width: 1.65em;
     height: 1.65em;
     opacity: 0; }
@@ -1888,19 +2033,19 @@ body {
       content: '';
       position: absolute;
       background-color: white;
-      width: 3px; }
+      width: 2px; }
     .checkbox__check:before {
-      left: 3px;
-      bottom: -1px;
-      height: 9px;
+      left: 4px;
+      bottom: 3px;
+      height: 5px;
       transition: none;
       transform: rotate(-50deg) scale(0);
       transform-origin: top left; }
     .checkbox__check:after {
       left: 8px;
-      bottom: 4px;
+      bottom: 5px;
+      height: 16px;
       transition-delay: .2s;
-      height: 18px;
       transition: none;
       transform: rotate(30deg) scale(0);
       transform-origin: bottom left; }
@@ -1998,9 +2143,8 @@ html, body, #app {
   height: 100%;
 }
 body {
-  font-family: sans-serif;
   margin: 0;
   padding: 0;
 }
 
-/*# sourceMappingURL=styles.970f16692d946bbce406.css.map*/
+/*# sourceMappingURL=styles.1e4f702ab2e425070d93.css.map*/

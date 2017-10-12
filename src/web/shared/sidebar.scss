@@ -1,20 +1,25 @@
+@import '../App';
+
 .App-sidebar {
     position: fixed;
-    top: 0;
+    top: $header-height;
     left: 0;
     bottom: 0;
     width: auto;
     transform: translateX(-102%);
     transition: .3s ease transform;
-    box-shadow: 2px 0 4px rgba(70, 70, 70, 0.3);
-    z-index: 3;
+    border-right: $sidenav-br-right;
+    box-shadow: 3px 2px 1px rgba(70, 70, 70, 0.09);
+    z-index: 4;
     will-change: transform;
 
     &--right {
         left: auto;
+        border-right: 0;
+        border-left: $sidenav-br-right;
         right: 0;
         transform: translateX(102%);
-        box-shadow: -2px 0 4px rgba(70, 70, 70, 0.3);
+        box-shadow: -3px 2px 1px rgba(70, 70, 70, 0.09);
     }
 
     &--is-open {

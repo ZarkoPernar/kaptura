@@ -7,7 +7,7 @@ function emitCompanySocket(company_id, { type, payload, room }, ignoreUser) {
     const socketId = init_1.companyClients.get(ignoreUser);
     const companySocketForUser = companySocketNS.connected[socketId];
     if (ignoreUser !== undefined && companySocketForUser !== undefined) {
-        return companySocketNS.broadcast.emit(type, payload);
+        return companySocketForUser.broadcast.emit(type, payload);
     }
     return companySocketNS.emit(type, payload);
 }

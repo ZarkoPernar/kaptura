@@ -5,18 +5,23 @@ import MdMenu from 'react-icons/lib/md/menu'
 
 import Clock from './clock'
 import Button from './shared/Button'
+import NotificationBadge from './NotificationBadge'
 
 import './AppHeader.scss'
 
 export default class AppHeader extends Component {
     componentDidMount() {
         document.body.addEventListener('click', this.close)
-        this._btn.addEventListener('click', this.toggle)
+        if (this._btn) {
+            this._btn.addEventListener('click', this.toggle)
+        }
     }
 
     componentWillUnmount() {
         document.body.removeEventListener('click', this.close)
-        this._btn.removeEventListener('click', this.toggle)
+        if (this._btn) {
+            this._btn.removeEventListener('click', this.toggle)
+        }
     }
 
     getBtnRef = (ref) => {
@@ -30,14 +35,6 @@ export default class AppHeader extends Component {
     toggle = (event) => {
         event.stopPropagation()
         document.body.classList.toggle('App--menuIsOpen')
-    }
-
-    openChat = () => {
-
-    }
-
-    openNotifications = () => {
-
     }
 
     render() {
@@ -58,14 +55,12 @@ export default class AppHeader extends Component {
 
                     <Clock />
 
-                    {/* <div className="flex">
-                        <Button style={{marginRight: '1rem'}} large clear iconOnly onClick={this.openNotifications}>
-                            <MdNotifications />
-                        </Button>
-                        <Button large clear iconOnly onClick={this.openChat}>
+                    <div className="flex">
+                        <Button large clear iconOnly onClick={this.props.toggleChat}>
+                            <NotificationBadge />
                             <MdChat />
                         </Button>
-                    </div> */}
+                    </div>
 
                 </div>
             </header>

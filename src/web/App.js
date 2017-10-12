@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 // import RegisterHistory from './RegisterHistory'
 
 import socketService from './socket'
-
+import { onlineEmployees } from './employees/reducer'
 import AppHeader from './AppHeader'
 import AppSidenav from './AppSidenav'
 import AppBody from './AppBody'
@@ -17,12 +17,16 @@ import './print.scss'
 const TAB_KEY = 9
 
 @withRouter
-@connect(state => ({user: state.userInfo.user}))
+@connect(state => ({ user: state.userInfo.user }), {
+    onlineUsers: onlineEmployees.actions.load,
+    addNotif: payload => ({type: 'notifications/ADD_ITEM', payload}),
+})
 export default class App extends Component {
     state = {
         menuIsOpen: false,
         isTabbing: false,
         isClicking: false,
+        isChatOpen: false,
     }
 
     componentDidMount() {
@@ -33,17 +37,13 @@ export default class App extends Component {
             .filter(Boolean)
             .mergeMap(socket => Observable.fromEvent(socket, 'online_users'))
             .subscribe(payload => {
-                console.log('online_users', payload)
-                // appStore.dispatch({
-                //     type: storeItem.types.UPDATE_ITEM_SUCCESS,
-                //     payload
-                // })
+                this.props.onlineUsers(payload)
             })
     }
 
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.user !== this.props.user && nextProps.user._id !== undefined) {
-            console.log('socketService.createCompany', nextProps.user.company_id)
             socketService.createCompany(nextProps.user.company_id)
         }
     }
@@ -66,6 +66,12 @@ export default class App extends Component {
         }
     }
 
+    toggleChat = () => {
+        this.setState(state => ({
+            isChatOpen: !state.isChatOpen
+        }))
+    }
+
     render() {
         return (
             <div className="App">
@@ -73,11 +79,11 @@ export default class App extends Component {
 
                 <AppSidenav />
 
-                <AppHeader />
+                <AppHeader toggleChat={this.toggleChat} />
 
                 <AppBody />
 
-                <AppChatSidebar />
+                <AppChatSidebar isOpen={this.state.isChatOpen} />
 
             </div>
         )

@@ -42,7 +42,7 @@ function initSocket({ io }) {
                 return;
             const companyNS = io.of('/company/' + _user.company_id);
             exports.userClients.delete(_user._id);
-            exports.companyClients.get(_user._id);
+            exports.companyClients.delete(_user._id);
             companyNS.emit('online_users', mapKeysToHash(exports.companyClients));
         });
     });

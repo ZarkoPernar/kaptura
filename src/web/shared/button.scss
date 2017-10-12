@@ -4,6 +4,7 @@
 $button-border-radius: 0;
 $button-box-shadow: 3px 3px 0 rgba(70,70,70,.15);
 
+$button-default-color: #566177;
 $button-default-background-color: #EFF0F4;
 $button-default-border: 1px solid darken($bc-light, 20);
 
@@ -164,6 +165,14 @@ $button-default-border: 1px solid darken($bc-light, 20);
 
     &--flat {
         box-shadow: none;
+    }
+
+    &--outline {
+        color: $button-default-color;
+        background-color: transparent;
+        box-shadow: none;
+        border: 1px solid $button-default-background-color;
+        outline-color: $bc-dark;
     }
 
     &--clear {

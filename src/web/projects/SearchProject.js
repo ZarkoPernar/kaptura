@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { list } from './api'
+import api from './api'
 import Search from '../shared/search'
 
 // const debounced = debounce(list, 500)
@@ -9,7 +9,7 @@ const searchFn = (searchTerm) => {
     const params = searchTerm ? {
         name: searchTerm,
     } : {}
-    return list(params)
+    return api.list(params)
 }
 
 export default class SearchProjects extends Component {

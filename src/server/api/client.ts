@@ -1,5 +1,4 @@
-import * as url from 'url'
-import {Request, Response} from 'express'
+import { Request, Response } from 'express'
 
 import { IRequest } from './../routes/request.interface'
 import ClientModel, { IClient, Model } from '../models/client'
@@ -21,8 +20,7 @@ const defaultListParams = {
 }
 
 export async function getItem(request: IRequest, response: Response) {
-    const urlParts = url.parse(request.url, true)
-    const id = urlParts.query.id
+    const id = request.params.id
 
     const result = await ClientModel.getItem(id, request.user)
     response.status(200).json(result)

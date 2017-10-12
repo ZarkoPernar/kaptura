@@ -9,7 +9,7 @@ const defaultStyle = {
     transform: scaleZero,
 }
 
-class componentName extends PureComponent {
+export default class Ripple extends PureComponent {
     state = {
         rippleStyle: defaultStyle,
     }
@@ -83,5 +83,3 @@ class componentName extends PureComponent {
         )
     }
 }
-
-export default componentName;

@@ -17,16 +17,18 @@ export default class ButtonComponent extends Component {
         block: PropTypes.bool,
         full: PropTypes.bool,
         flat: PropTypes.bool,
+        outline: PropTypes.bool,
     }
 
     render() {
-        const { iconOnly, small, clear, large, block, full, children, color, flat, className, ...rest } = this.props
+        const { iconOnly, small, clear, large, block, full, children, color, flat, outline, className, ...rest } = this.props
 
         return (
             <button className={'btn ' + (color ? (' btn--color-' + color + ' ') : '') + classnames({
                     'btn--icon-only': iconOnly,
                     'btn--small': small,
                     'btn--clear': clear,
+                    'btn--outline': outline,
                     'btn--large': large,
                     'btn--flat': flat,
                     'btn--block': block,

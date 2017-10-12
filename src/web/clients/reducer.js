@@ -1,6 +1,6 @@
 import createStoreList from '../utils/createStoreList'
 
-import * as api from './api'
+import api from './api'
 
 export const storeItem = createStoreList('clients', { api })
 

@@ -36,8 +36,14 @@ export default class EmployeeList extends PureComponent {
                         this.props.employees.map(employee => {
                             return (
                                 <TableRow key={employee._id} hover condensed onClick={this.props.rowClick} item={employee}>
-                                    <TableCell color={employee.isOnline === true ? 'success' : 'danger'}>
-                                        { employee.isOnline === true ? 'online' : 'offline' }
+                                    <TableCell>
+                                        <div style={{
+                                            width: '6px',
+                                            height: '6px',
+                                            borderRadius: '50%',
+                                            display: 'inline-block',
+                                            backgroundColor: employee.isOnline === true ? 'green' : 'red'
+                                        }} />
                                     </TableCell>
                                     <TableCell>
                                         { employee.full_name }

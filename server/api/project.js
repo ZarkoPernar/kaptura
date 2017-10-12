@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const url = require("url");
 const api_1 = require("../socket/api");
 const project_1 = require("../models/project");
 const convertDates_1 = require("../utils/convertDates");
@@ -12,8 +11,7 @@ const defaultListParams = {
     }
 };
 async function getItem(request, response) {
-    const urlParts = url.parse(request.url, true);
-    const id = urlParts.query.id;
+    const id = request.params.id;
     const result = await project_1.default.getItem(id, request.user);
     response.status(200).json(result);
 }

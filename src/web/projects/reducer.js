@@ -3,7 +3,7 @@ import 'rxjs/add/observable/fromEvent'
 import createRootStoreList from '../utils/createRootStoreList'
 
 
-import * as api from './api'
+import api from './api'
 
 export const storeItem = createRootStoreList('projects', { api })
 

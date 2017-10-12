@@ -1,7 +1,7 @@
 import createStoreList from '../utils/createStoreList'
 
 import { storeItem as rootStoreItem } from './reducer'
-import * as api from './api'
+import api from './api'
 
 export const storeItem = createStoreList('projectList', { api, rootStoreItem })
 

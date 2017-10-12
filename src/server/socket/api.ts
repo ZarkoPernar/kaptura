@@ -13,7 +13,7 @@ export function emitCompanySocket(company_id, { type, payload, room }: SocketAct
     const companySocketForUser = companySocketNS.connected[socketId]
 
     if (ignoreUser !== undefined && companySocketForUser !== undefined) {
-        return companySocketNS.broadcast.emit(type, payload)
+        return companySocketForUser.broadcast.emit(type, payload)
     }
 
     return companySocketNS.emit(type, payload)

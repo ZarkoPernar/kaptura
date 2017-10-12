@@ -3,7 +3,7 @@ import * as apiService from '../shared/apiService'
 export function makeCreateApi(base_url, api) {
     return {
         getById(id) {
-            const url = base_url + '/get/' + id
+            const url = base_url + '/getItem/' + id
             return api.get(url)
         },
         list(params) {

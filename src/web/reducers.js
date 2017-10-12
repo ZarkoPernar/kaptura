@@ -12,6 +12,8 @@ import invoiceList from './invoices/listReducer'
 import userInfo from './userInfo.reducer'
 import employees, { onlineEmployees } from './employees/reducer'
 
+import createStoreList from './utils/createStoreList'
+
 export default combineReducers({
     userInfo,
     companyInfo,
@@ -25,5 +27,6 @@ export default combineReducers({
     invoiceList,
     employees,
     onlineEmployees: onlineEmployees.reducer,
+    notifications: createStoreList('notifications').reducer,
 })
 
