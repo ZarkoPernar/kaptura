@@ -18,12 +18,14 @@ $link-padding-md: 1rem 1.2rem;
         display: block;
         text-decoration: none;
         color: $nav-c;
-        font-weight: 600;
-        font-size: 15px;
+        font-weight: 500;
+        font-size: 1rem;
         text-transform: uppercase;
         letter-spacing: 1px;
         padding: $link-padding-sm;
         transition: .2s ease background-color, .2s ease color;
+         -webkit-font-smoothing: antialiased;
+
 
 
         &__icon {

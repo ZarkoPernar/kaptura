@@ -1,44 +1,14 @@
 import { fromStore, toStore } from './store.utils'
 import { findByIdAndReplace, findByIdAndRemove } from './array.utils'
+import createListTypes from './createListTypes'
 
-const SPLIT = '/'
-
-export const LOAD_LIST = 'LOAD_LIST'
-export const LOAD_LIST_SUCCESS = 'LOAD_LIST_SUCCESS'
-export const LOAD_LIST_ERROR = 'LOAD_LIST_ERROR'
-
-export const ADD_ITEM = 'ADD_ITEM'
-export const ADD_ITEM_SUCCESS = 'ADD_ITEM_SUCCESS'
-export const ADD_ITEM_ERROR = 'ADD_ITEM_ERROR'
-
-export const UPDATE_ITEM = 'UPDATE_ITEM'
-export const UPDATE_ITEM_SUCCESS = 'UPDATE_ITEM_SUCCESS'
-export const UPDATE_ITEM_ERROR = 'UPDATE_ITEM_ERROR'
-
-export const REMOVE_ITEM = 'REMOVE_ITEM'
-export const REMOVE_ITEM_SUCCESS = 'REMOVE_ITEM_SUCCESS'
-export const REMOVE_ITEM_ERROR = 'REMOVE_ITEM_ERROR'
-
-const TYPES = [
-    LOAD_LIST,
-    LOAD_LIST_SUCCESS,
-    LOAD_LIST_ERROR,
-    ADD_ITEM,
-    ADD_ITEM_SUCCESS,
-    ADD_ITEM_ERROR,
-    UPDATE_ITEM,
-    UPDATE_ITEM_SUCCESS,
-    UPDATE_ITEM_ERROR,
-    REMOVE_ITEM,
-    REMOVE_ITEM_SUCCESS,
-    REMOVE_ITEM_ERROR,
-]
+const defaultState = {
+    byId: {},
+    allIds: [],
+}
 
 export default function createStoreList(name = required('name'), { api, rootStoreItem } = {}) {
-    const ACTION_TYPES = TYPES.reduce((types, type) => {
-        types[type] = name + SPLIT + type
-        return types
-    }, {})
+    const ACTION_TYPES = createListTypes(name)
 
     return {
         name,
@@ -52,7 +22,7 @@ export default function createStoreList(name = required('name'), { api, rootStor
         reducer,
     }
 
-    function reducer(state = {}, action) {
+    function reducer(state = defaultState, action) {
         switch (action.type) {
             case ACTION_TYPES.LOAD_LIST:
                 return {
@@ -78,12 +48,12 @@ export default function createStoreList(name = required('name'), { api, rootStor
             case ACTION_TYPES.ADD_ITEM:
                 return addItemToList(state, action.payload)
             case ACTION_TYPES.ADD_ITEM_SUCCESS:
-                return updateItemInList(state, action.payload)
+                return handleUpdate(state, action.payload)
 
             case ACTION_TYPES.UPDATE_ITEM:
-                return updateItemInList(state, action.payload)
+                return handleUpdate(state, action.payload)
             case ACTION_TYPES.UPDATE_ITEM_SUCCESS:
-                return updateItemInList(state, action.payload)
+                return handleUpdate(state, action.payload)
 
             case ACTION_TYPES.REMOVE_ITEM:
                 return removeItemInList(state, action.payload)
@@ -105,12 +75,16 @@ export default function createStoreList(name = required('name'), { api, rootStor
         return toStore(updatedLogs, state)
     }
 
-    function updateItemInList(state, payload) {
-        const logs = fromStore(state)
+    function handleUpdate(state, payload) {
+        if (state.byId[payload._id] === undefined) return state
 
-        const updatedLogs = findByIdAndReplace(logs, payload)
-
-        return toStore(updatedLogs, state)
+        return {
+            allIds: state.allIds,
+            byId: {
+                ...state.byId,
+                [payload._id]: payload
+            }
+        }
     }
 
     function removeItemInList(state, payload) {

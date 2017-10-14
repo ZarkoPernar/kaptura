@@ -78,7 +78,7 @@ export default class SatiPage extends Component {
 
     // TODO:
     updateLog = (log) => {
-        this.props.updateLog(log)
+        this.props.update(log)
         this._executeAfterModalClose()
     }
 

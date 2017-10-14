@@ -1,29 +1,9 @@
 import { connect } from 'react-redux'
-import { createSelector } from 'reselect'
 
-import { fromStore } from '../utils/store.utils'
+import createSelector from '../utils/createSelector'
 
 export default function createStoreListComponent({ storeName, actions, rootStoreItem }) {
-    let selector
-
-    if (!rootStoreItem) {
-        selector = createSelector(state => state[storeName], items => fromStore(items))
-    } else {
-        selector = createSelector(
-            state => state[rootStoreItem.name],
-            state => state[storeName],
-            // combine
-            (root, items) => {
-                const byId = root.byId
-                const allIds = items.allIds
-
-                return fromStore({
-                    allIds,
-                    byId,
-                })
-            }
-        )
-    }
+    const selector = createSelector(storeName, rootStoreItem && rootStoreItem.name)
 
     const stateToProps = state => ({
         items: selector(state),
