@@ -24,12 +24,11 @@ module.exports = function (env) {
         },
         resolve: {
             extensions: ['.js'],
-            // alias: {
-            //     'react': 'inferno-compat',
-            //     'react-dom': 'inferno-compat',
-            //     'react-redux': 'inferno-redux',
-            // },
-        },
+            alias: {
+                'react': 'preact-compat',
+                'react-dom': 'preact-compat',
+                'react-redux': 'preact-redux',
+            }        },
         stats: {
             reasons: true,
         },

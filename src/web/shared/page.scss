@@ -87,3 +87,10 @@
     }
 }
 
+@media #{$sidebar-media-query-sm} {
+    .page {
+        &__sub-header {
+            left: $sidenav-sm-width;
+        }
+    }
+}

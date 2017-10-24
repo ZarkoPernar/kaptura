@@ -11,4 +11,13 @@
     box-shadow: 0 0px 1px rgba(70, 70, 70, .15), 0 1px 4px rgba(70, 70, 70, .25);
 }
 
+@mixin position-bg() {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+
 

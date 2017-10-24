@@ -108,9 +108,7 @@ export default class Clock extends PureComponent {
                 _id: uid(),
                 user_id: this.props.user._id,
             })
-            .then((res) => {
-                this.props.sendToList(res)
-            })
+            .then(this.props.sendToList)
         }
     }
 

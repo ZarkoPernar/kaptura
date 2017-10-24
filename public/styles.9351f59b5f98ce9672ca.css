@@ -26,7 +26,7 @@
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -59,13 +59,17 @@ body {
   .App-body {
     padding-left: 16rem; } }
 
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
+
 .btn {
   color: #566177;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif;
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   text-decoration: none;
   position: relative;
   white-space: nowrap;
@@ -82,13 +86,13 @@ body {
   box-shadow: 0 0px 1px rgba(70, 70, 70, 0.15), 0 1px 4px rgba(70, 70, 70, 0.25);
   cursor: pointer;
   transform: scale(1);
-  transition: .1s ease transform; }
-  .btn__inner {
-    height: 2.5rem;
-    padding: .5rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center; }
+  transition: .1s ease transform;
+  z-index: 1;
+  height: 2.5rem;
+  padding: .5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
   .btn:hover {
     background-color: rgba(86, 97, 119, 0.22); }
   .btn:active {
@@ -118,29 +122,28 @@ body {
     margin-left: -.8rem;
     font-size: 1.25rem;
     margin-right: .8rem; }
-  .btn--small .btn__inner {
+  .btn--small {
     height: 2em; }
   .btn--large {
-    font-size: 1.2rem; }
-    .btn--large .btn__inner {
-      height: 3em;
-      padding: .9rem 1.5rem; }
-  .btn--icon-only .btn__inner {
+    font-size: 1.2rem;
+    height: 3em;
+    padding: .9rem 1.5rem; }
+  .btn--icon-only {
     padding: .5em;
     width: 2.5rem; }
-  .btn--icon-only svg {
-    font-size: 1.5em;
-    margin: 0; }
-  .btn--large.btn--icon-only .btn__inner {
+    .btn--icon-only svg {
+      font-size: 1.5em;
+      margin: 0; }
+  .btn--large.btn--icon-only {
     height: 2.5em;
     width: 2.5em; }
-  .btn--large.btn--icon-only svg {
-    font-size: 2em; }
-  .btn--small.btn--icon-only .btn__inner {
+    .btn--large.btn--icon-only svg {
+      font-size: 1.5em; }
+  .btn--small.btn--icon-only {
     height: 2rem;
     width: 2rem; }
-  .btn--small.btn--icon-only svg {
-    font-size: 1.25em; }
+    .btn--small.btn--icon-only svg {
+      font-size: 1.25em; }
   .btn--block {
     width: 100%; }
   .btn--full {
@@ -196,6 +199,19 @@ body {
 .clickable {
   position: relative;
   z-index: 1; }
+  .clickable--bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2; }
+    .clickable--bg .clickable__inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0; }
 
 .ripples {
   position: absolute;
@@ -241,7 +257,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -274,9 +290,13 @@ body {
   .App-body {
     padding-left: 16rem; } }
 
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
+
 .clock-toggle__icon {
   font-size: 30px;
-  margin: -5px 10px 0 !important; }
+  margin: -1px 10px 0 !important; }
   .clock-toggle__icon--start {
     color: #fff;
     background-color: green;
@@ -322,7 +342,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -354,6 +374,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 .badge {
   font-size: 80%;
@@ -398,7 +422,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -430,6 +454,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 .App-heading {
   display: flex;
@@ -487,6 +515,10 @@ body {
       display: none; }
     .App-heading__inner {
       padding: 0 3rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-logo {
+    border-right: 0; } }
 @charset "UTF-8";
 /* Coolors Exported Palette - coolors.co/fcfcfc-303036-e8606e-424b54-6b7fd7 */
 /* HSL */
@@ -515,7 +547,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -547,6 +579,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 .App-sidebar {
   position: fixed;
@@ -601,7 +637,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -634,22 +670,26 @@ body {
   .App-body {
     padding-left: 16rem; } }
 
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
+
 /* Coolors Exported Palette - coolors.co/fcfcfc-303036-e8606e-424b54-6b7fd7 */
 /* HSL */
 /* RGB */
 .nav {
-  padding-top: 1rem;
   display: flex;
   flex-direction: column;
   text-align: left; }
   .nav__link {
     display: block;
+    border-right: 2px solid transparent;
     text-decoration: none;
     color: #6e7f9e;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 1rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     padding: 0.7rem 1.2rem;
     transition: .2s ease background-color, .2s ease color;
     -webkit-font-smoothing: antialiased; }
@@ -668,7 +708,7 @@ body {
     .nav__link--active, .nav__link--active:hover {
       color: #FF7043;
       background-color: #eee;
-      border-right: 2px solid #2E3645; }
+      border-color: #2E3645; }
   .nav__sub {
     display: none;
     padding-left: 1.2rem;
@@ -681,12 +721,24 @@ body {
 .nav__link--active + .nav__sub {
   display: block; }
 
-@media (min-width: 64rem) {
+@media (min-width: 64rem) and (max-width: 79.999rem) {
   .nav {
     transform: none;
     opacity: 1; }
     .nav__link {
-      padding: 1rem 1.2rem; } }
+      text-align: center;
+      padding: 1.2rem 1.2rem; }
+      .nav__link__bg {
+        padding: .5rem 0 !important; }
+      .nav__link__icon {
+        font-size: 1.65rem;
+        margin: 0; }
+      .nav__link__text {
+        display: none; } }
+
+@media (min-width: 80rem) {
+  .nav__link {
+    padding: 1.2rem 1.2rem; } }
 @charset "UTF-8";
 /* Coolors Exported Palette - coolors.co/fcfcfc-303036-e8606e-424b54-6b7fd7 */
 /* HSL */
@@ -715,7 +767,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -748,6 +800,10 @@ body {
   .App-body {
     padding-left: 16rem; } }
 
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
+
 .App--menuIsOpen .App-sidenav {
   transform: none; }
 
@@ -771,7 +827,12 @@ body {
   .App-sidenav.App-sidebar {
     transform: none;
     opacity: 1;
-    z-index: 3; } }
+    z-index: 3;
+    width: 5rem; } }
+
+@media (min-width: 80rem) {
+  .App-sidenav.App-sidebar {
+    width: 16rem; } }
 .card {
   border: 0;
   border-radius: 2px;
@@ -808,7 +869,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -840,6 +901,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 .row > * {
   flex-grow: 1; }
@@ -900,7 +965,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -932,6 +997,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 textarea {
   display: block; }
@@ -1098,7 +1167,7 @@ body *::selection {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -1130,6 +1199,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 .box--padding {
   padding: 1rem 2rem; }
@@ -1187,6 +1260,10 @@ body {
     padding: 0; }
   .EditProject__form {
     min-width: 36rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .page__sub-header {
+    left: 5rem; } }
 .subtitle--underlined {
   margin-bottom: 2em;
   padding-bottom: 1em;
@@ -1265,7 +1342,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -1297,6 +1374,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 .login-container {
   background-color: #fff;
@@ -1334,7 +1415,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -1366,6 +1447,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 .ReactModal__Body--open {
   overflow: hidden; }
@@ -1455,7 +1540,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -1487,6 +1572,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 .pagination {
   display: flex;
@@ -1552,7 +1641,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -1584,6 +1673,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 .table-holder {
   position: relative;
@@ -1692,7 +1785,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -1724,6 +1817,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 .rbc-month-view {
   background-color: transparent; }
@@ -1810,7 +1907,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -1842,6 +1939,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 .tabs {
   display: flex;
@@ -1892,7 +1993,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -1924,6 +2025,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 .Projekti__controls {
   margin-bottom: 1em;
@@ -1963,7 +2068,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -1995,6 +2100,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 
 .checkbox {
   height: 54px;
@@ -2086,7 +2195,7 @@ body {
 body {
   color: #585A78;
   background-color: #f6f7f9;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica, Arial, sans-serif; }
 
 .App {
   height: 100%;
@@ -2118,6 +2227,10 @@ body {
 @media (min-width: 64rem) {
   .App-body {
     padding-left: 16rem; } }
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  .App-body {
+    padding-left: 5rem; } }
 @media print {
   @page {
     size: A4;
@@ -2143,4 +2256,4 @@ body {
   padding: 0;
 }
 
-/*# sourceMappingURL=styles.601095a3d7613fc9bf70.css.map*/
+/*# sourceMappingURL=styles.9351f59b5f98ce9672ca.css.map*/

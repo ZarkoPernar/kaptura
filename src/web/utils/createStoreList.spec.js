@@ -96,10 +96,12 @@ describe('it', () => {
         const { add } = storeItem.actions
         const item = { _id: 1 }
         const expectedResult = {
-            byId: { 2: {
-                _id: 2,
-                offlineId: 1,
-            } },
+            byId: {
+                '2': {
+                    _id: 2,
+                    offlineId: 1,
+                },
+            },
             allIds: [2]
         }
 
@@ -131,7 +133,9 @@ describe('it', () => {
                     _id: 2,
                 }
             },
-            allIds: [1, 2]
+            allIds: [1, 2],
+            loading: false,
+            error: null,
         }
 
         store.dispatch(list({}, offlineList)).then(() => {
@@ -142,26 +146,27 @@ describe('it', () => {
         })
     })
 
-    test('list action adds offlineItems', () => {
-        const { list } = storeItem.actions
-        const offlineList = [{
-            _id: 1,
-        }]
-        const expectedResult = {
-            byId: {
-                1: {
-                    _id: 1,
-                },
-            },
-            allIds: [1,]
-        }
+    // TODO: revisit with a plugin or middleware
+    // test('list action adds offlineItems', () => {
+    //     const { list } = storeItem.actions
+    //     const offlineList = [{
+    //         _id: 1,
+    //     }]
+    //     const expectedResult = {
+    //         byId: {
+    //             1: {
+    //                 _id: 1,
+    //             },
+    //         },
+    //         allIds: [1,]
+    //     }
 
-        store.dispatch(list({}, offlineList))
+    //     store.dispatch(list({}, offlineList))
 
-        const actualResult = store.getState()
-        expect(actualResult.test).toEqual(expectedResult)
+    //     const actualResult = store.getState()
+    //     expect(actualResult.test).toEqual(expectedResult)
 
-    })
+    // })
 
     test('update action returns a function', () => {
         const { update } = createStoreList(name).actions
@@ -169,8 +174,8 @@ describe('it', () => {
         expect(typeof update()).toEqual('function')
     })
 
-    test('update action with api update an item and then updates from server', () => {
-        const { update, list } = storeItem.actions
+    test('update action with api update an item', () => {
+        const { update } = storeItem.actions
         const offlineList = [{
             _id: 1,
         }, {
@@ -190,9 +195,10 @@ describe('it', () => {
             allIds: [1, 2]
         }
 
-        // this is just setup, reject is so the request is sync,
-        // and there are no race conditions
-        store.dispatch(list({reject: true}, offlineList))
+        store.dispatch({
+            type: storeItem.types.LOAD_LIST_SUCCESS,
+            payload: offlineList,
+        })
 
         store.dispatch(update(item))
 
@@ -201,7 +207,7 @@ describe('it', () => {
     })
 
     test('update action with api update an item and then updates from server', (done) => {
-        const { update, list } = storeItem.actions
+        const { update } = storeItem.actions
         const offlineList = [{
             _id: 1,
         }, {
@@ -222,10 +228,10 @@ describe('it', () => {
             allIds: [1, 2]
         }
 
-        // this is just setup, reject is so the request is sync,
-        // and there are no race conditions
-        store.dispatch(list({ reject: true }, offlineList))
-
+        store.dispatch({
+            type: storeItem.types.LOAD_LIST_SUCCESS,
+            payload: offlineList,
+        })
 
         store.dispatch(update(item)).then(() => {
             const actualResult = store.getState()

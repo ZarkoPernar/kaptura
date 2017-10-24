@@ -48,7 +48,7 @@ export default function createStoreList(name = required('name'), { api, rootStor
             case ACTION_TYPES.ADD_ITEM:
                 return addItemToList(state, action.payload)
             case ACTION_TYPES.ADD_ITEM_SUCCESS:
-                return handleUpdate(state, action.payload)
+                return handleUpdate(state, action.payload, 'offlineId')
 
             case ACTION_TYPES.UPDATE_ITEM:
                 return handleUpdate(state, action.payload)
@@ -75,13 +75,33 @@ export default function createStoreList(name = required('name'), { api, rootStor
         return toStore(updatedLogs, state)
     }
 
-    function handleUpdate(state, payload) {
-        if (state.byId[payload._id] === undefined) return state
+    function findById(id) {
+        return id === this._id
+    }
+
+    function handleUpdate(state, payload, findByIdPropName) {
+        // if (state.byId[payload._id] === undefined) return state
+        let index = state.allIds.findIndex(findById, { _id: payload[findByIdPropName || '_id'] })
+        let allIds = state.allIds
+        let byId = state.byId
+
+        if (index !== -1) {
+            allIds = [
+                ...state.allIds.slice(0, index),
+                payload._id,
+                ...state.allIds.slice(index + 1),
+            ]
+        }
+
+        if (findByIdPropName !== undefined) {
+            byId = {...state.byId}
+            delete byId[payload[findByIdPropName]]
+        }
 
         return {
-            allIds: state.allIds,
+            allIds,
             byId: {
-                ...state.byId,
+                ...byId,
                 [payload._id]: payload
             }
         }

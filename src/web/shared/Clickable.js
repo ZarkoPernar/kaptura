@@ -5,7 +5,9 @@ import classnames from 'classnames'
 
 import Ripple from './Ripple'
 
-const updateLast = (arr, item) => {
+import { getScrollHost, createRipple } from './clickableService'
+
+const replaceLastItem = (arr, item) => {
     const copy = arr.slice(0, arr.length - 1)
     copy.push(item)
     return copy
@@ -17,7 +19,12 @@ export default class Clickable extends Component {
     }
 
     _element = null
-    _stuff = null
+    _scrollHost = null
+    _measurements = null
+
+    componentDidMount() {
+        this._scrollHost = getScrollHost(document)
+    }
 
     componentWillUnmount() {
         if (this.clearRipples.cancel) {
@@ -25,16 +32,15 @@ export default class Clickable extends Component {
         }
     }
 
-    onMouseDown = ({ pageY, pageX }) => {
+    onMouseDown = (event) => {
         if (this.props.disabled === true) return
 
-        this._stuff = this._element.getBoundingClientRect()
-        const scrollTop = (document.documentElement ||
-            document.body.parentNode ||
-            document.body).scrollTop
+        this._measurements = this._element.getBoundingClientRect()
+
+        const ripple = createRipple(event, this._scrollHost)
 
         this.setState(state => ({
-            ripples: [...state.ripples, { pageX, pageY: (pageY - scrollTop) }]
+            ripples: [...state.ripples, ripple]
         }))
     }
 
@@ -44,7 +50,7 @@ export default class Clickable extends Component {
         this.clearRipples()
 
         this.setState(state => ({
-            ripples: updateLast(state.ripples, { mouseUp: true })
+            ripples: replaceLastItem(state.ripples, { mouseUp: true })
         }))
     }
 
@@ -61,18 +67,18 @@ export default class Clickable extends Component {
             return
         }
         this._element = ref
-        this._stuff = ref.getBoundingClientRect()
+        this._measurements = ref.getBoundingClientRect()
     }
 
     render() {
         return (
-            <div ref={this.getRef} className="clickable">
+            <div ref={this.getRef} className={classnames('clickable', {'clickable--bg': this.props.absolute})}>
                 <div className="clickable__inner" onMouseDown={this.onMouseDown} onMouseUp={this.onMouseUp}>
                     {this.props.children}
                 </div>
 
                 <div className="ripples">
-                    {this.state.ripples.map((e, i) => <Ripple key={i} hostElement={this._stuff} event={e}/>)}
+                    {this.state.ripples.map((event) => <Ripple key={event.timeStamp} hostElement={this._measurements} event={event}/>)}
                 </div>
             </div>
         )

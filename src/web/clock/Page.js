@@ -85,7 +85,7 @@ export default class SatiPage extends Component {
     render() {
         const timeForEdit = this.state.timeForEdit === null ? undefined : this.state.timeForEdit
         return (
-            <Page name="Sati">
+            <Page name="Sati" hasSubheader>
                 <PageSubheader>
                     <PageFilters filters={this.state.filters} applyFilters={this.applyFilters} />
                 </PageSubheader>

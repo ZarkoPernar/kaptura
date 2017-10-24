@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable'
 import { v4 as uid } from 'uuid'
 import MdAdd from 'react-icons/lib/md/add-circle'
 import { connect } from 'react-redux'
+import { Route } from 'react-router-dom'
 
 import appStore from '../appStore'
 import socketService from '../socket'
@@ -250,11 +251,9 @@ export default class ProjectPage extends Component {
     render() {
         const projectForEdit = this.state.projectForEdit === null ? undefined : this.state.projectForEdit
         const projects = this.state.projects.length ? this.state.projects : this.props.items
-        const renderFn = this['render' + this.state.activeTab]
-        const renderContent = renderFn(projects)
 
         return (
-            <Page name="Projekti">
+            <Page name="Projekti" hasSubheader>
                 <Toaster toasts={this.state.toasts} />
                 <Modal isOpen={this.state.isEditModalOpen} onRequestClose={this._executeAfterModalClose}>
                     <EditProjectForm
@@ -284,17 +283,17 @@ export default class ProjectPage extends Component {
 
 
                 <PageBody>
-                    { renderContent }
+                    <Route render={() => this.renderList(projects)} path="/projekti" exact />
+
+                    <Route render={() => this.renderCalendar(projects)} path="/projekti/kalendar" />
                 </PageBody>
 
-                {
-                    this.state.activeTab === 'Map' ? (
-                        <Map
-                            locations={projects}
-                            center={this.props.company && this.props.company.position}
-                            height="calc(100vh - 128px)" />
-                    ) : null
-                }
+                <Route render={() => (
+                    <Map
+                        locations={projects}
+                        center={this.props.company && this.props.company.position}
+                        height="calc(100vh - 128px)" />
+                    )} path="/projekti/karta" />
             </Page>
         )
     }

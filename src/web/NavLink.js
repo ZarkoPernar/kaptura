@@ -35,7 +35,9 @@ class Link extends Component {
                 <NavLink to={link.to} key={link.key} className="nav__link" activeClassName="nav__link--active" isActive={this.isActive}>
                     <span className="nav__link__bg">
                         <Icon className="nav__link__icon" />
-                        {link.title}
+                        <span className="nav__link__text">
+                            {link.title}
+                        </span>
                     </span>
                 </NavLink>
 

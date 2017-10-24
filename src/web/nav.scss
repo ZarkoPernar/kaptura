@@ -2,10 +2,10 @@
 @import './palette';
 
 $link-padding-sm: .7rem 1.2rem;
-$link-padding-md: 1rem 1.2rem;
+$link-padding-md: 1.2rem 1.2rem;
 
 .nav {
-    padding-top: 1rem;
+    // padding-top: 1rem;
     display: flex;
     flex-direction: column;
     text-align: left;
@@ -16,12 +16,13 @@ $link-padding-md: 1rem 1.2rem;
 
     &__link {
         display: block;
+        border-right: 2px solid transparent;
         text-decoration: none;
         color: $nav-c;
-        font-weight: 500;
+        font-weight: 400;
         font-size: 1rem;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
         padding: $link-padding-sm;
         transition: .2s ease background-color, .2s ease color;
          -webkit-font-smoothing: antialiased;
@@ -67,7 +68,7 @@ $link-padding-md: 1rem 1.2rem;
 
             color: $nav-c-active;
             background-color: $nav-bg-active;
-            border-right: 2px solid $bc-dark;
+            border-color: $bc-dark;
 
             // color: $bc-warning;
             // background-color: #566177;
@@ -93,15 +94,34 @@ $link-padding-md: 1rem 1.2rem;
     display: block;
 }
 
-
-@media (min-width: $medium-device) {
+@media #{$sidebar-media-query-sm} {
     .nav {
         transform: none;
         opacity: 1;
 
         &__link {
+            text-align: center;
+
+            &__bg {
+                padding: .5rem 0 !important;
+            }
+
+            &__icon {
+                font-size: 1.65rem;
+                margin: 0;
+            }
+
+            &__text {
+                display: none;
+            }
+
             padding: $link-padding-md;
         }
     }
 }
 
+@media (min-width: $large-device) {
+    .nav__link {
+        padding: $link-padding-md;
+    }
+}

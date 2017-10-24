@@ -77,3 +77,9 @@
         }
     }
 }
+
+@media #{$sidebar-media-query-sm} {
+    .App-logo {
+        border-right: 0;
+    }
+}

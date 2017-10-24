@@ -27,7 +27,9 @@ export default function createStoreList(name = required('name'), { api } = {}) {
             case ACTION_TYPES.ADD_ITEM:
                 return addItemToList(state, action.payload)
             case ACTION_TYPES.ADD_ITEM_SUCCESS:
-                return handleUpdate(state, action.payload)
+                // REVIEW: might cause issues bc both offline version
+                // and the item in the db will exist inth root store list
+                return addItemToList(state, action.payload)
 
             case ACTION_TYPES.UPDATE_ITEM:
                 return handleUpdate(state, action.payload)
@@ -49,14 +51,14 @@ export default function createStoreList(name = required('name'), { api } = {}) {
         return toStoreMerge(updatedLogs, state)
     }
 
-    function handleUpdate(state, payload) {
+    function handleUpdate(state, payload, idPropName='_id') {
         if (state.byId[payload._id] === undefined) return state
 
         return {
             allIds: state.allIds,
             byId: {
                 ...state.byId,
-                [payload._id]: payload
+                [payload[idPropName]]: payload
             }
         }
     }
