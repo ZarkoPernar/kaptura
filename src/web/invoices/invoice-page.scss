@@ -1,0 +1,44 @@
+@import '../App';
+@import '../mixins';
+
+.invoice-page {
+    &__side {
+        position: relative;
+        padding-left: 3rem;
+        z-index: 1;
+
+        &__title {
+            color: lighten($bc-dark, 30);
+            background-color: $body-bg-color;
+        }
+    }
+}
+
+@media (min-width: $medium-device) {
+    .invoice-page {
+        &__side {
+            height: 100%;
+            position: relative;
+            padding-top: 1.5rem;
+            margin-bottom: 1rem;
+            padding-left: 0;
+            z-index: 1;
+
+            &:after {
+                content: '';
+                @include position-bg;
+                left: 1rem;
+                border-left: 1px solid darken($bc-light, 15);
+                z-index: -1;
+            }
+
+            &__title {
+                margin-top: 0;
+                background-color: $body-bg-color;
+                padding: .5rem 0;
+                font-weight: 300;
+            }
+        }
+
+    }
+}

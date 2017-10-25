@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { v4 as uid } from 'uuid'
 import MdAdd from 'react-icons/lib/md/add-circle'
 import { connect } from 'react-redux'
-import { Route } from 'react-router-dom';
+import { Route } from 'react-router-dom'
+import { Observable } from 'rxjs/Observable'
 
 import Box from '../shared/Box'
 import Toaster from '../shared/toast/Toaster'
@@ -17,13 +18,16 @@ import EditProjectForm from './Form'
 import DeleteDialog from './DeleteDialog'
 import PageFilters from './PageFilters'
 import InvoiceDetail from './Detail'
-
+import socketService from '../socket'
 import createStoreListComponent from '../shared/StoreList'
 
 import { storeItem } from './listReducer'
 import { storeItem as rootStoreItem } from './reducer'
 
-@connect(state => ({ company: state.companyInfo.data }))
+@connect(state => ({ company: state.companyInfo.data }), {
+    addInvoiceAtRoot: payload => ({ payload, type: rootStoreItem.types.ADD_ITEM, }),
+    updateInvoiceAtRoot: payload => ({ payload, type: rootStoreItem.types.UPDATE_ITEM_SUCCESS, }),
+})
 @createStoreListComponent({
     storeName: storeItem.name,
     actions: storeItem.actions,
@@ -39,8 +43,21 @@ export default class InvoicesPage extends Component {
         pageNumber: 1,
     }
 
-    componentWillMount = () => {
+    componentDidMount = () => {
         this.list()
+
+        this.create$$ = socketService.companySocket$
+            .mergeMap(socket => Observable.fromEvent(socket, 'invoice_create'))
+            .subscribe(this.props.addInvoiceAtRoot)
+
+        this.update$$ = socketService.companySocket$
+            .mergeMap(socket => Observable.fromEvent(socket, 'invoice_update'))
+            .subscribe(this.props.updateInvoiceAtRoot)
+    }
+
+    componentWillUnmount() {
+        this.create$$.unsubscribe()
+        this.update$$.unsubscribe()
     }
 
     applyFilters = (filters) => {
@@ -155,7 +172,7 @@ export default class InvoicesPage extends Component {
 
     renderPage = () => {
         return (
-            <Page name="Fakture">
+            <Page name="Fakture" hasSubheader>
                 <Toaster toasts={this.state.toasts} />
 
                 <PageSubheader>

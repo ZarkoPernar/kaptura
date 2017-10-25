@@ -22,11 +22,11 @@ module.exports = {
     },
     resolve: {
         extensions: ['.js'],
-        alias: {
-            'react': 'preact-compat',
-            'react-dom': 'preact-compat',
-            'react-redux': 'preact-redux',
-        }
+        // alias: {
+        //     'react': 'preact-compat',
+        //     'react-dom': 'preact-compat',
+        //     'react-redux': 'preact-redux',
+        // }
     },
     devServer: CONFIG.WEBPACK_DEV_SERVER_CONFIG,
     plugins: [

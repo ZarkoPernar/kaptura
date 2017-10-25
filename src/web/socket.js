@@ -23,7 +23,7 @@ export const connection = new BehaviorSubject(function(observer) {
 export default {
     socket,
     connection,
-    companySocket$: new BehaviorSubject(null),
+    companySocket$: new BehaviorSubject(null).filter(Boolean),
     createCompany(company_id) {
         if (this._companySocket === undefined) {
             this.companySocket = createCompanySocket(company_id)

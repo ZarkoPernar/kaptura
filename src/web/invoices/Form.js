@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import merge from 'lodash/merge'
 import set from 'lodash/set'
+import debounce from 'lodash/debounce'
 
 import Flex from '../shared/flex'
 import Cell from '../shared/Cell'
@@ -84,10 +85,20 @@ class EditClientForm extends Component {
         this.props.onSubmit(invoice)
     }
 
+    changes = () => {
+        const invoice = {
+            ...this.props.invoice, // Original
+            ...this.state.invoice, // Any edited fields
+        }
+
+        this.props.onChange(invoice)
+    }
+    onChanges = debounce(this.changes, 300)
+
     inputChanged = (value, path) => {
         this.setState((prevState) => ({
             invoice: set({...prevState.invoice}, path, value)
-        }))
+        }), this.onChanges)
     }
 
     onPlaceChange = (data) => {
@@ -96,7 +107,7 @@ class EditClientForm extends Component {
                 ...prevState.invoice,
                 ...data
             }
-        }))
+        }), this.onChanges)
     }
 
     dismiss = (e) => {
@@ -106,8 +117,7 @@ class EditClientForm extends Component {
 
     render() {
         return (
-            <form style={{padding: '0 1rem'}} className="EditProject__form" ref={this.getFormEl} onSubmit={this._submit} method="POST" action={'/api/v1/invoice/' + (this.props.invoice._id ? 'update' : 'create')}>
-                <h2>{this.props.invoice._id ? 'Izmjeni informacije o racunu' : 'Novi Klijent'}</h2>
+            <form style={{padding: '1rem'}} className="EditProject__form" ref={this.getFormEl} onSubmit={this._submit} method="POST" action={'/api/v1/invoice/' + (this.props.invoice._id ? 'update' : 'create')}>
 
                 <input name="_id" defaultValue={this.props.invoice._id} type="text" hidden />
 
@@ -193,7 +203,7 @@ class EditClientForm extends Component {
                     </Cell>
                 </Flex>
 
-                <div style={actionStyles}>
+                {/* <div style={actionStyles}>
                     <Button color="primary" type="submit">
                         {this.props.invoice._id ? 'Spremi' : 'Posalji'}
                     </Button>
@@ -201,8 +211,7 @@ class EditClientForm extends Component {
                     <Button onClick={this.dismiss} clear style={{marginRight: '25px'}}>
                         Odustani
                     </Button>
-                </div>
-
+                </div> */}
             </form>
         )
     }

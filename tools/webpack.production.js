@@ -24,11 +24,12 @@ module.exports = function (env) {
         },
         resolve: {
             extensions: ['.js'],
-            alias: {
-                'react': 'preact-compat',
-                'react-dom': 'preact-compat',
-                'react-redux': 'preact-redux',
-            }        },
+            // alias: {
+            //     'react': 'preact-compat',
+            //     'react-dom': 'preact-compat',
+            //     'react-redux': 'preact-redux',
+            // }
+        },
         stats: {
             reasons: true,
         },

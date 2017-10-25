@@ -34,7 +34,6 @@ export default class App extends Component {
         document.body.addEventListener('keydown', this.onKeyDown)
 
         socketService.companySocket$
-            .filter(Boolean)
             .mergeMap(socket => Observable.fromEvent(socket, 'online_users'))
             .subscribe(payload => {
                 this.props.onlineUsers(payload)

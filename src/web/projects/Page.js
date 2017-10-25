@@ -31,7 +31,10 @@ import { storeItem as rootStoreItem } from './reducer'
 
 import './projekti.scss'
 
-@connect(state => ({ company: state.companyInfo.data }))
+@connect(state => ({ company: state.companyInfo.data }), {
+    addProjectAtRoot: payload => ({ payload, type: rootStoreItem.types.ADD_ITEM, }),
+    updateProjectAtRoot: payload => ({ payload, type: rootStoreItem.types.UPDATE_ITEM_SUCCESS, }),
+})
 @createStoreListComponent({
     storeName: storeItem.name,
     actions: storeItem.actions,
@@ -58,30 +61,16 @@ export default class ProjectPage extends Component {
         projects: [],
     }
 
-    componentWillMount = () => {
+    componentDidMount = () => {
         this.getProjects()
 
         this.create$$ = socketService.companySocket$
-            .filter(Boolean)
             .mergeMap(socket => Observable.fromEvent(socket, 'project_create'))
-            .subscribe(payload => {
-                console.log('project_create', payload)
-                appStore.dispatch({
-                    type: storeItem.types.UPDATE_ITEM_SUCCESS,
-                    payload
-                })
-            })
+            .subscribe(this.props.addProjectAtRoot)
 
         this.update$$ = socketService.companySocket$
-            .filter(Boolean)
             .mergeMap(socket => Observable.fromEvent(socket, 'project_update'))
-            .subscribe(payload => {
-                console.log('project_update', payload)
-                appStore.dispatch({
-                    type: storeItem.types.UPDATE_ITEM_SUCCESS,
-                    payload
-                })
-            })
+            .subscribe(this.props.updateProjectAtRoot)
     }
 
     componentWillUnmount() {
