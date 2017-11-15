@@ -3,14 +3,9 @@ import { startOfYear } from 'date-fns'
 
 import { emitCompanySocket } from '../socket/api'
 import { IRequest } from './../routes/request.interface'
-import InvoiceActions, { IInvoice, Model } from '../models/invoice'
+import InvoiceItemActions, { IInvoiceItem, Model } from '../models/invoice.item'
 import convertDates from '../utils/convertDates'
 import applyFilters from '../utils/applyFilters'
-
-import UserModel from '../models/user'
-import ClientActions from '../models/client'
-import ProjectActions from '../models/project'
-import CompanyActions from '../models/company'
 
 export interface IProjectListRequestParams {
     // name: string
@@ -30,7 +25,7 @@ const defaultListParams = {
 export async function getItem(request: IRequest, response: Response) {
     const id = request.params.id
 
-    const result = await InvoiceActions.getItem(id, request.user)
+    const result = await InvoiceItemActions.getItem(id, request.user)
     response.status(200).json(result)
 }
 
@@ -64,42 +59,13 @@ export async function list(request: IRequest, response: Response) {
 export async function create(request: IRequest, response: Response) {
     const item = request.body
 
-    const newItem = convertDates(item, ['issue_date', 'due_date'])
+    const newItem = {...item}
     const offlineId = newItem._id
     delete newItem._id
 
-    const invoiceCount = await Model
-        .find({
-            issue_date: {
-                $gte: startOfYear(new Date()),
-            }
-        })
-        .where('company_id')
-        .equals(request.user.company_id)
-        // .where('created_at')
-        // .gte(startOfYear(new Date()))
-        .count()
-
-    const [client, project, company, user,] = await Promise.all([
-        ClientActions.getItem(item.client_id, request.user),
-        ProjectActions.getItem(item.project_id, request.user),
-        CompanyActions.getItem(request.user.company_id),
-        UserModel.findById(request.user._id),
-    ])
-
     try {
-        const result = await InvoiceActions.create({
-            item: {
-                ...newItem,
-                client,
-                project,
-                company,
-                number: (invoiceCount + 1) + '/01/01',
-                issued_by: {
-                    user_id: user._id,
-                    name: user.full_name,
-                },
-            },
+        const result = await InvoiceItemActions.create({
+            item: newItem,
             offlineId,
             user: request.user,
         })
@@ -107,7 +73,7 @@ export async function create(request: IRequest, response: Response) {
 
         emitCompanySocket(
             request.user.company_id.toString(),
-            { type: 'invoice_create', payload: result },
+            { type: 'invoice_item_create', payload: result },
             request.user._id.toString(),
         )
     } catch(err) {
@@ -116,11 +82,11 @@ export async function create(request: IRequest, response: Response) {
 }
 
 export async function update(request: IRequest, response: Response) {
-    const item: IInvoice = request.body
+    const item: IInvoiceItem = request.body
 
-    const newItem = convertDates(item, ['issue_date', 'due_date'])
+    const newItem = { ...item }
 
-    const result = await InvoiceActions.update({
+    const result = await InvoiceItemActions.update({
         item: newItem,
         user: request.user,
     })
@@ -129,13 +95,13 @@ export async function update(request: IRequest, response: Response) {
 
     emitCompanySocket(
         request.user.company_id.toString(),
-        { type: 'invoice_update', payload: result },
+        { type: 'invoice_item_update', payload: result },
         request.user._id.toString(),
     )
 }
 
 export async function remove(request: IRequest, response: Response) {
-    const result = await InvoiceActions.remove({
+    const result = await InvoiceItemActions.remove({
         item: request.body,
         user: request.user,
     })

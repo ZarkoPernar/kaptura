@@ -11,6 +11,7 @@ import API_PREFIX from './prefix'
 import projectRoutes from './project'
 import clientRoutes from './client'
 import invoiceRoutes from './invoice'
+import invoiceItemRoutes from './invoice.item'
 import timesheetRoutes from './timesheet'
 import userRoutes from './user'
 import authRoutes from './auth'
@@ -45,6 +46,7 @@ export default function registerRoutes(app) {
     projectRoutes(app)
     clientRoutes(app)
     invoiceRoutes(app)
+    invoiceItemRoutes(app)
     timesheetRoutes(app)
     userRoutes(app)
     companyRoutes(app)

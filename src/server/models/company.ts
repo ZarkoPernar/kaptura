@@ -39,6 +39,7 @@ export default {
     update({ company, user }) {
         return Model.findById(company._id)
             .then((doc) => {
+                if (doc === null) return
                 Object.assign(doc, company)
                 return doc.save()
             })

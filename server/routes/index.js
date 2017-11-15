@@ -7,6 +7,7 @@ const prefix_1 = require("./prefix");
 const project_1 = require("./project");
 const client_1 = require("./client");
 const invoice_1 = require("./invoice");
+const invoice_item_1 = require("./invoice.item");
 const timesheet_1 = require("./timesheet");
 const user_1 = require("./user");
 const auth_1 = require("./auth");
@@ -33,6 +34,7 @@ function registerRoutes(app) {
     project_1.default(app);
     client_1.default(app);
     invoice_1.default(app);
+    invoice_item_1.default(app);
     timesheet_1.default(app);
     user_1.default(app);
     company_1.default(app);

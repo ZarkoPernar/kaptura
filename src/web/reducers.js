@@ -8,6 +8,8 @@ import projectList from './projects/listReducer'
 import companyInfo from './company/reducer'
 import clients from './clients/reducer'
 import invoices from './invoices/reducer'
+import invoice_items from './invoices/itemsReducer'
+import invoice_items_list from './invoices/itemsListReducer'
 import invoiceList from './invoices/listReducer'
 import userInfo from './userInfo.reducer'
 import employees, { onlineEmployees } from './employees/reducer'
@@ -25,6 +27,8 @@ export default combineReducers({
     clients,
     invoices,
     invoiceList,
+    invoice_items,
+    invoice_items_list,
     employees,
     onlineEmployees: onlineEmployees.reducer,
     notifications: createStoreList('notifications').reducer,

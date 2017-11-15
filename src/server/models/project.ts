@@ -93,6 +93,7 @@ export default {
             .where('company_id')
             .equals(user.company_id)
             .then((doc) => {
+                if (doc === null) return
                 Object.assign(doc, item)
 
                 return doc.save()

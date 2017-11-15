@@ -79,7 +79,12 @@ module.exports = function (env) {
 
             new webpack.optimize.CommonsChunkPlugin({
                 name: 'vendor',
-                filename: 'commons-[chunkhash].js',
+                // filename: 'commons-[chunkhash].js',
+
+                // create a additional async chunk for the common modules
+                // which is loaded in parallel to the requested chunks
+                async: true,
+
                 minChunks: function (module) {
                     // this assumes your vendor imports exist in the node_modules directory
                     return module.context && module.context.indexOf("node_modules") !== -1;

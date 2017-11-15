@@ -7,6 +7,7 @@ import Card, { CardBody} from '../shared/Card'
 import Flex from '../shared/flex'
 import Cell from '../shared/Cell'
 
+import InvoiceItems from './InvoiceItems'
 import { storeItem } from './listReducer'
 
 import './invoice-page.scss'
@@ -40,11 +41,7 @@ export default class InvoicePage extends Component {
                     </aside>
                 </Cell>
                 <Cell md="10">
-                    <Card>
-                        <CardBody>
-
-                        </CardBody>
-                    </Card>
+                    <InvoiceItems invoice={this.props.invoice} />
                 </Cell>
             </Flex>
         );
