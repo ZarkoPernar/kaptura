@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable'
 import { Route, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 // import RegisterHistory from './RegisterHistory'
+import { hot } from 'react-hot-loader'
 
 import socketService from './socket'
 import { onlineEmployees } from './employees/reducer'
@@ -19,9 +20,9 @@ const TAB_KEY = 9
 @withRouter
 @connect(state => ({ user: state.userInfo.user }), {
     onlineUsers: onlineEmployees.actions.load,
-    addNotif: payload => ({type: 'notifications/ADD_ITEM', payload}),
+    addNotif: payload => ({ type: 'notifications/ADD_ITEM', payload }),
 })
-export default class App extends Component {
+export class App extends Component {
     state = {
         menuIsOpen: false,
         isTabbing: false,
@@ -40,9 +41,11 @@ export default class App extends Component {
             })
     }
 
-
     componentWillReceiveProps(nextProps) {
-        if (nextProps.user !== this.props.user && nextProps.user._id !== undefined) {
+        if (
+            nextProps.user !== this.props.user &&
+            nextProps.user._id !== undefined
+        ) {
             socketService.createCompany(nextProps.user.company_id)
         }
     }
@@ -58,7 +61,7 @@ export default class App extends Component {
         document.body.classList.remove('App--menuIsOpen')
     }
 
-    onKeyDown = (event) => {
+    onKeyDown = event => {
         if (event.keyCode === TAB_KEY) {
             document.body.classList.add('App--is-tabbing')
             document.body.classList.remove('App--is-clicking')
@@ -67,7 +70,7 @@ export default class App extends Component {
 
     toggleChat = () => {
         this.setState(state => ({
-            isChatOpen: !state.isChatOpen
+            isChatOpen: !state.isChatOpen,
         }))
     }
 
@@ -83,8 +86,9 @@ export default class App extends Component {
                 <AppBody />
 
                 <AppChatSidebar isOpen={this.state.isChatOpen} />
-
             </div>
         )
     }
 }
+
+export default hot(module)(App)

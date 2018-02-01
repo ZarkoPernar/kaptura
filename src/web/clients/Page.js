@@ -14,7 +14,7 @@ import { storeItem } from './reducer'
 
 @createStoreListComponent({
     storeName: 'clients',
-    actions: storeItem.actions
+    actions: storeItem.actions,
 })
 export default class ClientsPage extends Component {
     state = {
@@ -36,19 +36,25 @@ export default class ClientsPage extends Component {
             pages: {
                 pageSize: this.state.pageSize,
                 pageNumber: this.state.pageNumber,
-            }
+            },
         })
     }
 
     nextPage = () => {
-        this.setState(state => ({ pageNumber: state.pageNumber + 1 }), this.getProjects)
+        this.setState(
+            state => ({ pageNumber: state.pageNumber + 1 }),
+            this.getProjects,
+        )
     }
 
     prevPage = () => {
-        this.setState(state => ({ pageNumber: state.pageNumber - 1 }), this.getProjects)
+        this.setState(
+            state => ({ pageNumber: state.pageNumber - 1 }),
+            this.getProjects,
+        )
     }
 
-    submitProject = (project) => {
+    submitProject = project => {
         if (project._id === undefined) {
             this.createProject(project)
         } else {
@@ -56,7 +62,7 @@ export default class ClientsPage extends Component {
         }
     }
 
-    createProject = (project) => {
+    createProject = project => {
         this.dismiss()
 
         const newProject = {
@@ -64,33 +70,33 @@ export default class ClientsPage extends Component {
             _id: uid(),
         }
 
-        this.props.add(newProject)
-            .catch(this.handleProjectError)
-
+        this.props.add(newProject).catch(this.handleProjectError)
     }
 
-    updateProject = (project) => {
+    updateProject = project => {
         this.dismiss()
 
         this.setState({
             projectForEdit: null,
         })
 
-        this.props.update(project)
-            .catch(this.handleProjectError)
+        this.props.update(project).catch(this.handleProjectError)
     }
 
-    removeToast = (toast) => {
-        this.setState((state) => ({
-            toasts: state.toasts.filter(temp => temp.id !== toast.id)
+    removeToast = toast => {
+        this.setState(state => ({
+            toasts: state.toasts.filter(temp => temp.id !== toast.id),
         }))
     }
 
-    handleProjectError = (err) => {
+    handleProjectError = err => {
         this.setState(state => ({
-            toasts: [...state.toasts, {
-                description: err.message
-            }]
+            toasts: [
+                ...state.toasts,
+                {
+                    description: err.message,
+                },
+            ],
         }))
     }
 
@@ -101,7 +107,7 @@ export default class ClientsPage extends Component {
         })
     }
 
-    openProject = (project) => {
+    openProject = project => {
         this.setState({
             projectForEdit: project,
             isEditModalOpen: true,
@@ -115,7 +121,7 @@ export default class ClientsPage extends Component {
         })
     }
 
-    askForRemove = (project) => {
+    askForRemove = project => {
         this.setState({
             projectForDelete: project,
             isDeleteModalOpen: true,
@@ -139,7 +145,7 @@ export default class ClientsPage extends Component {
 
     toggleRemoval = () => {
         this.setState(state => ({
-            allowRemoval: !state.allowRemoval
+            allowRemoval: !state.allowRemoval,
         }))
     }
 
@@ -148,24 +154,32 @@ export default class ClientsPage extends Component {
     }
 
     render() {
-        const projectForEdit = this.state.projectForEdit === null ? undefined : this.state.projectForEdit
+        const projectForEdit =
+            this.state.projectForEdit === null
+                ? undefined
+                : this.state.projectForEdit
 
         return (
             <div className="Klijenti page--padding">
                 <Toaster remove={this.removeToast} toasts={this.state.toasts} />
 
-                <Modal isOpen={this.state.isEditModalOpen} onRequestClose={this._executeAfterModalClose}>
+                <Modal
+                    isOpen={this.state.isEditModalOpen}
+                    onRequestClose={this._executeAfterModalClose}
+                >
                     <EditClientForm
                         client={projectForEdit}
                         onSubmit={this.submitProject}
-                        onDismiss={this.dismiss} />
+                        onDismiss={this.dismiss}
+                    />
                 </Modal>
 
                 <Modal isOpen={this.state.isDeleteModalOpen}>
                     <DeleteDialog
                         confirm={this.deleteConfirm}
                         dismiss={this.deleteDismiss}
-                        project={this.state.projectForDelete} />
+                        project={this.state.projectForDelete}
+                    />
                 </Modal>
 
                 <div className="page__controls">
@@ -182,7 +196,8 @@ export default class ClientsPage extends Component {
                     pageNumber={this.state.pageNumber}
                     pageSize={this.state.pageSize}
                     nextPage={this.nextPage}
-                    prevPage={this.prevPage} />
+                    prevPage={this.prevPage}
+                />
             </div>
         )
     }

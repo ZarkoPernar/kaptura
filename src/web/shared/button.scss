@@ -2,12 +2,11 @@
 @import '../mixins.scss';
 
 $button-border-radius: 0;
-$button-box-shadow: 3px 3px 0 rgba(70,70,70,.15);
+$button-box-shadow: 3px 3px 0 rgba(70, 70, 70, 0.15);
 
 $button-default-color: #566177;
-$button-default-background-color: #EFF0F4;
+$button-default-background-color: #eff0f4;
 $button-default-border: 1px solid darken($bc-light, 20);
-
 
 .btn {
     color: #566177;
@@ -33,21 +32,20 @@ $button-default-border: 1px solid darken($bc-light, 20);
     @include square-shadow;
     cursor: pointer;
     transform: scale(1);
-    transition: .1s ease transform;
+    transition: 0.1s ease transform;
     z-index: 1;
 
     // &__inner {
-        height: 2.5rem;
-        padding: .5rem 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    height: 2.5rem;
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     // }
 
     &:hover {
         // background-color: darken($bc-light, 3);
         background-color: rgba(86, 97, 119, 0.22);
-
     }
 
     &:active {
@@ -55,7 +53,8 @@ $button-default-border: 1px solid darken($bc-light, 20);
         outline: none !important;
     }
 
-    &--primary, &--color-primary {
+    &--primary,
+    &--color-primary {
         color: #fff;
         background-color: $bc-primary;
         border-color: darken($bc-primary, 5);
@@ -70,7 +69,8 @@ $button-default-border: 1px solid darken($bc-light, 20);
         }
     }
 
-    &--danger, &--color-danger {
+    &--danger,
+    &--color-danger {
         color: #fff;
         background-color: $bc-fire;
         border-color: darken($bc-fire, 25);
@@ -90,12 +90,11 @@ $button-default-border: 1px solid darken($bc-light, 20);
     }
 
     svg {
-        margin-top: -2px;
-        margin-left: -.8rem;
+        // margin-top: -2px;
+        margin-left: -0.8rem;
         font-size: 1.25rem;
-        margin-right: .8rem
+        margin-right: 0.8rem;
     }
-
 
     &--small {
         height: 2em;
@@ -104,19 +103,17 @@ $button-default-border: 1px solid darken($bc-light, 20);
     &--large {
         font-size: 1.2rem;
         height: 3em;
-        padding: .9rem 1.5rem;
+        padding: 0.9rem 1.5rem;
     }
 
     &--icon-only {
-        padding: .5em;
         width: 2.5rem;
+        padding: 0;
 
         svg {
             font-size: 1.5em;
             margin: 0;
         }
-
-
     }
 
     &--large.btn--icon-only {
@@ -126,7 +123,6 @@ $button-default-border: 1px solid darken($bc-light, 20);
         svg {
             font-size: 1.5em;
         }
-
     }
 
     &--small.btn--icon-only {
@@ -173,9 +169,9 @@ $button-default-border: 1px solid darken($bc-light, 20);
             right: 0;
             bottom: 0;
             z-index: -1;
-            background-color: rgba(70, 70, 70, .1);
+            background-color: rgba(70, 70, 70, 0.1);
             opacity: 0;
-            transition: .3s ease opacity;
+            transition: 0.3s ease opacity;
         }
 
         &:hover {
@@ -196,7 +192,7 @@ $button-default-border: 1px solid darken($bc-light, 20);
         }
 
         .ripple {
-            background-color: rgba($bc-primary, .3);
+            background-color: rgba($bc-primary, 0.3);
         }
     }
 
@@ -209,10 +205,9 @@ $button-default-border: 1px solid darken($bc-light, 20);
         }
 
         .ripple {
-            background-color: rgba($bc-danger, .3);
+            background-color: rgba($bc-danger, 0.3);
         }
     }
-
 
     // Social
 
@@ -221,10 +216,9 @@ $button-default-border: 1px solid darken($bc-light, 20);
     }
 
     &--google {
-        background-color: #DD4B39;
+        background-color: #dd4b39;
     }
 }
-
 
 .clickable {
     position: relative;
@@ -250,9 +244,9 @@ $button-default-border: 1px solid darken($bc-light, 20);
 }
 .ripple {
     position: absolute;
-    background-color: rgba(70, 70, 70, .3);
+    background-color: rgba(70, 70, 70, 0.3);
     border-radius: 50%;
-    transition: .6s ease transform, .6s ease opacity;
+    transition: 0.6s ease transform, 0.6s ease opacity;
     z-index: -1;
     transform: scale(0);
 }

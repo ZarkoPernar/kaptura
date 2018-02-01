@@ -1,11 +1,6 @@
-import { fromStore, toStore } from './store.utils'
-import { findByIdAndReplace, findByIdAndRemove } from './array.utils'
+import { defaultState } from './store.utils'
 import createListTypes from './createListTypes'
-
-const defaultState = {
-    byId: {},
-    allIds: [],
-}
+import createStoreListReducer from './createStoreListReducer'
 
 export default function createStoreList(name = required('name'), { api, rootStoreItem } = {}) {
     const ACTION_TYPES = createListTypes(name)
@@ -19,102 +14,8 @@ export default function createStoreList(name = required('name'), { api, rootStor
             update,
             remove,
         },
-        reducer,
+        reducer: createStoreListReducer(ACTION_TYPES, { defaultState }),
     }
-
-    function reducer(state = defaultState, action) {
-        switch (action.type) {
-            case ACTION_TYPES.LOAD_LIST:
-                return {
-                    ...state, //toStore(action.payload, state)
-                    loading: true,
-                    error: null,
-                }
-
-            case ACTION_TYPES.LOAD_LIST_SUCCESS:
-                return {
-                    ...toStore(action.payload, state),
-                    loading: false,
-                    error: null,
-                }
-
-            case ACTION_TYPES.LOAD_LIST_ERROR:
-                return {
-                    ...state,
-                    loading: false,
-                    error: action.error,
-                }
-
-            case ACTION_TYPES.ADD_ITEM:
-                return addItemToList(state, action.payload)
-            case ACTION_TYPES.ADD_ITEM_SUCCESS:
-                return handleUpdate(state, action.payload, 'offlineId')
-
-            case ACTION_TYPES.UPDATE_ITEM:
-                return handleUpdate(state, action.payload)
-            case ACTION_TYPES.UPDATE_ITEM_SUCCESS:
-                return handleUpdate(state, action.payload)
-
-            case ACTION_TYPES.REMOVE_ITEM:
-                return removeItemInList(state, action.payload)
-            case ACTION_TYPES.REMOVE_ITEM_SUCCESS:
-                return removeItemInList(state, action.payload)
-
-            default:
-                return state
-        }
-    }
-
-
-
-    // START UTILS
-    function addItemToList(state, payload) {
-        const logs = fromStore(state)
-        const updatedLogs = [payload, ...logs]
-
-        return toStore(updatedLogs, state)
-    }
-
-    function findById(id) {
-        return id === this._id
-    }
-
-    function handleUpdate(state, payload, findByIdPropName) {
-        // if (state.byId[payload._id] === undefined) return state
-        let index = state.allIds.findIndex(findById, { _id: payload[findByIdPropName || '_id'] })
-        let allIds = state.allIds
-        let byId = state.byId
-
-        if (index !== -1) {
-            allIds = [
-                ...state.allIds.slice(0, index),
-                payload._id,
-                ...state.allIds.slice(index + 1),
-            ]
-        }
-
-        if (findByIdPropName !== undefined) {
-            byId = {...state.byId}
-            delete byId[payload[findByIdPropName]]
-        }
-
-        return {
-            allIds,
-            byId: {
-                ...byId,
-                [payload._id]: payload
-            }
-        }
-    }
-
-    function removeItemInList(state, payload) {
-        const logs = fromStore(state)
-
-        const updatedLogs = findByIdAndRemove(logs, payload)
-
-        return toStore(updatedLogs, state)
-    }
-    // :: END UTILS
 
     // START LOAD
     function list(params, offlineList=[]) {

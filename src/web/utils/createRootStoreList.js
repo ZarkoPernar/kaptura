@@ -1,6 +1,6 @@
-import { fromStore, toStoreMerge } from './store.utils'
-import { findByIdAndReplace } from './array.utils'
+import { defaultState } from './store.utils'
 import createListTypes from './createListTypes'
+import createRootStoreListReducer from './createRootStoreListReducer'
 
 export default function createStoreList(name = required('name'), { api } = {}) {
     const ACTION_TYPES = createListTypes(name)
@@ -12,57 +12,18 @@ export default function createStoreList(name = required('name'), { api } = {}) {
             list,
             add,
             update,
+            loadListRequest,
+            loadListSuccess,
+            loadListFailure,
+            addItemRequest,
+            addItemSuccess,
+            addItemFailure,
+            updateItemRequest,
+            updateItemSuccess,
+            updateItemFailure,
         },
-        reducer,
+        reducer: createRootStoreListReducer(ACTION_TYPES, { defaultState }),
     }
-
-    function reducer(state = {}, action) {
-        switch (action.type) {
-            case ACTION_TYPES.LOAD_LIST:
-                return toStoreMerge(action.payload, state)
-
-            case ACTION_TYPES.LOAD_LIST_SUCCESS:
-                return toStoreMerge(action.payload, state)
-
-            case ACTION_TYPES.ADD_ITEM:
-                return addItemToList(state, action.payload)
-            case ACTION_TYPES.ADD_ITEM_SUCCESS:
-                // REVIEW: might cause issues bc both offline version
-                // and the item in the db will exist inth root store list
-                return addItemToList(state, action.payload)
-
-            case ACTION_TYPES.UPDATE_ITEM:
-                return handleUpdate(state, action.payload)
-            case ACTION_TYPES.UPDATE_ITEM_SUCCESS:
-                return handleUpdate(state, action.payload)
-
-            default:
-                return state
-        }
-    }
-
-
-
-    // START UTILS
-    function addItemToList(state, payload) {
-        const logs = fromStore(state)
-        const updatedLogs = [payload, ...logs]
-
-        return toStoreMerge(updatedLogs, state)
-    }
-
-    function handleUpdate(state, payload, idPropName='_id') {
-        if (state.byId[payload._id] === undefined) return state
-
-        return {
-            allIds: state.allIds,
-            byId: {
-                ...state.byId,
-                [payload[idPropName]]: payload
-            }
-        }
-    }
-    // :: END UTILS
 
     // START LOAD
     function list(params, offlineList=[]) {
@@ -70,14 +31,11 @@ export default function createStoreList(name = required('name'), { api } = {}) {
             dispatch(loadListRequest(offlineList))
 
             if (!api) {
-                dispatch(loadListSuccess(offlineList))
-            } else {
-                return api.list(params)
-                    .then(res => {
-                        dispatch(loadListSuccess(res))
-                    })
-                    .catch(err => dispatch(loadListFailure(err)))
+                return dispatch(loadListSuccess(offlineList))
             }
+            return api.list(params)
+                .then(res => dispatch(loadListSuccess(res)))
+                .catch(err => dispatch(loadListFailure(err)))
         }
     }
 
@@ -109,14 +67,11 @@ export default function createStoreList(name = required('name'), { api } = {}) {
             dispatch(addItemRequest(item))
 
             if (!api) {
-                dispatch(addItemSuccess(item))
-            } else {
-                return api.add(item)
-                    .then(res => {
-                        dispatch(addItemSuccess(res))
-                    })
-                    .catch(err => dispatch(addItemFailure(err)))
+                return dispatch(addItemSuccess(item))
             }
+            return api.add(item)
+                .then(res => dispatch(addItemSuccess(res)))
+                .catch(err => dispatch(addItemFailure(err)))
         }
     }
 
@@ -148,14 +103,11 @@ export default function createStoreList(name = required('name'), { api } = {}) {
             dispatch(updateItemRequest(item))
 
             if (!api) {
-                dispatch(updateItemSuccess(item))
-            } else {
-                return api.update(item)
-                    .then(res => {
-                        dispatch(updateItemSuccess(res))
-                    })
-                    .catch(err => dispatch(updateItemFailure(err)))
+                return dispatch(updateItemSuccess(item))
             }
+            return api.update(item)
+                .then(res => dispatch(updateItemSuccess(res)))
+                .catch(err => dispatch(updateItemFailure(err)))
         }
     }
 

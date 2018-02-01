@@ -67,7 +67,6 @@ export default class Clickable extends Component {
             return
         }
         this._element = ref
-        this._measurements = ref.getBoundingClientRect()
     }
 
     render() {

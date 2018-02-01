@@ -1,5 +1,8 @@
 import createApi from '../utils/createApi'
 
 const base_url = '/client'
-
-export default createApi(base_url)
+const api = createApi(base_url)
+export default {
+    ...api,
+    loadList: api.list,
+}

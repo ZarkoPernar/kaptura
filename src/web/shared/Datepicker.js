@@ -7,7 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 const DATE_SHORT_FORMAT = 'DD.MM.YYYY'
 
 function getValueFromProps(isoString) {
-    if (!isoString) return '' //moment()
+    if (!isoString) return null //moment()
 
     return moment(isoString)
 }
@@ -25,11 +25,8 @@ function formatValueForCallback(moment) {
 class Datepicker extends Component {
     state = {}
 
-    dateChange = (moment) => {
-        this.props.onChange(
-            formatValueForCallback(moment),
-            this.props.name
-        )
+    dateChange = moment => {
+        this.props.onChange(formatValueForCallback(moment), this.props.name)
     }
 
     render() {
@@ -43,7 +40,8 @@ class Datepicker extends Component {
                 onChangeRaw={this.onChangeRaw}
                 onChange={this.dateChange}
                 className={classnames('form-control', this.props.className)}
-                selected={selected} />
+                selected={selected}
+            />
         )
     }
 }

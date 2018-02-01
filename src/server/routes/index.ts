@@ -53,6 +53,6 @@ export default function registerRoutes(app) {
     employeeRoutes(app)
 
     app.all('*', localAuthMiddleware, staticMiddleware, (req, res) => {
-        res.sendFile(indexFileLocation)
+        res.sendFile('index.html', { root: process.cwd() + '/public' })
     })
 }

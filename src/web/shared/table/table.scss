@@ -3,14 +3,14 @@
 
 $table-br: 2px;
 
-$table-heading-padding: 1em 1.5em;
-$table-heading-padding-half: .5em .75em;
+$table-heading-padding: 1em 0.75em;
+$table-heading-padding-half: 0.5em 0.5em;
 $table-heading-bg-color: #fff;
 
 $table-row-hover-bg-color: #e9e9e9;
 $table-cell-br-color: #eee;
-$table-cell-padding: 1em 1.5em;
-$table-cell-padding-half: .5em .75em;
+$table-cell-padding: 1.25em 1.5em;
+$table-cell-padding-half: 0.75em 0.75em;
 
 .table-holder {
     position: relative;
@@ -19,7 +19,6 @@ $table-cell-padding-half: .5em .75em;
     // box-shadow: 0 1px 3px rgba(70,70,70,.3);
     margin-bottom: 1em;
     @include square-shadow;
-
 }
 
 .table {
@@ -30,7 +29,6 @@ $table-cell-padding-half: .5em .75em;
     text-align: left;
 
     &__head {
-
     }
 
     &__heading {
@@ -40,6 +38,7 @@ $table-cell-padding-half: .5em .75em;
         border-bottom: 1px solid #ddd;
 
         &:first-child {
+            padding-left: 1.5em;
             border-top-left-radius: $table-br;
         }
 
@@ -47,7 +46,6 @@ $table-cell-padding-half: .5em .75em;
             border-top-right-radius: $table-br;
         }
     }
-
 
     &__row {
         &--hover:hover {
@@ -57,7 +55,7 @@ $table-cell-padding-half: .5em .75em;
         }
 
         &--condensed {
-            .table__cell {
+            .table__cell__content {
                 padding: $table-cell-padding-half;
             }
         }
@@ -111,12 +109,12 @@ $table-cell-padding-half: .5em .75em;
                 }
             }
         }
-
     }
 
     &__cell {
         background-color: #fff;
-        padding: $table-cell-padding;
+        // padding: $table-cell-padding;
+        padding: 0;
         border-color: $table-cell-br-color;
         border-width: 0 0 1px 0;
         border-style: solid;
@@ -127,6 +125,18 @@ $table-cell-padding-half: .5em .75em;
             white-space: nowrap;
             padding: $table-cell-padding-half;
             overflow: hidden;
+        }
+
+        &:first-child {
+            .table__cell__content {
+                padding-left: 1.5em;
+            }
+        }
+
+        &:last-child {
+            .table__cell__content {
+                padding-right: 1.5em;
+            }
         }
     }
 
@@ -140,7 +150,7 @@ $table-cell-padding-half: .5em .75em;
 
 .table-row-overlay {
     position: absolute;
-    background-color: rgba(255,255,255,.85);
+    background-color: rgba(255, 255, 255, 0.85);
     width: 100%;
     height: 52px;
     text-align: center;
@@ -150,7 +160,7 @@ $table-cell-padding-half: .5em .75em;
     z-index: 2;
     top: 0;
     opacity: 0;
-    transition: .3s ease opacity;
+    transition: 0.3s ease opacity;
 
     &--active {
         opacity: 1;

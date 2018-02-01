@@ -1,23 +1,19 @@
 {
-    "presets": [
-        "react"
-    ],
+    "presets": ["react"],
     "env": {
         "production": {
             "modules": false,
-              "useBuiltIns": true,
-              "targets": {
+            "useBuiltIns": true,
+            "targets": {
                 "browsers": [
-                  "Chrome >=60",
-                  "Safari >=10.1",
-                  "iOS >=10.3",
-                  "Firefox >=54",
-                  "Edge >=15"
+                    "Chrome >=60",
+                    "Safari >=10.1",
+                    "iOS >=10.3",
+                    "Firefox >=54",
+                    "Edge >=15"
                 ]
             },
-            "presets": [
-                "minify"
-            ]
+            "presets": ["minify"]
         }
     },
     "plugins": [
@@ -25,8 +21,8 @@
         "transform-object-rest-spread",
         "transform-decorators-legacy",
         "transform-class-properties",
-        "syntax-dynamic-import", [
-            "transform-react-jsx"
-        ]
+        "syntax-dynamic-import",
+        "react-hot-loader/babel",
+        ["transform-react-jsx"]
     ]
 }

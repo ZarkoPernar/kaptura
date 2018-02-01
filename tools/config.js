@@ -8,6 +8,7 @@ module.exports = {
     HtmlWebpackPlugin: {
         title: 'React Boilerplate',
         template: './src/web/index.html',
+        alwaysWriteToDisk: true,
     },
 
     WEBPACK_DEV_SERVER_CONFIG: {
@@ -17,21 +18,18 @@ module.exports = {
         overlay: true,
         watchOptions: {
             aggregateTimeout: 300,
-            poll: 1000
+            poll: 1000,
         },
 
         hot: true,
 
         proxy: {
-            '/api': {
-                target: 'http://localhost:5000'
-            },
-            '/auth': {
-                target: 'http://localhost:5000'
-            },
-            '/napi/*': {
-                target: 'ws://localhost:5000',
-                ws: true,
+            '/': {
+                target: 'http://localhost:5000/',
+                // secure: false,
+                // pathRewrite: {
+                //     '^/api': '',
+                // },
             },
         },
 

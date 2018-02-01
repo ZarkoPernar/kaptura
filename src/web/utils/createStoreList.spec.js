@@ -12,16 +12,21 @@ beforeEach(() => {
     storeItem = createStoreList('test', {
         api: {
             list(params) {
-                if (params && params.reject) return Promise.reject(new Error('Bad request'))
+                if (params && params.reject)
+                    return Promise.reject(new Error('Bad request'))
 
-                return Promise.resolve([{
-                    _id: 1,
-                }, {
-                    _id: 2
-                }])
+                return Promise.resolve([
+                    {
+                        _id: 1,
+                    },
+                    {
+                        _id: 2,
+                    },
+                ])
             },
             add(log) {
-                if (log && log.reject) return Promise.reject(new Error('Bad request'))
+                if (log && log.reject)
+                    return Promise.reject(new Error('Bad request'))
 
                 return Promise.resolve({
                     offlineId: log._id,
@@ -29,21 +34,22 @@ beforeEach(() => {
                 })
             },
             update(log) {
-                if (log && log.reject) return Promise.reject(new Error('Bad request'))
+                if (log && log.reject)
+                    return Promise.reject(new Error('Bad request'))
 
                 return Promise.resolve({
                     ...log,
                     updated_at: 'test',
                 })
             },
-        }
+        },
     })
 
     store = createStore(
         combineReducers({
-            test: storeItem.reducer
+            test: storeItem.reducer,
         }),
-        {test: {}},
+        { test: {} },
         middleware,
     )
 })
@@ -80,19 +86,18 @@ describe('it', () => {
         const { add } = storeItem.actions
         const item = { _id: 1 }
         const expectedResult = {
-            byId: {1: item},
-            allIds: [1]
+            byId: { 1: item },
+            allIds: [1],
         }
 
         store.dispatch(add(item))
 
         const actualResult = store.getState()
 
-
         expect(actualResult.test).toEqual(expectedResult)
     })
 
-    test('add action with api adds an item and then updates', (done) => {
+    test('add action with api adds an item and then updates', done => {
         const { add } = storeItem.actions
         const item = { _id: 1 }
         const expectedResult = {
@@ -102,7 +107,7 @@ describe('it', () => {
                     offlineId: 1,
                 },
             },
-            allIds: [2]
+            allIds: [2],
         }
 
         store.dispatch(add(item)).then(() => {
@@ -119,11 +124,13 @@ describe('it', () => {
         expect(typeof list()).toEqual('function')
     })
 
-    test('list action with api loads all items from api', (done) => {
+    test('list action with api loads all items from api', done => {
         const { list } = storeItem.actions
-        const offlineList = [{
-            _id: 1,
-        }]
+        const offlineList = [
+            {
+                _id: 1,
+            },
+        ]
         const expectedResult = {
             byId: {
                 1: {
@@ -131,7 +138,7 @@ describe('it', () => {
                 },
                 2: {
                     _id: 2,
-                }
+                },
             },
             allIds: [1, 2],
             loading: false,
@@ -176,12 +183,15 @@ describe('it', () => {
 
     test('update action with api update an item', () => {
         const { update } = storeItem.actions
-        const offlineList = [{
-            _id: 1,
-        }, {
-            _id: 2,
-        }]
-        const item = { _id: 1, newField: 1, }
+        const offlineList = [
+            {
+                _id: 1,
+            },
+            {
+                _id: 2,
+            },
+        ]
+        const item = { _id: 1, newField: 1 }
         const expectedResult = {
             byId: {
                 1: {
@@ -190,9 +200,9 @@ describe('it', () => {
                 },
                 2: {
                     _id: 2,
-                }
+                },
             },
-            allIds: [1, 2]
+            allIds: [1, 2],
         }
 
         store.dispatch({
@@ -206,14 +216,17 @@ describe('it', () => {
         expect(actualResult.test).toEqual(expectedResult)
     })
 
-    test('update action with api update an item and then updates from server', (done) => {
+    test('update action with api update an item and then updates from server', done => {
         const { update } = storeItem.actions
-        const offlineList = [{
-            _id: 1,
-        }, {
-            _id: 2,
-        }]
-        const item = { _id: 1, newField: 1, }
+        const offlineList = [
+            {
+                _id: 1,
+            },
+            {
+                _id: 2,
+            },
+        ]
+        const item = { _id: 1, newField: 1 }
         const expectedResult = {
             byId: {
                 1: {
@@ -223,9 +236,9 @@ describe('it', () => {
                 },
                 2: {
                     _id: 2,
-                }
+                },
             },
-            allIds: [1, 2]
+            allIds: [1, 2],
         }
 
         store.dispatch({
@@ -241,4 +254,3 @@ describe('it', () => {
         })
     })
 })
-

@@ -4,13 +4,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const MinifyPlugin = require("babel-minify-webpack-plugin");
+// const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+// .BundleAnalyzerPlugin
+const MinifyPlugin = require('babel-minify-webpack-plugin')
 
 const CONFIG = require('./config')
 
-module.exports = function (env) {
+module.exports = function(env) {
     return {
         devtool: 'cheap-module-source-map',
         entry: {
@@ -18,9 +19,10 @@ module.exports = function (env) {
             // vendor: ['react',], // reselect, recompose, others...
         },
         output: {
-            path: path.resolve(CONFIG.CLIENT_OUTPUT_PATH),
+            path: path.resolve(process.cwd(), CONFIG.CLIENT_OUTPUT_PATH),
             chunkFilename: '[name].bundle-[chunkhash].js',
             filename: 'bundle-[chunkhash].js',
+            publicPath: '/',
         },
         resolve: {
             extensions: ['.js'],
@@ -40,21 +42,23 @@ module.exports = function (env) {
                 // 'process.env.BABEL_ENV': JSON.stringify('production'),
             }),
 
-            new HtmlWebpackPlugin(Object.assign({}, CONFIG.HtmlWebpackPlugin, {
-                minify: {
-                    removeComments: true,
-                    collapseWhitespace: true,
-                    removeRedundantAttributes: true,
-                    useShortDoctype: true,
-                    removeEmptyAttributes: true,
-                    // removeStyleLinkTypeAttributes: true,
-                    keepClosingSlash: true,
-                    minifyJS: true,
-                    minifyCSS: true,
-                    minifyURLs: true,
-                },
-                inject: true,
-            })),
+            new HtmlWebpackPlugin(
+                Object.assign({}, CONFIG.HtmlWebpackPlugin, {
+                    minify: {
+                        removeComments: true,
+                        collapseWhitespace: true,
+                        removeRedundantAttributes: true,
+                        useShortDoctype: true,
+                        removeEmptyAttributes: true,
+                        // removeStyleLinkTypeAttributes: true,
+                        keepClosingSlash: true,
+                        minifyJS: true,
+                        minifyCSS: true,
+                        minifyURLs: true,
+                    },
+                    inject: true,
+                }),
+            ),
 
             new ExtractTextPlugin('styles.[chunkhash].css'),
 
@@ -76,7 +80,6 @@ module.exports = function (env) {
             //     stripPrefix: 'public/',
             // }),
 
-
             new webpack.optimize.CommonsChunkPlugin({
                 name: 'vendor',
                 // filename: 'commons-[chunkhash].js',
@@ -85,14 +88,18 @@ module.exports = function (env) {
                 // which is loaded in parallel to the requested chunks
                 async: true,
 
-                minChunks: function (module) {
+                minChunks: function(module) {
                     // this assumes your vendor imports exist in the node_modules directory
-                    return module.context && module.context.indexOf("node_modules") !== -1;
-                }
+                    return (
+                        module.context &&
+                        module.context.indexOf('node_modules') !== -1
+                    )
+                },
             }),
 
-            new CopyWebpackPlugin([{
-                    from: 'src/manifest.json',
+            new CopyWebpackPlugin([
+                {
+                    from: 'src/web/manifest.json',
                     to: '',
                 },
                 {
@@ -108,31 +115,29 @@ module.exports = function (env) {
             // TODO: works but generated manifest needs config
             // new FaviconsWebpackPlugin('./resources/logo.png'),
 
-
-            new BundleAnalyzerPlugin(),
+            // new BundleAnalyzerPlugin(),
         ],
         module: {
-            rules: [{
+            rules: [
+                {
                     test: /\.js$/,
                     use: 'babel-loader',
-                    include: [
-                        path.resolve('src/web'),
-                    ],
+                    include: [path.resolve('src/web')],
                     exclude: ['.spec.'],
                 },
                 {
                     test: /\.scss$/,
                     use: ExtractTextPlugin.extract({
-                        fallback: "style-loader",
-                        use: ['css-loader', 'sass-loader']
-                    })
+                        fallback: 'style-loader',
+                        use: ['css-loader', 'sass-loader'],
+                    }),
                 },
                 {
                     test: /\.css$/,
                     use: ExtractTextPlugin.extract({
                         fallback: 'style-loader',
-                        use: 'css-loader'
-                    })
+                        use: 'css-loader',
+                    }),
                 },
 
                 {
@@ -147,13 +152,13 @@ module.exports = function (env) {
                                 interlaced: false,
                                 pngquant: {
                                     quality: '65-90',
-                                    speed: 4
-                                }
-                            }
-                        }
-                    ]
+                                    speed: 4,
+                                },
+                            },
+                        },
+                    ],
                 },
-            ]
-        }
+            ],
+        },
     }
 }

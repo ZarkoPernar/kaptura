@@ -5,11 +5,13 @@ import Search from '../shared/search'
 
 // const debounced = debounce(list, 500)
 const getValue = item => item.name
-const searchFn = (searchTerm) => {
-    const params = searchTerm ? {
-        name: searchTerm,
-    } : {}
-    return api.list(params)
+const searchFn = searchTerm => {
+    const params = searchTerm
+        ? {
+              name: searchTerm,
+          }
+        : {}
+    return api.list(params).then(res => res.data)
 }
 
 export default class SearchProjects extends Component {
@@ -18,12 +20,13 @@ export default class SearchProjects extends Component {
     }
 
     render() {
-        return(
+        return (
             <Search
                 {...this.props}
                 searchFn={searchFn}
                 getItemValue={getValue}
-                onSelect={this.onSelect} />
+                onSelect={this.onSelect}
+            />
         )
     }
 }

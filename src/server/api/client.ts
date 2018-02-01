@@ -7,8 +7,8 @@ import convertDates from '../utils/convertDates'
 export interface IClienttListRequestParams {
     name: string
     pages: {
-        pageSize: number,
-        pageNumber: number,
+        pageSize: number
+        pageNumber: number
     }
 }
 
@@ -16,7 +16,7 @@ const defaultListParams = {
     pages: {
         pageSize: 25,
         pageNumber: 1,
-    }
+    },
 }
 
 export async function getItem(request: IRequest, response: Response) {
@@ -35,27 +35,23 @@ export async function list(request: IRequest, response: Response) {
 
     const query = Model.find()
     if (!request.user.company_id) {
-        query
-            .where('created_by')
-            .equals(request.user._id)
+        query.where('created_by').equals(request.user._id)
     } else {
-        query
-            .where('company_id')
-            .equals(request.user.company_id)
+        query.where('company_id').equals(request.user.company_id)
     }
 
     if (params.name !== undefined) {
-        query.find({ name: { $regex: new RegExp(params.name, 'gi',) } })
+        query.find({ name: { $regex: new RegExp(params.name, 'gi') } })
     }
 
-    const result = await query
+    const data = await query
         .sort({
             created_at: -1,
         })
         .skip(params.pages.pageSize * (params.pages.pageNumber - 1))
         .limit(params.pages.pageSize)
 
-    response.status(200).json(result)
+    response.status(200).json({ data })
 }
 
 export async function create(request: IRequest, response: Response) {
@@ -72,7 +68,7 @@ export async function create(request: IRequest, response: Response) {
             user: request.user,
         })
         response.status(200).json(result)
-    } catch(err) {
+    } catch (err) {
         response.status(412).json(err)
     }
 }
@@ -96,6 +92,3 @@ export async function remove(request: IRequest, response: Response) {
     })
     response.status(200).json(result)
 }
-
-
-

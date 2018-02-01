@@ -16,29 +16,38 @@ const InvoiceItemsList = ({ items, rowClick }) => (
         <Table key="table">
             <TableHead key="head">
                 <TableHeading>Stavka</TableHeading>
+                <TableHeading>Tip</TableHeading>
+                <TableHeading>Proizvođač</TableHeading>
+                <TableHeading>Količina</TableHeading>
+                <TableHeading>Cijena</TableHeading>
                 <TableHeading>Opis</TableHeading>
-                <TableHeading>Biljeske</TableHeading>
+                <TableHeading>Bilješke</TableHeading>
             </TableHead>
-            {
-                items.map(item => {
-                    return (
-                        <TableRow key={item._id} hover condensed onClick={rowClick} item={item}>
+            {items.map(item => {
+                return (
+                    <TableRow
+                        key={item._id}
+                        hover
+                        condensed
+                        onClick={rowClick}
+                        item={item}
+                    >
+                        <TableCell>{item.name}</TableCell>
 
-                            <TableCell>
-                                {item.name}
-                            </TableCell>
+                        <TableCell>{item.type}</TableCell>
 
-                            <TableCell>
-                                { item.description }
-                            </TableCell>
+                        <TableCell>{item.brand_name}</TableCell>
 
-                            <TableCell>
-                                { item.notes }
-                            </TableCell>
-                        </TableRow>
-                    )
-                })
-            }
+                        <TableCell>{item.quantity}</TableCell>
+
+                        <TableCell>{item.price}</TableCell>
+
+                        <TableCell>{item.description}</TableCell>
+
+                        <TableCell>{item.notes}</TableCell>
+                    </TableRow>
+                )
+            })}
         </Table>
     </div>
 )
