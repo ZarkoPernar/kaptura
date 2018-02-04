@@ -42,6 +42,7 @@
 .App-logo {
     font-size: 1rem;
     width: $sidenav-width;
+    // flex: 1 0 $sidenav-width;
     height: $header-height;
     display: none;
     flex-direction: column;

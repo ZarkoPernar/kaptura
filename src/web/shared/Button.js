@@ -13,7 +13,7 @@ const replaceLastItem = (arr, item) => {
     return copy
 }
 
-export default class ButtonComponent extends Component {
+export default class Button extends Component {
     static propTypes = {
         color: PropTypes.string,
         className: PropTypes.string,

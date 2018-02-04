@@ -6,6 +6,9 @@ import { location, ITimestampsSchema, IModifiedBySchema } from './default'
 import { IBaseInventoryItem, IBaseInventoryItemSchema } from './inventory.item'
 
 export interface IFavoriteInventoryItem extends IBaseInventoryItem {}
+export interface IFavoriteInventoryItemDocument
+    extends IFavoriteInventoryItem,
+        mongoose.Document {}
 
 const InventoryFavoriteItemSchema = new mongoose.Schema(
     IBaseInventoryItemSchema,
@@ -23,8 +26,8 @@ InventoryFavoriteItemSchema.post('save', function(error: any, doc, next) {
 })
 
 export const InventoryFavoriteItemModel = mongoose.model<
-    IFavoriteInventoryItem
->('invoice_item', InventoryFavoriteItemSchema)
+    IFavoriteInventoryItemDocument
+>('inventory_item_favorite', InventoryFavoriteItemSchema)
 
 export function createInvoiceItemModelActions(model) {
     return {

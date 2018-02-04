@@ -7,15 +7,12 @@ import { hasValue } from './utils'
 import Label from './Label'
 
 import './form.scss'
+import { FormValidationContext } from './Form'
+import Checkbox from './Checkbox'
 
 class FormGroup extends PureComponent {
     static propTypes = {
         // label: PropTypes.string,
-    }
-
-    state = {
-        isFocused: false,
-        hasValue: false,
     }
 
     constructor(props) {
@@ -25,6 +22,11 @@ class FormGroup extends PureComponent {
             (props.formName ? props.formName : uid()) +
             '-' +
             props.children.props.name
+
+        this.state = {
+            isFocused: false,
+            hasValue: hasValue(props.children.props.value),
+        }
     }
 
     onChange = e => {
@@ -51,12 +53,19 @@ class FormGroup extends PureComponent {
 
     render() {
         const input = this.props.children
+        // FIXME: figure out why input.type === Checkbox does not work
+        const hideFgLine = input.type.displayName === Checkbox.displayName
         const id = input.props.id || this._id
 
         let labelElement
-        let inputElement = React.cloneElement(input, {
-            id,
-        })
+        let inputElement = this.props.ignoreField
+            ? React.cloneElement(input, {
+                  id,
+                  'data-ignore-field': true,
+              })
+            : React.cloneElement(input, {
+                  id,
+              })
 
         if (typeof this.props.label === 'string') {
             labelElement = <Label id={id}>{this.props.label}</Label>
@@ -81,34 +90,42 @@ class FormGroup extends PureComponent {
                 : null
 
         return (
-            <div
-                onChange={this.onChange}
-                onBlur={this.onBlur}
-                onFocus={this.onFocus}
-                className={classnames('form-group', {
-                    'form-group--inline': this.props.inline,
-                    'form-group--is-focused': this.state.isFocused,
-                    'form-group--active': this.state.hasValue,
-                    'form-group--has-error': this.props.error,
-                    'form-group--flat': this.props.flat,
-                    'form-group--icon-left': this.props.itemLeft !== undefined,
-                })}
-                style={this.props.style}
-            >
-                {labelElement}
+            <FormValidationContext.Consumer>
+                {({ errors }) => (
+                    <div
+                        onChange={this.onChange}
+                        onBlur={this.onBlur}
+                        onFocus={this.onFocus}
+                        className={classnames('form-group', {
+                            'form-group--inline': this.props.inline,
+                            'form-group--is-focused': this.state.isFocused,
+                            'form-group--active': this.state.hasValue,
+                            'form-group--has-error': errors[input.props.name],
+                            'form-group--flat': this.props.flat,
+                            'form-group--icon-left':
+                                this.props.itemLeft !== undefined,
+                        })}
+                        style={this.props.style}
+                    >
+                        {labelElement}
 
-                <div className="input-group">
-                    {itemLeft}
-                    {inputElement}
-                    {itemRight}
-                </div>
+                        <div className="input-group">
+                            {itemLeft}
+                            {inputElement}
+                            {itemRight}
+                            {hideFgLine ? null : (
+                                <span className="form-group__line" />
+                            )}
+                        </div>
 
-                {this.props.error ? (
-                    <div className="form-group__messages">
-                        {this.props.error}
+                        {errors[input.props.name] ? (
+                            <div className="form-group__messages">
+                                {errors[input.props.name]}
+                            </div>
+                        ) : null}
                     </div>
-                ) : null}
-            </div>
+                )}
+            </FormValidationContext.Consumer>
         )
     }
 }

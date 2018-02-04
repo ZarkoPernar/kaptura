@@ -12,6 +12,7 @@ import projectRoutes from './project'
 import clientRoutes from './client'
 import invoiceRoutes from './invoice'
 import invoiceItemRoutes from './invoice.item'
+import inventoryItemRoutes from './inventory.item'
 import timesheetRoutes from './timesheet'
 import userRoutes from './user'
 import authRoutes from './auth'
@@ -51,6 +52,7 @@ export default function registerRoutes(app) {
     userRoutes(app)
     companyRoutes(app)
     employeeRoutes(app)
+    inventoryItemRoutes(app)
 
     app.all('*', localAuthMiddleware, staticMiddleware, (req, res) => {
         res.sendFile('index.html', { root: process.cwd() + '/public' })

@@ -6,8 +6,10 @@ import { v4 as uid } from 'uuid'
 import './checkbox.scss'
 
 export default class Checkbox extends Component {
-    static propTypes = {
-
+    static displayName = 'Checkbox'
+    static propTypes = {}
+    static defaultProps = {
+        onChange: () => {},
     }
 
     constructor(props) {
@@ -16,7 +18,7 @@ export default class Checkbox extends Component {
         this._id = (props.formName ? props.formName : uid()) + '-' + props.name
     }
 
-    onChange = (event) => {
+    onChange = event => {
         this.props.onChange(event.target.checked, this.props.name)
     }
 
@@ -25,7 +27,13 @@ export default class Checkbox extends Component {
 
         return (
             <div className={classnames('checkbox')}>
-                <input id={id} type="checkbox" name={this.props.name} onChange={this.onChange} value={this.props.value} defaultChecked={this.props.value} />
+                <input
+                    id={id}
+                    type="checkbox"
+                    {...this.props}
+                    defaultChecked={this.props.value}
+                    onChange={this.onChange}
+                />
                 <label htmlFor={id}>{this.props.label}</label>
                 <span className="checkbox__check" />
             </div>

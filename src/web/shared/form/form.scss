@@ -1,10 +1,11 @@
 @import '../../App';
 @import '../../mixins';
 
-$size: 0.5em;
 $line-transition: 0.38s transform cubic-bezier(0.24, 0.8, 0, 0.97);
 $label-transition: 0.38s cubic-bezier(0.24, 0.8, 0, 0.97) transform,
     0.38s cubic-bezier(0.24, 0.8, 0, 0.97) opacity;
+$size: 0.5em;
+$label-top-offset-modifier: 3.5;
 
 textarea {
     display: block;
@@ -13,13 +14,13 @@ textarea {
 .form-group {
     font-size: 1rem;
     display: block;
-    margin-bottom: 3 * $size;
+    margin-bottom: $label-top-offset-modifier * $size;
     padding-top: 2 * $size;
     position: relative;
 
-    label {
+    .form-group__label {
         position: absolute;
-        top: 3 * $size;
+        top: $label-top-offset-modifier * $size;
         left: 0;
         color: $bc-earth;
         font-weight: 600;
@@ -27,23 +28,23 @@ textarea {
         opacity: 0.85;
         // transition: .2s ease transform, .2s ease opacity;
         transition: $label-transition;
-        z-index: 0;
+        z-index: 1;
     }
 
     &--active,
     &--is-focused {
-        label {
-            transform: translate3d(0, -(3 * $size), 0) scale(1);
+        .form-group__label {
+            transform: translate3d(0, -($label-top-offset-modifier * $size), 0)
+                scale(1);
         }
     }
 
     &--is-focused {
-        label {
+        .form-group__label {
             opacity: 1;
         }
 
         .input-group {
-            &:after,
             .form-group__line {
                 transform: scaleX(1);
             }
@@ -57,7 +58,7 @@ textarea {
     }
 
     &--has-error {
-        label {
+        .form-group__label {
             color: darken($bc-fire, 20);
         }
 
@@ -67,7 +68,6 @@ textarea {
         }
 
         .input-group {
-            &:after,
             .form-group__line {
                 background-color: $bc-fire;
             }
@@ -99,19 +99,22 @@ textarea {
     }
 
     &--icon-left {
-        label {
+        .form-group__label {
             left: 2.5rem;
         }
 
         &.form-group--inline {
-            label {
+            .form-group__label {
                 left: 2.5rem;
             }
         }
     }
 
     &__messages {
+        color: $bc-fire;
         padding-top: 0.5em;
+        position: absolute;
+        width: 100%;
     }
 }
 
@@ -119,7 +122,6 @@ textarea {
     position: relative;
     display: flex;
 
-    &:after,
     .form-group__line {
         content: '';
         background-color: $bc-earth;
@@ -175,28 +177,25 @@ textarea {
 .form-group--inline {
     padding: 0;
 
-    label {
+    .form-group__label {
         opacity: 1;
         pointer-events: none;
         top: 0.8rem;
         left: 0.5em;
         transform: none !important;
+        z-index: 1;
     }
 
     &.form-group--is-focused {
-        label {
+        .form-group__label {
             opacity: 0;
         }
     }
 
     &.form-group--active {
-        label {
+        .form-group__label {
             opacity: 0;
         }
-    }
-
-    &::after {
-        content: none;
     }
 }
 
@@ -210,6 +209,10 @@ textarea {
         border-radius: 2px;
         border: 0;
         transition: 0.2s ease background-color;
+    }
+
+    .form-group__line {
+        display: none;
     }
 }
 

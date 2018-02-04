@@ -6,9 +6,8 @@ import { location, ITimestampsSchema, IModifiedBySchema } from './default'
 
 export interface IBaseInventoryItem
     extends ITimestampsSchema,
-        IModifiedBySchema,
-        mongoose.Document {
-    _id: string
+        IModifiedBySchema {
+    _id: any
     company_id: string
     name: string
     description?: string
@@ -16,6 +15,7 @@ export interface IBaseInventoryItem
     brand_name?: string
     quantity?: number
     price?: number
+    currency?: string
     unit?: string
     offlineId?: string
 }
@@ -23,6 +23,10 @@ export interface IBaseInventoryItem
 export interface IInventoryItem extends IBaseInventoryItem {
     favorite_id?: string
 }
+
+export interface IInventoryItemDocument
+    extends IInventoryItem,
+        mongoose.Document {}
 
 const UPDATE_OPTIONS = { new: true }
 export const IBaseInventoryItemSchema = {
@@ -39,6 +43,7 @@ export const IBaseInventoryItemSchema = {
     brand_name: String,
     quantity: Number,
     price: mongoose.Schema.Types.Decimal128,
+    currency: String,
     // price: Number,
     offlineId: String,
 }
@@ -63,13 +68,13 @@ InventoryItemSchema.post('save', function(error: any, doc, next) {
     }
 })
 
-export const InventoryItemModel = mongoose.model<IInventoryItem>(
-    'invoice_item',
+export const InventoryItemModel = mongoose.model<IInventoryItemDocument>(
+    'inventory_item',
     InventoryItemSchema,
 )
 
 export function createInvoiceItemModelActions(
-    model: mongoose.Model<IInventoryItem>,
+    model: mongoose.Model<IInventoryItemDocument>,
 ) {
     return {
         getItem($id, user) {

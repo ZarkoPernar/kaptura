@@ -1,28 +1,15 @@
 import React, { Component, Children, cloneElement } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes, { func } from 'prop-types'
 import { Formik, Form, Field } from 'formik'
 import yup from 'yup'
 
 import FormGroup from './FormGroup'
 import Input from './Input'
 
-// const ThemeContext = React.createContext('light')
-// class ThemeProvider extends React.Component {
-//   state = {theme: 'light'}
-//   render() {
-//     return ThemeContext.provide(this.state.theme, this.props.children)
-//   }
-// }
-
-// const ThemeConsumer = ({children}) => ThemeContext.consume(children)
-
-// class App extends React.Component {
-//   render() {
-//     <ThemeProvider>
-//       <ThemeConsumer>{val => <div>{val}</div>}</ThemeConsumer>
-//     </ThemeProvider>
-//   }
-// }
+export const FormValidationContext = React.createContext({
+    errors: {},
+    values: {},
+})
 
 class EnhancedForm extends Component {
     handleSubmit = (
@@ -30,6 +17,24 @@ class EnhancedForm extends Component {
         { setSubmitting, setErrors /* setValues and other goodies */ },
     ) => {
         // do async validating after submitting to some api
+        console.log(values)
+        this.props.onSubmit(values)
+    }
+
+    createHandleBlur(handleBlur) {
+        return function onBlur(e) {
+            if (e.target.nodeName === 'BUTTON' || e.target.dataset.ignoreField)
+                return
+            handleBlur(e)
+        }
+    }
+
+    createHandleChange(handleChange) {
+        return function onBlur(e) {
+            if (e.target.nodeName === 'BUTTON' || e.target.dataset.ignoreField)
+                return
+            handleChange(e)
+        }
     }
 
     render() {
@@ -48,8 +53,12 @@ class EnhancedForm extends Component {
                     handleSubmit,
                     isSubmitting,
                 }) => (
-                    <Form>
-                        {Children.map(this.props.children, formGroup => {
+                    <Form
+                        autoComplete={this.props.autoComplete}
+                        onChange={this.createHandleChange(handleChange)}
+                        onBlur={this.createHandleBlur(handleBlur)}
+                    >
+                        {/* {Children.map(this.props.children, formGroup => {
                             const inputName =
                                 formGroup.props.children.props.name
 
@@ -58,7 +67,13 @@ class EnhancedForm extends Component {
                                 onChange: handleChange,
                                 error: errors[inputName],
                             })
-                        })}
+                        })} */}
+
+                        <FormValidationContext.Provider
+                            value={{ errors, values }}
+                        >
+                            {this.props.children}
+                        </FormValidationContext.Provider>
                     </Form>
                 )}
             />
