@@ -11,7 +11,7 @@
     left: 0px;
     right: 0px;
     bottom: 0px;
-    background-color: rgba(#2E3645, 0.75);
+    background-color: rgba(#2e3645, 0.75);
 
     &--after-open {
         .ReactModal__Content {
@@ -21,11 +21,11 @@
 
     &--before-close {
         opacity: 0;
-        transition: .3s ease opacity;
+        transition: 0.3s ease opacity;
 
         .ReactModal__Content {
             transform: translate3d(100%, 0, 0) !important;
-            transition: .3s ease transform;
+            transition: 0.3s ease transform;
         }
     }
 }
@@ -42,7 +42,7 @@
     outline: none;
     padding: 20px;
     transform: translate3d(100%, 0, 0);
-    transition: .3s ease transform;
+    transition: 0.3s ease transform;
 }
 
 .ReactModal__Overlay--after-open {
@@ -59,8 +59,7 @@
 
 .modal {
     form {
-        padding: 20px 30px;
-
+        padding: 0 20px;
     }
     &__header {
         margin-left: -20px;
@@ -82,5 +81,4 @@
         flex-direction: row-reverse;
         border-top: 1px solid #ddd;
     }
-
 }

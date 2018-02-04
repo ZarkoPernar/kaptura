@@ -42,11 +42,11 @@
 }
 
 @media (min-width: $medium-device) {
-   .App-sidenav.App-sidebar {
-       transform: none;
-       opacity: 1;
-       z-index: $sidenav-z;
-       width: $sidenav-sm-width;
+    .App-sidenav.App-sidebar {
+        transform: none;
+        opacity: 1;
+        z-index: $sidenav-z;
+        width: $sidenav-sm-width;
     }
 }
 
@@ -54,5 +54,7 @@
     .App-sidenav.App-sidebar {
         width: $sidenav-width;
     }
+    .App-sidebar--dark.App-sidenav .App-sidenav__container {
+        background-color: transparent;
+    }
 }
-

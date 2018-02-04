@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
-import Loadable from 'react-loadable';
+import Loadable from 'react-loadable'
 
 // import RegisterHistory from './RegisterHistory'
 
@@ -10,18 +10,18 @@ import KorisnikComponent from './pages/Korisnik'
 import LoginComponent from './pages/Login'
 import Zaposlenici from './employees/Page'
 import Klijenti from './clients/Page'
-
+import InventoryPage from './inventory/Page'
 // import SatiComponent from './clock/Page'
 // import InvoicesPage from './invoices/Page'
 // import Projekti from './projects/Page'
 
 function Loader(props) {
     if (props.error) {
-        return <div>Error!</div>;
+        return <div>Error!</div>
     } else if (props.pastDelay) {
-        return <div>Loading...</div>;
+        return <div>Loading...</div>
     } else {
-        return null;
+        return null
     }
 }
 
@@ -40,7 +40,6 @@ const InvoicesPage = Loadable({
     loader: () => import('./invoices/Page'),
 })
 
-
 export default class AppBody extends Component {
     render() {
         return (
@@ -50,6 +49,7 @@ export default class AppBody extends Component {
                 <Route path="/tvrtka" component={TvrtkaComponent} />
                 <Route path="/korisnik" component={KorisnikComponent} />
                 <Route path="/projekti" component={Projekti} />
+                <Route path="/skladiste" component={InventoryPage} />
                 <Route path="/zaposlenici" component={Zaposlenici} />
                 {/* <Route path="/projekti/charts" component={ProjectChartsComponent} /> */}
                 <Route path="/klijenti" component={Klijenti} />

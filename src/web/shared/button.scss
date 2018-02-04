@@ -1,7 +1,7 @@
 @import '../App.scss';
 @import '../mixins.scss';
 
-$button-border-radius: 0;
+$button-border-radius: 2px;
 $button-box-shadow: 3px 3px 0 rgba(70, 70, 70, 0.15);
 
 $button-default-color: #566177;
@@ -29,7 +29,9 @@ $button-default-border: 1px solid darken($bc-light, 20);
     border: 0;
     outline-color: darken($bc-light, 60);
     // box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    @include square-shadow;
+    box-shadow: 0 0px 2px rgba(70, 70, 70, 0.36),
+        0 3px 5px rgba(70, 70, 70, 0.08);
+    // @include square-shadow;
     cursor: pointer;
     transform: scale(1);
     transition: 0.1s ease transform;
@@ -51,6 +53,16 @@ $button-default-border: 1px solid darken($bc-light, 20);
     &:active {
         // transform: scale(.98);
         outline: none !important;
+    }
+
+    &--color-default {
+        background-image: linear-gradient(-180deg, #fdfdfd 0%, #fbfbfb 90%);
+
+        &:hover {
+            // background-color: darken($bc-light, 3);
+            background-color: rgba(86, 97, 119, 0.05);
+            background-image: none;
+        }
     }
 
     &--primary,
@@ -89,13 +101,6 @@ $button-default-border: 1px solid darken($bc-light, 20);
         background-color: $bc-light;
     }
 
-    svg {
-        // margin-top: -2px;
-        margin-left: -0.8rem;
-        font-size: 1.25rem;
-        margin-right: 0.8rem;
-    }
-
     &--small {
         height: 2em;
     }
@@ -104,6 +109,16 @@ $button-default-border: 1px solid darken($bc-light, 20);
         font-size: 1.2rem;
         height: 3em;
         padding: 0.9rem 1.5rem;
+    }
+
+    &--icon-left {
+        padding-left: 2.75rem;
+
+        svg {
+            position: absolute;
+            font-size: 1.25rem;
+            left: 0.75rem;
+        }
     }
 
     &--icon-only {
@@ -150,6 +165,7 @@ $button-default-border: 1px solid darken($bc-light, 20);
     &--outline {
         color: $button-default-color;
         background-color: transparent;
+        background-image: none;
         box-shadow: none;
         border: 1px solid $button-default-background-color;
         outline-color: $bc-dark;
@@ -157,6 +173,7 @@ $button-default-border: 1px solid darken($bc-light, 20);
 
     &--clear {
         background-color: transparent;
+        background-image: none;
         box-shadow: none;
         outline-color: $bc-dark;
         z-index: 1;
@@ -168,7 +185,7 @@ $button-default-border: 1px solid darken($bc-light, 20);
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: -1;
+            z-index: -2;
             background-color: rgba(70, 70, 70, 0.1);
             opacity: 0;
             transition: 0.3s ease opacity;
@@ -246,7 +263,7 @@ $button-default-border: 1px solid darken($bc-light, 20);
     position: absolute;
     background-color: rgba(70, 70, 70, 0.3);
     border-radius: 50%;
-    transition: 0.6s ease transform, 0.6s ease opacity;
+    transition: 1s ease transform, 1s ease opacity;
     z-index: -1;
     transform: scale(0);
 }

@@ -15,6 +15,10 @@ import userInfo from './userInfo.reducer'
 import employees, { onlineEmployees } from './employees/reducer'
 
 import createStoreList from './utils/createStoreList'
+import {
+    inventoryStoreList,
+    inventoryFavoritesStoreList,
+} from './inventory/reducer'
 
 export default combineReducers({
     userInfo,
@@ -32,5 +36,6 @@ export default combineReducers({
     employees,
     onlineEmployees: onlineEmployees.reducer,
     notifications: createStoreList('notifications').reducer,
+    [inventoryStoreList.name]: inventoryStoreList.reducer,
+    [inventoryFavoritesStoreList.name]: inventoryFavoritesStoreList.reducer,
 })
-

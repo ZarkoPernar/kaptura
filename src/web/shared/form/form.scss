@@ -1,9 +1,10 @@
 @import '../../App';
 @import '../../mixins';
 
-$size: .5em;
-$line-transition: .38s transform cubic-bezier(.24, .8, 0, .97);
-$label-transition: .38s cubic-bezier(.24, .8, 0, .97) transform, .38s cubic-bezier(.24, .8, 0, .97) opacity;
+$size: 0.5em;
+$line-transition: 0.38s transform cubic-bezier(0.24, 0.8, 0, 0.97);
+$label-transition: 0.38s cubic-bezier(0.24, 0.8, 0, 0.97) transform,
+    0.38s cubic-bezier(0.24, 0.8, 0, 0.97) opacity;
 
 textarea {
     display: block;
@@ -21,29 +22,12 @@ textarea {
         top: 3 * $size;
         left: 0;
         color: $bc-earth;
-        font-weight: 700;
+        font-weight: 600;
         // transform: scale(.95);
-        opacity: .75;
+        opacity: 0.85;
         // transition: .2s ease transform, .2s ease opacity;
         transition: $label-transition;
-        z-index: 2;
-    }
-
-    &:after,
-    .form-group__line {
-        content: '';
-        background-color: $bc-earth;
-        position: absolute;
-        top: 100%;
-        margin-top: -1px;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        transform: scaleX(0);
-        // transition: .2s ease transform;
-        transition: $line-transition;
-        transform-origin: center;
-        z-index: 4;
+        z-index: 0;
     }
 
     &--active,
@@ -58,9 +42,11 @@ textarea {
             opacity: 1;
         }
 
-        &:after,
-        .form-group__line {
-            transform: scaleX(1);
+        .input-group {
+            &:after,
+            .form-group__line {
+                transform: scaleX(1);
+            }
         }
 
         &.form-group--flat {
@@ -69,7 +55,6 @@ textarea {
             }
         }
     }
-
 
     &--has-error {
         label {
@@ -81,9 +66,11 @@ textarea {
             border-color: $bc-fire;
         }
 
-        &:after,
-        .form-group__line {
-            background-color: $bc-fire;
+        .input-group {
+            &:after,
+            .form-group__line {
+                background-color: $bc-fire;
+            }
         }
     }
 
@@ -113,29 +100,48 @@ textarea {
 
     &--icon-left {
         label {
-            left: 2.5rem
+            left: 2.5rem;
         }
 
         &.form-group--inline {
             label {
                 left: 2.5rem;
             }
-
         }
+    }
 
+    &__messages {
+        padding-top: 0.5em;
     }
 }
 
 .input-group {
+    position: relative;
     display: flex;
 
+    &:after,
+    .form-group__line {
+        content: '';
+        background-color: $bc-earth;
+        position: absolute;
+        top: 100%;
+        margin-top: -1px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        transform: scaleX(0);
+        // transition: .2s ease transform;
+        transition: $line-transition;
+        transform-origin: center;
+        z-index: 1;
+    }
 }
 
 .form-control {
     color: #566177;
     border: 0;
     width: 100%;
-    padding: .65rem 0 $size;
+    padding: 0.65rem 0 $size;
     border-bottom: 1px solid #ccc;
     background-color: transparent;
 
@@ -148,13 +154,11 @@ textarea {
         background-color: #eee;
         cursor: not-allowed;
     }
-
 }
 
 .rc-time-picker {
     display: block;
     width: 100%;
-
 
     &-input {
         color: initial;
@@ -165,7 +169,6 @@ textarea {
         border-bottom: 1px solid #ccc;
         background-color: transparent;
         padding: $size 0;
-
     }
 }
 
@@ -175,8 +178,8 @@ textarea {
     label {
         opacity: 1;
         pointer-events: none;
-        top: .8rem;
-        left: .5em;
+        top: 0.8rem;
+        left: 0.5em;
         transform: none !important;
     }
 
@@ -192,7 +195,6 @@ textarea {
         }
     }
 
-
     &::after {
         content: none;
     }
@@ -204,20 +206,19 @@ textarea {
         height: 100%;
     }
     .input-group {
-        background-color: #EFF0F4;
+        background-color: #eff0f4;
         border-radius: 2px;
         border: 0;
-        transition: .2s ease background-color;
+        transition: 0.2s ease background-color;
     }
 }
 
-
 .form-control--flat {
-    background-color: #EFF0F4;
+    background-color: #eff0f4;
     border-radius: 2px;
     border: 0;
-    padding-left: .5em;
-    transition: .2s ease background-color;
+    padding-left: 0.5em;
+    transition: 0.2s ease background-color;
 
     &:focus {
         background-color: rgba(86, 97, 119, 0.22);
@@ -226,5 +227,5 @@ textarea {
 
 body *::selection {
     color: #fff;
-    background-color: #8190AF;
+    background-color: #8190af;
 }

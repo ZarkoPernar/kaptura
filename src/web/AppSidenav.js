@@ -9,12 +9,14 @@ import './AppSidenav.scss'
 
 const AppSidenav = () => {
     return (
-        <Sidebar className="App-sidenav">
+        <Sidebar className="App-sidenav App-sidebar--dark">
             <div className="App-sidenav__container">
                 <Nav />
 
                 <div key="logout" className="App-sidenav__logout">
-                    <Button href="/auth/logout" block flat>Log Out</Button>
+                    <Button href="/auth/logout" block flat>
+                        Log Out
+                    </Button>
                 </div>
             </div>
         </Sidebar>

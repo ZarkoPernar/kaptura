@@ -45,38 +45,39 @@ export default class ButtonComponent extends Component {
         }
     }
 
-    onMouseDown = (event) => {
-        if (this.props.disabled === true || event.nativeEvent.which !== 1) return
+    onMouseDown = event => {
+        if (this.props.disabled === true || event.nativeEvent.which !== 1)
+            return
 
         this._measurements = this._element.getBoundingClientRect()
 
         const ripple = createRipple(event, this._scrollHost)
 
         this.setState(state => ({
-            ripples: [...state.ripples, ripple]
+            ripples: [...state.ripples, ripple],
         }))
     }
 
-    onMouseUp = (event) => {
-        if (this.props.disabled === true || event.nativeEvent.which !== 1) return
+    onMouseUp = event => {
+        if (this.props.disabled === true || event.nativeEvent.which !== 1)
+            return
 
         this.clearRipples()
 
         this.setState(state => ({
-            ripples: replaceLastItem(state.ripples, { mouseUp: true })
+            ripples: replaceLastItem(state.ripples, { mouseUp: true }),
         }))
     }
 
     _clearRipples = () => {
         this.setState({
-            ripples: []
+            ripples: [],
         })
     }
 
     clearRipples = debounce(this._clearRipples, 800)
 
-
-    getRef = (ref) => {
+    getRef = ref => {
         if (!ref) {
             return
         }
@@ -85,23 +86,56 @@ export default class ButtonComponent extends Component {
     }
 
     render() {
-        const { iconOnly, small, clear, large, block, full, children, color, flat, outline, className, ...rest } = this.props
+        const {
+            iconOnly,
+            iconLeft,
+            small,
+            clear,
+            large,
+            block,
+            full,
+            children,
+            color,
+            flat,
+            outline,
+            className,
+            ...rest
+        } = this.props
 
         return (
-            <button ref={this.getRef} className={'btn ' + (color ? (' btn--color-' + color + ' ') : '') + classnames({
-                    'btn--icon-only': iconOnly,
-                    'btn--small': small,
-                    'btn--clear': clear,
-                    'btn--outline': outline,
-                    'btn--large': large,
-                    'btn--flat': flat,
-                    'btn--block': block,
-                    'btn--full': full,
-            }) + ' ' + (className || '')} {...rest} onMouseDown={this.onMouseDown} onMouseUp={this.onMouseUp}>
+            <button
+                ref={this.getRef}
+                className={
+                    'btn ' +
+                    (color ? ' btn--color-' + color + ' ' : '') +
+                    classnames({
+                        'btn--icon-only': iconOnly,
+                        'btn--icon-left': iconLeft,
+                        'btn--small': small,
+                        'btn--clear': clear,
+                        'btn--outline': outline,
+                        'btn--large': large,
+                        'btn--flat': flat,
+                        'btn--block': block,
+                        'btn--full': full,
+                    }) +
+                    ' ' +
+                    (className || '')
+                }
+                {...rest}
+                onMouseDown={this.onMouseDown}
+                onMouseUp={this.onMouseUp}
+            >
                 {children}
 
                 <div className="ripples">
-                    {this.state.ripples.map((e, i) => <Ripple key={i} hostElement={this._measurements} event={e} />)}
+                    {this.state.ripples.map((e, i) => (
+                        <Ripple
+                            key={i}
+                            hostElement={this._measurements}
+                            event={e}
+                        />
+                    ))}
                 </div>
             </button>
         )

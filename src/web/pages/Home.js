@@ -18,17 +18,15 @@ export default class HomePage extends Component {
                         <h2>Buttons</h2>
                         <Flex grid>
                             <div className="padding-sm">
-                                <Button small>
+                                <Button small color="default">
                                     Button small
                                 </Button>
                             </div>
                             <div className="padding-sm">
-                                <Button>
-                                    Button
-                                </Button>
+                                <Button color="default">Button</Button>
                             </div>
                             <div className="padding-sm">
-                                <Button large>
+                                <Button large color="default">
                                     Button large
                                 </Button>
                             </div>
@@ -37,9 +35,7 @@ export default class HomePage extends Component {
                         <h3>Colors</h3>
                         <Flex grid>
                             <div className="padding-sm">
-                                <Button clear>
-                                    Button clear
-                                </Button>
+                                <Button clear>Button clear</Button>
                             </div>
 
                             <div className="padding-sm">
@@ -76,7 +72,6 @@ export default class HomePage extends Component {
                         <Button color="primary" block>
                             Button block
                         </Button>
-
                     </CardBody>
 
                     <Button color="primary" full>
@@ -98,14 +93,18 @@ export default class HomePage extends Component {
                         </FormGroup>
 
                         <h4>Label as a child element</h4>
-                        <FormGroup label={<Label><HomeIcon style={{fontSize: '1.2rem'}} /> Label child</Label>}>
+                        <FormGroup
+                            label={
+                                <Label>
+                                    <HomeIcon style={{ fontSize: '1.2rem' }} />{' '}
+                                    Label child
+                                </Label>
+                            }
+                        >
                             <Input />
                         </FormGroup>
-
                     </CardBody>
-
                 </Card>
-
             </div>
         )
     }

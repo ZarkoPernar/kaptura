@@ -24,7 +24,7 @@ export default class AppHeader extends Component {
         }
     }
 
-    getBtnRef = (ref) => {
+    getBtnRef = ref => {
         this._btn = ref
     }
 
@@ -32,7 +32,7 @@ export default class AppHeader extends Component {
         document.body.classList.remove('App--menuIsOpen')
     }
 
-    toggle = (event) => {
+    toggle = event => {
         event.stopPropagation()
         document.body.classList.toggle('App--menuIsOpen')
     }
@@ -40,15 +40,16 @@ export default class AppHeader extends Component {
     render() {
         return (
             <header role="banner" className="App-heading">
-                <div className="App-logo">
-                    <h2 className="App-logo__text">
-                        Kaptura
-                    </h2>
+                <div className="App-logo App-logo--dark">
+                    <h2 className="App-logo__text">Kaptura</h2>
                 </div>
 
                 <div className="App-heading__inner">
                     <span className="App-heading__menu-btn">
-                        <button className="btn btn--clear btn--icon-only btn--large" ref={this.getBtnRef}>
+                        <button
+                            className="btn btn--clear btn--icon-only btn--large"
+                            ref={this.getBtnRef}
+                        >
                             <MdMenu />
                         </button>
                     </span>
@@ -56,12 +57,16 @@ export default class AppHeader extends Component {
                     <Clock />
 
                     <div className="flex">
-                        <Button large clear iconOnly onClick={this.props.toggleChat}>
+                        <Button
+                            large
+                            clear
+                            iconOnly
+                            onClick={this.props.toggleChat}
+                        >
                             <NotificationBadge />
                             <MdChat />
                         </Button>
                     </div>
-
                 </div>
             </header>
         )

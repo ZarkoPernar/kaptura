@@ -40,7 +40,7 @@ function registerRoutes(app) {
     company_1.default(app);
     employee_1.default(app);
     app.all('*', localAuth_1.localAuthMiddleware, staticMiddleware, (req, res) => {
-        res.sendFile(indexFileLocation);
+        res.sendFile('index.html', { root: process.cwd() + '/public' });
     });
 }
 exports.default = registerRoutes;

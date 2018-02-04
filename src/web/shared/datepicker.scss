@@ -1,0 +1,22 @@
+@import '../App';
+
+.react-datepicker-popper {
+    z-index: 999;
+}
+
+.react-datepicker {
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(70, 70, 70, 0.2);
+
+    &__header {
+        border-radius: 2px;
+        border: 0;
+    }
+
+    &__day--selected,
+    &__day--in-selecting-range,
+    &__day--in-range {
+        background-color: $bc-dark;
+    }
+}

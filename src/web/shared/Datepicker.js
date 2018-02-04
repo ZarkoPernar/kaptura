@@ -4,6 +4,8 @@ import DatePicker from 'react-datepicker'
 import classnames from 'classnames'
 import 'react-datepicker/dist/react-datepicker.css'
 
+import './datepicker.scss'
+
 const DATE_SHORT_FORMAT = 'DD.MM.YYYY'
 
 function getValueFromProps(isoString) {

@@ -1,8 +1,8 @@
 @import './App';
 @import './palette';
 
-$link-padding-sm: 0.7rem 1.2rem;
-$link-padding-md: 1.2rem 1.2rem;
+$link-padding-sm: 0.7rem 1rem;
+$link-padding-md: 0.8rem 1rem;
 
 .nav {
     // padding-top: 1rem;
@@ -15,7 +15,7 @@ $link-padding-md: 1.2rem 1.2rem;
 
     &__link {
         display: block;
-        border-right: 2px solid transparent;
+        border-left: 4px solid transparent;
         text-decoration: none;
         color: $nav-c;
         font-weight: 600;
@@ -65,7 +65,7 @@ $link-padding-md: 1.2rem 1.2rem;
 
             color: $nav-c-active;
             background-color: $nav-bg-active;
-            border-color: $bc-dark;
+            border-color: $nav-c;
 
             // color: $bc-warning;
             // background-color: #566177;
@@ -118,5 +118,25 @@ $link-padding-md: 1.2rem 1.2rem;
 @media (min-width: $large-device) {
     .nav__link {
         padding: $link-padding-md;
+    }
+}
+
+@media (min-width: $large-device) {
+    .App-sidebar--dark {
+        .nav__link {
+            color: #b6c5e0;
+            &:hover {
+                color: #e2e7f1;
+                background-color: #262d3c;
+            }
+
+            &--active,
+            &--active:hover {
+                color: $nav-c-active;
+                background-color: #262d3c;
+                border-color: #2e3645;
+                border-color: transparent;
+            }
+        }
     }
 }

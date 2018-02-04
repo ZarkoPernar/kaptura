@@ -13,13 +13,11 @@ import TableCell from '../shared/table/TableCell'
 
 import { isInvoicePassedDue } from './utils'
 
-const ProjectList = ({ items, rowClick, nextPage, prevPage, pageNumber, }) => (
+const ProjectList = ({ items, rowClick, nextPage, prevPage, pageNumber }) => (
     <div>
         <Table key="table">
             <TableHead key="head">
-                <TableHeading width="1%">
-                    Placeno
-                </TableHeading>
+                <TableHeading width="1%">Placeno</TableHeading>
                 <TableHeading>Broj</TableHeading>
                 <TableHeading>Projekt</TableHeading>
                 <TableHeading>Klijent</TableHeading>
@@ -28,59 +26,75 @@ const ProjectList = ({ items, rowClick, nextPage, prevPage, pageNumber, }) => (
                 <TableHeading>Rok Placanja</TableHeading>
                 <TableHeading>Biljeske</TableHeading>
             </TableHead>
-            {
-                items.map(invoice => {
-                    return (
-                        <TableRow key={invoice._id} hover condensed onClick={rowClick} item={invoice}
-                            color={!invoice.payment_received && isInvoicePassedDue(invoice.due_date) === true ? 'danger' : ''}>
-                            <TableCell center>
-                                <span style={{fontSize: '1.5rem', lineHeight: 0,}}>{invoice.payment_received === true ? <MdCheck /> : null}</span>
-                            </TableCell>
+            {items.map(invoice => {
+                return (
+                    <TableRow
+                        key={invoice._id}
+                        // hover
+                        condensed
+                        // onClick={rowClick}
+                        item={invoice}
+                        color={
+                            !invoice.payment_received &&
+                            isInvoicePassedDue(invoice.due_date) === true
+                                ? 'danger'
+                                : ''
+                        }
+                    >
+                        <TableCell center>
+                            <span style={{ fontSize: '1.5rem', lineHeight: 0 }}>
+                                {invoice.payment_received === true ? (
+                                    <MdCheck />
+                                ) : null}
+                            </span>
+                        </TableCell>
 
-                            <TableCell>
-                                <Link className="" to={{
+                        <TableCell>
+                            <Link
+                                className=""
+                                to={{
                                     pathname: '/fakture/' + invoice._id,
                                     state: {
                                         invoice,
                                     },
-                                }}>
-                                    {invoice.number ? invoice.number : 'Nema Broj'}
-                                </Link>
-                            </TableCell>
+                                }}
+                            >
+                                {invoice.number ? invoice.number : 'Nema Broj'}
+                            </Link>
+                        </TableCell>
 
-                            <TableCell>
-                                {invoice.project ? invoice.project.name : ''}
-                            </TableCell>
+                        <TableCell>
+                            {invoice.project ? invoice.project.name : ''}
+                        </TableCell>
 
-                            <TableCell>
-                                { invoice.client ? invoice.client.name : '' }
-                            </TableCell>
+                        <TableCell>
+                            {invoice.client ? invoice.client.name : ''}
+                        </TableCell>
 
-                            <TableCell>
-                                { invoice.issued_by ? invoice.issued_by.name : '' }
-                            </TableCell>
+                        <TableCell>
+                            {invoice.issued_by ? invoice.issued_by.name : ''}
+                        </TableCell>
 
-                            <TableCell>
-                                <DisplayDate>{invoice.issue_date}</DisplayDate>
-                            </TableCell>
+                        <TableCell>
+                            <DisplayDate>{invoice.issue_date}</DisplayDate>
+                        </TableCell>
 
-                            <TableCell>
-                                <DisplayDate>{invoice.due_date}</DisplayDate>
-                            </TableCell>
+                        <TableCell>
+                            <DisplayDate>{invoice.due_date}</DisplayDate>
+                        </TableCell>
 
-                            <TableCell>
-                                { invoice.notes }
-                            </TableCell>
-                        </TableRow>
-                    )
-                })
-            }
+                        <TableCell>{invoice.notes}</TableCell>
+                    </TableRow>
+                )
+            })}
         </Table>
 
-        <Pagination key="pages"
+        <Pagination
+            key="pages"
             nextPage={nextPage}
             prevPage={prevPage}
-            currentPage={pageNumber} />
+            currentPage={pageNumber}
+        />
     </div>
 )
 

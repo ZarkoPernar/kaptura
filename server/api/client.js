@@ -5,7 +5,7 @@ const defaultListParams = {
     pages: {
         pageSize: 25,
         pageNumber: 1,
-    }
+    },
 };
 async function getItem(request, response) {
     const id = request.params.id;
@@ -20,25 +20,21 @@ async function list(request, response) {
     }
     const query = client_1.Model.find();
     if (!request.user.company_id) {
-        query
-            .where('created_by')
-            .equals(request.user._id);
+        query.where('created_by').equals(request.user._id);
     }
     else {
-        query
-            .where('company_id')
-            .equals(request.user.company_id);
+        query.where('company_id').equals(request.user.company_id);
     }
     if (params.name !== undefined) {
         query.find({ name: { $regex: new RegExp(params.name, 'gi') } });
     }
-    const result = await query
+    const data = await query
         .sort({
         created_at: -1,
     })
         .skip(params.pages.pageSize * (params.pages.pageNumber - 1))
         .limit(params.pages.pageSize);
-    response.status(200).json(result);
+    response.status(200).json({ data });
 }
 exports.list = list;
 async function create(request, response) {

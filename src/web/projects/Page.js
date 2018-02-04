@@ -32,13 +32,19 @@ import { storeItem as rootStoreItem } from './reducer'
 import './projekti.scss'
 
 @connect(state => ({ company: state.companyInfo.data }), {
-    addProjectAtRoot: payload => ({ payload, type: rootStoreItem.types.ADD_ITEM, }),
-    updateProjectAtRoot: payload => ({ payload, type: rootStoreItem.types.UPDATE_ITEM_SUCCESS, }),
+    addProjectAtRoot: payload => ({
+        payload,
+        type: rootStoreItem.types.ADD_ITEM,
+    }),
+    updateProjectAtRoot: payload => ({
+        payload,
+        type: rootStoreItem.types.UPDATE_ITEM_SUCCESS,
+    }),
 })
 @createStoreListComponent({
     storeName: storeItem.name,
     actions: storeItem.actions,
-    rootStoreItem
+    rootStoreItem,
 })
 export default class ProjectPage extends Component {
     static defaultProps = {
@@ -78,10 +84,9 @@ export default class ProjectPage extends Component {
         this.update$$.unsubscribe()
     }
 
-
-    applyFilters = (filters) => {
+    applyFilters = filters => {
         this.setState({
-            filters
+            filters,
         })
 
         this.props.list({
@@ -89,7 +94,7 @@ export default class ProjectPage extends Component {
         })
     }
 
-    selectTab = (activeTab) => {
+    selectTab = activeTab => {
         this.setState({
             activeTab,
         })
@@ -100,19 +105,25 @@ export default class ProjectPage extends Component {
             pages: {
                 pageSize: this.state.pageSize,
                 pageNumber: this.state.pageNumber,
-            }
+            },
         })
     }
 
     nextPage = () => {
-        this.setState(state => ({ pageNumber: state.pageNumber + 1 }), this.getProjects)
+        this.setState(
+            state => ({ pageNumber: state.pageNumber + 1 }),
+            this.getProjects,
+        )
     }
 
     prevPage = () => {
-        this.setState(state => ({ pageNumber: state.pageNumber - 1 }), this.getProjects)
+        this.setState(
+            state => ({ pageNumber: state.pageNumber - 1 }),
+            this.getProjects,
+        )
     }
 
-    submitProject = (project) => {
+    submitProject = project => {
         if (project._id === undefined) {
             this.createProject(project)
         } else {
@@ -120,7 +131,7 @@ export default class ProjectPage extends Component {
         }
     }
 
-    createProject = (project) => {
+    createProject = project => {
         this.dismiss()
 
         const newProject = {
@@ -128,29 +139,24 @@ export default class ProjectPage extends Component {
             _id: uid(),
         }
 
-        this.props.add(newProject)
-            .catch(this.handleProjectError)
-
+        this.props.add(newProject).catch(this.handleProjectError)
     }
 
-    updateProject = (project) => {
+    updateProject = project => {
         this.dismiss()
 
         this.setState({
             projectForEdit: null,
         })
 
-        this.props.update(project)
-            .catch(this.handleProjectError)
+        this.props.update(project).catch(this.handleProjectError)
     }
 
-
-
-    handleProjectError = (err) => {
+    handleProjectError = err => {
         this.setState({
             toasts: {
-                description: err.message
-            }
+                description: err.message,
+            },
         })
     }
 
@@ -161,7 +167,7 @@ export default class ProjectPage extends Component {
         })
     }
 
-    openProject = (project) => {
+    openProject = project => {
         this.setState({
             projectForEdit: project,
             isEditModalOpen: true,
@@ -175,7 +181,7 @@ export default class ProjectPage extends Component {
         })
     }
 
-    askForRemove = (project) => {
+    askForRemove = project => {
         this.setState({
             projectForDelete: project,
             isDeleteModalOpen: true,
@@ -199,7 +205,7 @@ export default class ProjectPage extends Component {
 
     toggleRemoval = () => {
         this.setState(state => ({
-            allowRemoval: !state.allowRemoval
+            allowRemoval: !state.allowRemoval,
         }))
     }
 
@@ -217,11 +223,11 @@ export default class ProjectPage extends Component {
         this.setState({ isEditModalOpen: false })
     }
 
-    renderCalendar = (projects) => (
+    renderCalendar = projects => (
         <Calendar items={projects} onEventChange={this.submitProject} />
     )
 
-    renderList = (projects) =>  (
+    renderList = projects => (
         <ProjectList
             projects={projects}
             rowRemove={this.askForRemove}
@@ -229,60 +235,94 @@ export default class ProjectPage extends Component {
             pageNumber={this.state.pageNumber}
             pageSize={this.state.pageSize}
             nextPage={this.nextPage}
-            prevPage={this.prevPage} />
+            prevPage={this.prevPage}
+        />
     )
 
     renderMap = () => {
         return null
     }
 
-
     render() {
-        const projectForEdit = this.state.projectForEdit === null ? undefined : this.state.projectForEdit
-        const projects = this.state.projects.length ? this.state.projects : this.props.items
+        const projectForEdit =
+            this.state.projectForEdit === null
+                ? undefined
+                : this.state.projectForEdit
+        const projects = this.state.projects.length
+            ? this.state.projects
+            : this.props.items
 
         return (
             <Page name="Projekti" hasSubheader>
                 <Toaster toasts={this.state.toasts} />
-                <Modal isOpen={this.state.isEditModalOpen} onRequestClose={this._executeAfterModalClose}>
+                <Modal
+                    isOpen={this.state.isEditModalOpen}
+                    onRequestClose={this._executeAfterModalClose}
+                >
                     <EditProjectForm
                         project={projectForEdit}
                         onSubmit={this.submitProject}
                         createInvoice={this.createInvoice}
-                        onDismiss={this.dismiss} />
+                        onDismiss={this.dismiss}
+                    />
                 </Modal>
 
                 <Modal isOpen={this.state.isDeleteModalOpen}>
                     <DeleteProjectDialog
                         confirm={this.deleteConfirm}
                         dismiss={this.deleteDismiss}
-                        project={this.state.projectForDelete} />
+                        project={this.state.projectForDelete}
+                    />
                 </Modal>
 
                 <PageSubheader>
-                    <ProjectTabs activeTab={this.state.activeTab} selectTab={this.selectTab} />
+                    <ProjectTabs
+                        activeTab={this.state.activeTab}
+                        selectTab={this.selectTab}
+                    />
 
-                    <PageFilters filters={this.state.filters} applyFilters={this.applyFilters} />
+                    <PageFilters
+                        filters={this.state.filters}
+                        applyFilters={this.applyFilters}
+                    />
 
-                    <Button flat color="primary" onClick={this.openNew}>
+                    <Button
+                        flat
+                        iconLeft
+                        color="primary"
+                        onClick={this.openNew}
+                    >
                         <MdAdd />
                         Novi Projekt
                     </Button>
                 </PageSubheader>
 
-
                 <PageBody>
-                    <Route render={() => this.renderList(projects)} path="/projekti" exact />
+                    <Route
+                        render={() => this.renderList(projects)}
+                        path="/projekti"
+                        exact
+                    />
 
-                    <Route render={() => this.renderCalendar(projects)} path="/projekti/kalendar" />
+                    <Route
+                        render={() => this.renderCalendar(projects)}
+                        path="/projekti/kalendar"
+                    />
                 </PageBody>
 
-                <Route render={() => (
-                    <Map
-                        locations={projects}
-                        center={this.props.company && this.props.company.position}
-                        height="calc(100vh - 128px)" />
-                    )} path="/projekti/karta" />
+                <Route
+                    render={() => (
+                        <Map
+                            locations={projects}
+                            center={
+                                this.props.company &&
+                                this.props.company.position
+                            }
+                            height="calc(100vh - 128px)"
+                        />
+                    )}
+                    path="/projekti/karta"
+                />
             </Page>
         )
     }

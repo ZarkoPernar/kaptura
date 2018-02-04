@@ -4,7 +4,10 @@ const { promisify } = require('util')
 import { IUser } from './user'
 import { location, ITimestampsSchema, IModifiedBySchema } from './default'
 
-interface IBaseInventoryItem extends ITimestampsSchema, IModifiedBySchema {
+export interface IBaseInventoryItem
+    extends ITimestampsSchema,
+        IModifiedBySchema,
+        mongoose.Document {
     _id: string
     company_id: string
     name: string
@@ -20,10 +23,9 @@ interface IBaseInventoryItem extends ITimestampsSchema, IModifiedBySchema {
 export interface IInventoryItem extends IBaseInventoryItem {
     favorite_id?: string
 }
-export interface IFavoriteInventoryItem extends IBaseInventoryItem {}
 
 const UPDATE_OPTIONS = { new: true }
-const IBaseInventoryItemSchema = {
+export const IBaseInventoryItemSchema = {
     company_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -50,12 +52,6 @@ const InventoryItemSchema = new mongoose.Schema(
         timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
     },
 )
-const InventoryFavoriteItemSchema = new mongoose.Schema(
-    IBaseInventoryItemSchema,
-    {
-        timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
-    },
-)
 
 // InvoiceItemSchema.index({ name: 'text' })
 
@@ -66,24 +62,15 @@ InventoryItemSchema.post('save', function(error: any, doc, next) {
         next(error)
     }
 })
-InventoryFavoriteItemSchema.post('save', function(error: any, doc, next) {
-    if (error.name === 'MongoError' && error.code === 11000) {
-        next(new Error('There was a duplicate key error'))
-    } else {
-        next(error)
-    }
-})
 
-export const InventoryItemModel = mongoose.model(
+export const InventoryItemModel = mongoose.model<IInventoryItem>(
     'invoice_item',
     InventoryItemSchema,
 )
-export const InventoryFavoriteItemModel = mongoose.model(
-    'invoice_item',
-    InventoryFavoriteItemSchema,
-)
 
-export function createInvoiceItemModelActions(model) {
+export function createInvoiceItemModelActions(
+    model: mongoose.Model<IInventoryItem>,
+) {
     return {
         getItem($id, user) {
             return model
@@ -97,7 +84,7 @@ export function createInvoiceItemModelActions(model) {
             user,
             offlineId,
         }: {
-            item: IInvoiceItem
+            item: IInventoryItem
             user: IUser
             offlineId?: string
         }) {
@@ -111,19 +98,20 @@ export function createInvoiceItemModelActions(model) {
             return new model(newItem).save()
         },
 
-        update({ item, user }: { item: IInvoiceItem; user: IUser }) {
+        update({ item, user }: { item: IInventoryItem; user: IUser }) {
             return model
                 .findById(item._id)
                 .where('company_id')
                 .equals(user.company_id)
                 .then(doc => {
+                    if (!doc) return Promise.resolve(doc)
                     Object.assign(doc, item)
 
                     return doc.save()
                 })
         },
 
-        remove({ item, user }: { item: IInvoiceItem; user: IUser }) {
+        remove({ item, user }: { item: IInventoryItem; user: IUser }) {
             return model
                 .findByIdAndRemove(item._id)
                 .where('company_id')
@@ -132,4 +120,4 @@ export function createInvoiceItemModelActions(model) {
     }
 }
 
-export default createInvoiceItemModelActions(Model)
+export default createInvoiceItemModelActions(InventoryItemModel)

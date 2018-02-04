@@ -32,6 +32,11 @@
     &__link {
         color: $bc-primary;
     }
+
+    &--dark {
+        color: #c9d4e8;
+        background-color: #343c4c;
+    }
 }
 
 .App-logo {
@@ -57,6 +62,20 @@
         text-transform: uppercase;
         letter-spacing: 0.35rem;
         text-align: center;
+    }
+}
+
+@media (min-width: $large-device) {
+    .App-logo {
+        &--dark {
+            background-color: #343c4c;
+            // border-bottom: 1px solid #4b525f;
+            border-right: 1px solid #4b525f;
+
+            h2 {
+                color: $logo-color;
+            }
+        }
     }
 }
 
