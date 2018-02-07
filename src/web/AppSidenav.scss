@@ -8,7 +8,6 @@
 
 .App-sidenav {
     color: $bc-light;
-    width: $sidenav-width;
 
     &__container {
         display: flex;
@@ -39,6 +38,10 @@
         //     }
         // }
     }
+}
+
+.App-sidenav.App-sidebar {
+    width: $sidenav-width;
 }
 
 @media (min-width: $medium-device) {
