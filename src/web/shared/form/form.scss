@@ -158,22 +158,6 @@ textarea {
     }
 }
 
-.rc-time-picker {
-    display: block;
-    width: 100%;
-
-    &-input {
-        color: initial;
-        font-size: 1rem;
-        border: 0;
-        height: auto;
-        line-height: 1.15;
-        border-bottom: 1px solid #ccc;
-        background-color: transparent;
-        padding: $size 0;
-    }
-}
-
 .form-group--inline {
     padding: 0;
 

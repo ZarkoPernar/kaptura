@@ -8,6 +8,7 @@ const project_1 = require("./project");
 const client_1 = require("./client");
 const invoice_1 = require("./invoice");
 const invoice_item_1 = require("./invoice.item");
+const inventory_item_1 = require("./inventory.item");
 const timesheet_1 = require("./timesheet");
 const user_1 = require("./user");
 const auth_1 = require("./auth");
@@ -39,6 +40,7 @@ function registerRoutes(app) {
     user_1.default(app);
     company_1.default(app);
     employee_1.default(app);
+    inventory_item_1.default(app);
     app.all('*', localAuth_1.localAuthMiddleware, staticMiddleware, (req, res) => {
         res.sendFile('index.html', { root: process.cwd() + '/public' });
     });

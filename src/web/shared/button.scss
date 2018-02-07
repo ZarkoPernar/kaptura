@@ -43,6 +43,8 @@ $button-default-border: 1px solid darken($bc-light, 20);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    -webkit-tap-highlight-color: #000;
+    -webkit-tap-highlight-color: transparent;
     // }
 
     &:hover {

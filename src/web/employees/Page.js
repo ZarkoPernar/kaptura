@@ -7,7 +7,7 @@ import EmployeeList from './List'
 import EditEmployeeForm from './Form'
 import DeleteDialog from './DeleteDialog'
 import Toaster from '../shared/toast/Toaster'
-import Modal from '../shared/modal'
+import Sidebar from '../shared/Sidebar/index'
 import Button from '../shared/Button'
 import createStoreListComponent from '../shared/StoreList'
 
@@ -20,18 +20,18 @@ const combine = (employees, online) => {
     }))
 }
 
-@connect(state => ({online: state.onlineEmployees.data || {}}))
+@connect(state => ({ online: state.onlineEmployees.data || {} }))
 @createStoreListComponent({
     storeName: 'employees',
-    actions: storeItem.actions
+    actions: storeItem.actions,
 })
 export default class EmployeesPage extends Component {
     state = {
         toasts: [],
         projectForEdit: null,
         projectForDelete: null,
-        isEditModalOpen: false,
-        isDeleteModalOpen: false,
+        isEditSidebarOpen: false,
+        isDeleteSidebarOpen: false,
         pageSize: 25,
         pageNumber: 1,
     }
@@ -46,7 +46,10 @@ export default class EmployeesPage extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.items !== this.props.items || nextProps.online !== this.props.online) {
+        if (
+            nextProps.items !== this.props.items ||
+            nextProps.online !== this.props.online
+        ) {
             this._employees = combine(nextProps.items, nextProps.online)
         }
     }
@@ -56,19 +59,25 @@ export default class EmployeesPage extends Component {
             pages: {
                 pageSize: this.state.pageSize,
                 pageNumber: this.state.pageNumber,
-            }
+            },
         })
     }
 
     nextPage = () => {
-        this.setState(state => ({ pageNumber: state.pageNumber + 1 }), this.getProjects)
+        this.setState(
+            state => ({ pageNumber: state.pageNumber + 1 }),
+            this.getProjects,
+        )
     }
 
     prevPage = () => {
-        this.setState(state => ({ pageNumber: state.pageNumber - 1 }), this.getProjects)
+        this.setState(
+            state => ({ pageNumber: state.pageNumber - 1 }),
+            this.getProjects,
+        )
     }
 
-    submitProject = (project) => {
+    submitProject = project => {
         if (project._id === undefined) {
             this.createProject(project)
         } else {
@@ -76,7 +85,7 @@ export default class EmployeesPage extends Component {
         }
     }
 
-    createProject = (project) => {
+    createProject = project => {
         this.dismiss()
 
         const newProject = {
@@ -84,61 +93,61 @@ export default class EmployeesPage extends Component {
             _id: uid(),
         }
 
-        this.props.add(newProject)
-            .catch(this.handleProjectError)
-
+        this.props.add(newProject).catch(this.handleProjectError)
     }
 
-    updateProject = (project) => {
+    updateProject = project => {
         this.dismiss()
 
         this.setState({
             projectForEdit: null,
         })
 
-        this.props.update(project)
-            .catch(this.handleProjectError)
+        this.props.update(project).catch(this.handleProjectError)
     }
 
-    removeToast = (toast) => {
-        this.setState((state) => ({
-            toasts: state.toasts.filter(temp => temp.id !== toast.id)
-        }))
-    }
-
-    handleProjectError = (err) => {
+    removeToast = toast => {
         this.setState(state => ({
-            toasts: [...state.toasts, {
-                description: err.message
-            }]
+            toasts: state.toasts.filter(temp => temp.id !== toast.id),
         }))
     }
 
-    _executeAfterModalClose = () => {
+    handleProjectError = err => {
+        this.setState(state => ({
+            toasts: [
+                ...state.toasts,
+                {
+                    description: err.message,
+                },
+            ],
+        }))
+    }
+
+    _executeAfterSidebarClose = () => {
         this.setState({
             projectForEdit: null,
-            isEditModalOpen: false,
+            isEditSidebarOpen: false,
         })
     }
 
-    openProject = (project) => {
+    openProject = project => {
         this.setState({
             projectForEdit: project,
-            isEditModalOpen: true,
+            isEditSidebarOpen: true,
         })
     }
 
     openNew = () => {
         this.setState({
             projectForEdit: null,
-            isEditModalOpen: true,
+            isEditSidebarOpen: true,
         })
     }
 
-    askForRemove = (project) => {
+    askForRemove = project => {
         this.setState({
             projectForDelete: project,
-            isDeleteModalOpen: true,
+            isDeleteSidebarOpen: true,
         })
     }
 
@@ -146,47 +155,55 @@ export default class EmployeesPage extends Component {
         this.props.remove(this.state.projectForDelete)
 
         this.setState({
-            isDeleteModalOpen: false,
+            isDeleteSidebarOpen: false,
         })
     }
 
     deleteDismiss = () => {
         this.setState({
             projectForDelete: null,
-            isDeleteModalOpen: false,
+            isDeleteSidebarOpen: false,
         })
     }
 
     toggleRemoval = () => {
         this.setState(state => ({
-            allowRemoval: !state.allowRemoval
+            allowRemoval: !state.allowRemoval,
         }))
     }
 
     dismiss = () => {
-        this.setState({ isEditModalOpen: false })
+        this.setState({ isEditSidebarOpen: false })
     }
 
     render() {
-        const projectForEdit = this.state.projectForEdit === null ? undefined : this.state.projectForEdit
+        const projectForEdit =
+            this.state.projectForEdit === null
+                ? undefined
+                : this.state.projectForEdit
 
         return (
             <div className="Klijenti page--padding">
                 <Toaster remove={this.removeToast} toasts={this.state.toasts} />
 
-                <Modal isOpen={this.state.isEditModalOpen} onRequestClose={this._executeAfterModalClose}>
+                <Sidebar
+                    isOpen={this.state.isEditSidebarOpen}
+                    onRequestClose={this._executeAfterSidebarClose}
+                >
                     <EditEmployeeForm
                         client={projectForEdit}
                         onSubmit={this.submitProject}
-                        onDismiss={this.dismiss} />
-                </Modal>
+                        onDismiss={this.dismiss}
+                    />
+                </Sidebar>
 
-                <Modal isOpen={this.state.isDeleteModalOpen}>
+                <Sidebar isOpen={this.state.isDeleteSidebarOpen}>
                     <DeleteDialog
                         confirm={this.deleteConfirm}
                         dismiss={this.deleteDismiss}
-                        project={this.state.projectForDelete} />
-                </Modal>
+                        project={this.state.projectForDelete}
+                    />
+                </Sidebar>
 
                 <div className="page__controls">
                     <Button color="primary" onClick={this.openNew}>
@@ -202,7 +219,8 @@ export default class EmployeesPage extends Component {
                     pageNumber={this.state.pageNumber}
                     pageSize={this.state.pageSize}
                     nextPage={this.nextPage}
-                    prevPage={this.prevPage} />
+                    prevPage={this.prevPage}
+                />
             </div>
         )
     }

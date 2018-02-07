@@ -11,13 +11,14 @@ import Table from '../shared/table/Table'
 import TableHead from '../shared/table/TableHead'
 import TableRow from '../shared/table/TableRow'
 import TableCell from '../shared/table/TableCell'
-import Modal from '../shared/modal'
+import Sidebar from '../shared/Sidebar'
 import Button from '../shared/Button'
 import MdStar from 'react-icons/lib/md/star'
 import MdStarOutline from 'react-icons/lib/md/star-outline'
 
 import EditItemForm from './EditItemForm'
 import { createOfflineId } from '../shared/offline.utils'
+import Currency from '../shared/Currency'
 
 class InventoryPage extends Component {
     static propTypes = {
@@ -36,23 +37,23 @@ class InventoryPage extends Component {
     openNew = () => {
         this.setState({
             itemForEdit: null,
-            isEditModalOpen: true,
+            isEditSidebarOpen: true,
         })
     }
 
-    closeModalAndClearItem() {
+    closeSidebarAndClearItem() {
         this.setState({
             itemForEdit: null,
-            isEditModalOpen: false,
+            isEditSidebarOpen: false,
         })
     }
 
     onRequestClose = () => {
-        this.closeModalAndClearItem()
+        this.closeSidebarAndClearItem()
     }
 
     dismissEditForm = () => {
-        this.closeModalAndClearItem()
+        this.closeSidebarAndClearItem()
     }
 
     onSubmit = val => {
@@ -69,8 +70,8 @@ class InventoryPage extends Component {
     render() {
         return (
             <Page hasSubheader>
-                <Modal
-                    isOpen={this.state.isEditModalOpen}
+                <Sidebar
+                    isOpen={this.state.isEditSidebarOpen}
                     onRequestClose={this.onRequestClose}
                 >
                     <EditItemForm
@@ -78,7 +79,7 @@ class InventoryPage extends Component {
                         onSubmit={this.onSubmit}
                         onDismiss={this.dismissEditForm}
                     />
-                </Modal>
+                </Sidebar>
 
                 <PageSubheader>
                     <Button flat color="primary" onClick={this.openNew}>
@@ -94,7 +95,6 @@ class InventoryPage extends Component {
                                 'Tip',
                                 'Brand',
                                 'Cijena',
-                                'Valuta',
                                 'Kolicina',
                                 'Mjera',
                                 'Favorit',
@@ -107,9 +107,10 @@ class InventoryPage extends Component {
                                 <TableCell>{item.type}</TableCell>
                                 <TableCell>{item.brand_name}</TableCell>
                                 <TableCell>
-                                    {item.price.$numberDecimal}
+                                    <Currency currency={item.currency}>
+                                        {item.price}
+                                    </Currency>
                                 </TableCell>
-                                <TableCell>{item.currency}</TableCell>
                                 <TableCell>{item.quantity}</TableCell>
                                 <TableCell>{item.unit}</TableCell>
                                 <TableCell>

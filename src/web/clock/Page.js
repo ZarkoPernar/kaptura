@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import Modal from '../shared/modal'
+import Sidebar from '../shared/Sidebar'
 import Page from '../shared/Page'
 import PageSubheader from '../shared/PageSubheader'
 import Pagination from '../shared/Pagination'
@@ -36,65 +36,75 @@ export default class SatiPage extends Component {
         this.props.list()
     }
 
-    applyFilters = (filters) => {
+    applyFilters = filters => {
         this.setState({
-            filters
+            filters,
         })
         this.props.list({
             filters,
             pages: {
-                pageNumber: this.currentPage
-            }
+                pageNumber: this.currentPage,
+            },
         })
     }
 
-    onPageChange = (currentPage) => {
-        console.log(currentPage);
+    onPageChange = currentPage => {
+        console.log(currentPage)
 
         this.props.list({
             filters: this.state.filters,
             pages: {
-                pageNumber: currentPage
-            }
+                pageNumber: currentPage,
+            },
         })
         this.currentPage = currentPage
     }
 
-    selectLog = (log) => {
+    selectLog = log => {
         this.setState({
             timeForEdit: log,
-            isEditModalOpen: true,
+            isEditSidebarOpen: true,
         })
     }
 
-    _executeAfterModalClose = () => {
-        if (!this.state.isEditModalOpen) return
+    _executeAfterSidebarClose = () => {
+        if (!this.state.isEditSidebarOpen) return
 
         this.setState({
             timeForEdit: null,
-            isEditModalOpen: false,
+            isEditSidebarOpen: false,
         })
     }
 
     // TODO:
-    updateLog = (log) => {
+    updateLog = log => {
         this.props.update(log)
-        this._executeAfterModalClose()
+        this._executeAfterSidebarClose()
     }
 
     render() {
-        const timeForEdit = this.state.timeForEdit === null ? undefined : this.state.timeForEdit
+        const timeForEdit =
+            this.state.timeForEdit === null ? undefined : this.state.timeForEdit
         return (
             <Page name="Sati" hasSubheader>
                 <PageSubheader>
-                    <PageFilters filters={this.state.filters} applyFilters={this.applyFilters} />
+                    <PageFilters
+                        filters={this.state.filters}
+                        applyFilters={this.applyFilters}
+                    />
                 </PageSubheader>
 
                 <div className="page--padding">
-                    <Modal isOpen={this.state.isEditModalOpen} onRequestClose={this._executeAfterModalClose}>
-                        <EditTimeForm timeLog={timeForEdit} onSubmit={this.updateLog} onDismiss={this._executeAfterModalClose} />
-                    </Modal>
-
+                    <Sidebar
+                        isOpen={this.state.isEditSidebarOpen}
+                        onRequestClose={this._executeAfterSidebarClose}
+                    >
+                        <EditTimeForm
+                            timeLog={timeForEdit}
+                            onSubmit={this.updateLog}
+                            onDismiss={this._executeAfterSidebarClose}
+                        />
+                    </Sidebar>
 
                     <Logs onSelect={this.selectLog} logs={this.props.items} />
 

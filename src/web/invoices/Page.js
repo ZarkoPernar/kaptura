@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable'
 
 import Box from '../shared/Box'
 import Toaster from '../shared/toast/Toaster'
-import Modal from '../shared/modal'
+import Sidebar from '../shared/Sidebar'
 import Page from '../shared/Page'
 import PageSubheader from '../shared/PageSubheader'
 import PageBody from '../shared/PageBody'
@@ -25,20 +25,26 @@ import { storeItem } from './listReducer'
 import { storeItem as rootStoreItem } from './reducer'
 
 @connect(state => ({ company: state.companyInfo.data }), {
-    addInvoiceAtRoot: payload => ({ payload, type: rootStoreItem.types.ADD_ITEM, }),
-    updateInvoiceAtRoot: payload => ({ payload, type: rootStoreItem.types.UPDATE_ITEM_SUCCESS, }),
+    addInvoiceAtRoot: payload => ({
+        payload,
+        type: rootStoreItem.types.ADD_ITEM,
+    }),
+    updateInvoiceAtRoot: payload => ({
+        payload,
+        type: rootStoreItem.types.UPDATE_ITEM_SUCCESS,
+    }),
 })
 @createStoreListComponent({
     storeName: storeItem.name,
     actions: storeItem.actions,
-    rootStoreItem
+    rootStoreItem,
 })
 export default class InvoicesPage extends Component {
     state = {
         forEdit: null,
         forDelete: null,
-        isEditModalOpen: false,
-        isDeleteModalOpen: false,
+        isEditSidebarOpen: false,
+        isDeleteSidebarOpen: false,
         pageSize: 25,
         pageNumber: 1,
     }
@@ -60,10 +66,13 @@ export default class InvoicesPage extends Component {
         this.update$$.unsubscribe()
     }
 
-    applyFilters = (filters) => {
-        this.setState({
-            filters
-        }, this.list)
+    applyFilters = filters => {
+        this.setState(
+            {
+                filters,
+            },
+            this.list,
+        )
     }
 
     list = () => {
@@ -72,11 +81,11 @@ export default class InvoicesPage extends Component {
             pages: {
                 pageSize: this.state.pageSize,
                 pageNumber: this.state.pageNumber,
-            }
+            },
         })
     }
 
-    submitProject = (project) => {
+    submitProject = project => {
         if (project._id === undefined) {
             this.createProject(project)
         } else {
@@ -84,7 +93,7 @@ export default class InvoicesPage extends Component {
         }
     }
 
-    createProject = (project) => {
+    createProject = project => {
         this.dismiss()
 
         const newProject = {
@@ -92,56 +101,52 @@ export default class InvoicesPage extends Component {
             _id: uid(),
         }
 
-        this.props.add(newProject)
-            .catch(this.handleProjectError)
-
+        this.props.add(newProject).catch(this.handleProjectError)
     }
 
-    updateProject = (project) => {
+    updateProject = project => {
         this.dismiss()
 
         this.setState({
             forEdit: null,
         })
 
-        this.props.update(project)
-            .catch(this.handleProjectError)
+        this.props.update(project).catch(this.handleProjectError)
     }
 
-
-    handleProjectError = (err) => {
+    handleProjectError = err => {
         this.setState({
             toasts: {
-                description: err.message
-            }
+                description: err.message,
+            },
         })
     }
 
-    _executeAfterModalClose = () => {
+    _executeAfterSidebarClose = () => {
         this.setState({
             forEdit: null,
-            isEditModalOpen: false,
+            isEditSidebarOpen: false,
         })
     }
 
-    openProject = (project) => {
+    openProject = project => {
         this.setState({
             forEdit: project,
-            isEditModalOpen: true,
+            isEditSidebarOpen: true,
         })
     }
 
     openNew = () => {
         this.setState({
             forEdit: null,
-            isEditModalOpen: true,
+            isEditSidebarOpen: true,
         })
     }
 
-    askForRemove = (project) => {
+    askForRemove = project => {
         this.setState({
             forDelete: project,
-            isDeleteModalOpen: true,
+            isDeleteSidebarOpen: true,
         })
     }
 
@@ -149,25 +154,25 @@ export default class InvoicesPage extends Component {
         this.props.remove(this.state.forDelete)
 
         this.setState({
-            isDeleteModalOpen: false,
+            isDeleteSidebarOpen: false,
         })
     }
 
     deleteDismiss = () => {
         this.setState({
             forDelete: null,
-            isDeleteModalOpen: false,
+            isDeleteSidebarOpen: false,
         })
     }
 
     toggleRemoval = () => {
         this.setState(state => ({
-            allowRemoval: !state.allowRemoval
+            allowRemoval: !state.allowRemoval,
         }))
     }
 
     dismiss = () => {
-        this.setState({ isEditModalOpen: false })
+        this.setState({ isEditSidebarOpen: false })
     }
 
     renderPage = () => {
@@ -176,12 +181,19 @@ export default class InvoicesPage extends Component {
                 <Toaster toasts={this.state.toasts} />
 
                 <PageSubheader>
-                    <PageFilters filters={this.state.filters} applyFilters={this.applyFilters} />
+                    <PageFilters
+                        filters={this.state.filters}
+                        applyFilters={this.applyFilters}
+                    />
                 </PageSubheader>
 
                 <PageBody>
-                    {this.props.items.loading ? 'Loading...' : (
-                        this.props.error ? this.props.error.toString() : <List items={this.props.items} />
+                    {this.props.items.loading ? (
+                        'Loading...'
+                    ) : this.props.error ? (
+                        this.props.error.toString()
+                    ) : (
+                        <List items={this.props.items} />
                     )}
                 </PageBody>
             </Page>
@@ -189,7 +201,8 @@ export default class InvoicesPage extends Component {
     }
 
     render() {
-        const forEdit = this.state.forEdit === null ? undefined : this.state.forEdit
+        const forEdit =
+            this.state.forEdit === null ? undefined : this.state.forEdit
 
         return (
             <Box>

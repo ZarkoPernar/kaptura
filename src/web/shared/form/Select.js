@@ -9,12 +9,14 @@ const SELECT_OPTION_TYPE = PropTypes.shape({
     label: PropTypes.string,
     value: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
 })
-const SELECT_OPTION_VALUE_TYPE = PropTypes.oneOf([SELECT_OPTION_TYPE, PropTypes.string])
+const SELECT_OPTION_VALUE_TYPE = PropTypes.oneOf([
+    SELECT_OPTION_TYPE,
+    PropTypes.string,
+])
 
 const GO_UP = 38
 const GO_DOWN = 40
 const ENTER = 13
-
 
 const enter = (state, props) => {
     const selectedResult = getResult(state, props, state.resHighlighted)
@@ -33,7 +35,9 @@ const goDown = (state, props) => {
 }
 
 const goDirection = (state, props, goDown) => {
-    const resHighlighted = goDown ? state.resHighlighted + 1 : state.resHighlighted - 1
+    const resHighlighted = goDown
+        ? state.resHighlighted + 1
+        : state.resHighlighted - 1
     const value = getResult(state, props, resHighlighted).value
     return {
         value,
@@ -46,8 +50,12 @@ const getResult = (state, props, index) => {
     return options[index]
 }
 
-const createOption = option => <option value={option.value} key={option.value}>{option.label}</option>
-function  searchLabel(option) {
+const createOption = option => (
+    <option value={option.value} key={option.value}>
+        {option.label}
+    </option>
+)
+function searchLabel(option) {
     return ~option.label.toLowerCase().indexOf(this)
 }
 
@@ -57,13 +65,14 @@ class SelectComponent extends Component {
         multi: PropTypes.bool,
         name: PropTypes.string,
         // value: SELECT_OPTION_VALUE_TYPE,
-        onChange: PropTypes.func,
+        onChange: PropTypes.func.isRequired,
         onFocus: PropTypes.func,
         onBlur: PropTypes.func,
     }
 
     static defaultProps = {
         options: [],
+        onChange: () => {},
     }
 
     state = {
@@ -74,7 +83,7 @@ class SelectComponent extends Component {
         selectedResult: null,
     }
 
-    onFocus = (e) => {
+    onFocus = e => {
         this.setState({
             isFocused: true,
         })
@@ -82,7 +91,7 @@ class SelectComponent extends Component {
         this.props.onFocus(e)
     }
 
-    onBlur = (e) => {
+    onBlur = e => {
         this.setState({
             isFocused: false,
         })
@@ -90,28 +99,29 @@ class SelectComponent extends Component {
         this.props.onBlur(e)
     }
 
-    onChange = (event) => {
+    onChange = event => {
         const value = event.target.value
-        console.log(value);
+        console.log(value)
 
-
-        const selectedOption = this.props.options.find(option => option.value == value)
+        const selectedOption = this.props.options.find(
+            option => option.value == value,
+        )
         // this.searchResults(value)
 
         this.props.onChange(selectedOption, this.props.name)
     }
 
-    searchResults = (value) => {
+    searchResults = value => {
         const searchValue = value.toLowerCase()
 
         const results = this.props.options.filter(searchLabel, searchValue)
 
         this.setState({
-            results
+            results,
         })
     }
 
-    navigateResults = (direction) => {
+    navigateResults = direction => {
         if (direction === GO_UP) {
             this.setState(goUp)
         } else if (direction === GO_DOWN) {
@@ -119,21 +129,20 @@ class SelectComponent extends Component {
         } else if (direction === ENTER) {
             this.setState(enter, this.notifyChange)
         }
-
     }
 
     notifyChange = () => {
         this.props.onChange(this.state.selectedResult.value, this.props.name)
     }
 
-    getDropdownContainerRef = (el) => {
+    getDropdownContainerRef = el => {
         console.log(el)
         this.setState({
             dropDownHeight: el.offsetHeight,
         })
     }
 
-    onKeyDown = (event) => {
+    onKeyDown = event => {
         if (event.keyCode === ENTER) {
             event.stopPropagation()
         }
@@ -142,14 +151,22 @@ class SelectComponent extends Component {
     }
 
     render() {
-        const dropDownHeight = this.state.isFocused && !this.state.isForceClosed ? this.state.dropDownHeight + 6 : 0
+        const dropDownHeight =
+            this.state.isFocused && !this.state.isForceClosed
+                ? this.state.dropDownHeight + 6
+                : 0
         const results = this.state.results || this.props.options
         const value = this.props.value && this.props.value.value
 
         return (
-            <select className="form-control" onChange={this.onChange} value={value}>
+            <select
+                className="form-control"
+                onChange={this.onChange}
+                value={value}
+                name={this.props.name}
+            >
                 <option value="" />
-                { this.props.options.map(createOption) }
+                {this.props.options.map(createOption)}
             </select>
         )
     }
@@ -157,8 +174,8 @@ class SelectComponent extends Component {
 
 export default SelectComponent
 
-
-{/* < div className= { classnames('enhanced-select', {
+{
+    /* < div className= { classnames('enhanced-select', {
     'enhanced-select--is-focused': this.state.isFocused,
         'enhanced-select--closed': this.state.isForceClosed,
                 })}>
@@ -182,4 +199,5 @@ export default SelectComponent
             }
         </div>
     </div>
-</div > */}
+</div > */
+}

@@ -4,16 +4,13 @@ import TimePicker from 'rc-time-picker'
 import * as moment from 'moment'
 
 import 'rc-time-picker/assets/index.css'
+import './timepicker.scss'
 
 const TIME_FORMAT = 'HH:mm'
 
 class Timepicker extends Component {
-
-    timeChange = (val) => {
-        this.props.onChange(
-            val,
-            this.props.name
-        )
+    timeChange = val => {
+        this.props.onChange(val, this.props.name)
     }
 
     render() {
@@ -31,8 +28,6 @@ class Timepicker extends Component {
     }
 }
 
-Timepicker.propTypes = {
-
-}
+Timepicker.propTypes = {}
 
 export default Timepicker
