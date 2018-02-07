@@ -14,7 +14,7 @@ InventoryFavoriteItemSchema.post('save', function (error, doc, next) {
         next(error);
     }
 });
-exports.InventoryFavoriteItemModel = mongoose.model('invoice_item', InventoryFavoriteItemSchema);
+exports.InventoryFavoriteItemModel = mongoose.model('inventory_item_favorite', InventoryFavoriteItemSchema);
 function createInvoiceItemModelActions(model) {
     return {
         getItem($id, user) {

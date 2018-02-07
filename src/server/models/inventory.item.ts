@@ -15,7 +15,13 @@ export interface IBaseInventoryItem
     brand_name?: string
     quantity?: number
     price?: number
-    currency?: string
+    currency: {
+        symbol: string
+        separator: string
+        decimal: string
+        label: string
+        value: string
+    }
     unit?: string
     offlineId?: string
 }
@@ -42,8 +48,21 @@ export const IBaseInventoryItemSchema = {
     type: String,
     brand_name: String,
     quantity: Number,
-    price: mongoose.Schema.Types.Decimal128,
-    currency: String,
+    // price: mongoose.Schema.Types.Decimal128,
+    price: Number,
+    currency: {
+        separator: {
+            type: String,
+            default: ',',
+        },
+        symbol: String,
+        decimal: {
+            type: String,
+            default: '.',
+        },
+        label: String,
+        value: String,
+    },
     // price: Number,
     offlineId: String,
 }

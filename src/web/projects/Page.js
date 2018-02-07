@@ -8,7 +8,7 @@ import { Route } from 'react-router-dom'
 import appStore from '../appStore'
 import socketService from '../socket'
 import Toaster from '../shared/toast/Toaster'
-import Modal from '../shared/modal'
+import Sidebar from '../shared/Sidebar'
 import Calendar from '../shared/calendar'
 import Page from '../shared/Page'
 import PageSubheader from '../shared/PageSubheader'
@@ -58,8 +58,8 @@ export default class ProjectPage extends Component {
     state = {
         projectForEdit: null,
         projectForDelete: null,
-        isEditModalOpen: false,
-        isDeleteModalOpen: false,
+        isEditSidebarOpen: false,
+        isDeleteSidebarOpen: false,
         pageSize: 25,
         pageNumber: 1,
         activeTab: 'List',
@@ -160,31 +160,31 @@ export default class ProjectPage extends Component {
         })
     }
 
-    _executeAfterModalClose = () => {
+    _executeAfterSidebarClose = () => {
         this.setState({
             projectForEdit: null,
-            isEditModalOpen: false,
+            isEditSidebarOpen: false,
         })
     }
 
     openProject = project => {
         this.setState({
             projectForEdit: project,
-            isEditModalOpen: true,
+            isEditSidebarOpen: true,
         })
     }
 
     openNew = () => {
         this.setState({
             projectForEdit: null,
-            isEditModalOpen: true,
+            isEditSidebarOpen: true,
         })
     }
 
     askForRemove = project => {
         this.setState({
             projectForDelete: project,
-            isDeleteModalOpen: true,
+            isDeleteSidebarOpen: true,
         })
     }
 
@@ -192,14 +192,14 @@ export default class ProjectPage extends Component {
         this.props.remove(this.state.projectForDelete)
 
         this.setState({
-            isDeleteModalOpen: false,
+            isDeleteSidebarOpen: false,
         })
     }
 
     deleteDismiss = () => {
         this.setState({
             projectForDelete: null,
-            isDeleteModalOpen: false,
+            isDeleteSidebarOpen: false,
         })
     }
 
@@ -220,7 +220,7 @@ export default class ProjectPage extends Component {
     }
 
     dismiss = () => {
-        this.setState({ isEditModalOpen: false })
+        this.setState({ isEditSidebarOpen: false })
     }
 
     renderCalendar = projects => (
@@ -255,9 +255,9 @@ export default class ProjectPage extends Component {
         return (
             <Page name="Projekti" hasSubheader>
                 <Toaster toasts={this.state.toasts} />
-                <Modal
-                    isOpen={this.state.isEditModalOpen}
-                    onRequestClose={this._executeAfterModalClose}
+                <Sidebar
+                    isOpen={this.state.isEditSidebarOpen}
+                    onRequestClose={this._executeAfterSidebarClose}
                 >
                     <EditProjectForm
                         project={projectForEdit}
@@ -265,15 +265,15 @@ export default class ProjectPage extends Component {
                         createInvoice={this.createInvoice}
                         onDismiss={this.dismiss}
                     />
-                </Modal>
+                </Sidebar>
 
-                <Modal isOpen={this.state.isDeleteModalOpen}>
+                <Sidebar isOpen={this.state.isDeleteSidebarOpen}>
                     <DeleteProjectDialog
                         confirm={this.deleteConfirm}
                         dismiss={this.deleteDismiss}
                         project={this.state.projectForDelete}
                     />
-                </Modal>
+                </Sidebar>
 
                 <PageSubheader>
                     <ProjectTabs
@@ -286,13 +286,7 @@ export default class ProjectPage extends Component {
                         applyFilters={this.applyFilters}
                     />
 
-                    <Button
-                        flat
-                        iconLeft
-                        color="primary"
-                        onClick={this.openNew}
-                    >
-                        <MdAdd />
+                    <Button flat color="primary" onClick={this.openNew}>
                         Novi Projekt
                     </Button>
                 </PageSubheader>

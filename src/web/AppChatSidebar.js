@@ -1,18 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Sidebar from './shared/Sidebar'
+import AppSidebar from './shared/AppSidebar'
 
 const AppChatSidebar = props => {
     return (
-        <Sidebar isOpen={props.isOpen} right>
-            <div style={{minWidth: '200px', padding: '2rem 1rem'}}>
+        <AppSidebar isOpen={props.isOpen} right>
+            <div style={{ minWidth: '200px', padding: '2rem 1rem' }}>
                 <div className="modal__header">
                     <h3>Chat</h3>
                 </div>
             </div>
-
-        </Sidebar>
+        </AppSidebar>
     )
 }
 

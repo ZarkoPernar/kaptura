@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import classnames from 'classnames'
 
 import Button from './shared/Button'
-import Sidebar from './shared/Sidebar'
+import AppSidebar from './shared/AppSidebar'
 import Nav from './Nav'
 
 import './AppSidenav.scss'
 
 const AppSidenav = () => {
     return (
-        <Sidebar className="App-sidenav App-sidebar--dark">
+        <AppSidebar className="App-sidenav App-sidebar--dark">
             <div className="App-sidenav__container">
                 <Nav />
 
@@ -19,7 +19,7 @@ const AppSidenav = () => {
                     </Button>
                 </div>
             </div>
-        </Sidebar>
+        </AppSidebar>
     )
 }
 

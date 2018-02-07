@@ -6,7 +6,7 @@ import ClientList from './List'
 import EditClientForm from './Form'
 import DeleteDialog from './DeleteDialog'
 import Toaster from '../shared/toast/Toaster'
-import Modal from '../shared/modal'
+import Sidebar from '../shared/Sidebar'
 import Button from '../shared/Button'
 import createStoreListComponent from '../shared/StoreList'
 
@@ -21,8 +21,8 @@ export default class ClientsPage extends Component {
         toasts: [],
         projectForEdit: null,
         projectForDelete: null,
-        isEditModalOpen: false,
-        isDeleteModalOpen: false,
+        isEditSidebarOpen: false,
+        isDeleteSidebarOpen: false,
         pageSize: 25,
         pageNumber: 1,
     }
@@ -100,31 +100,31 @@ export default class ClientsPage extends Component {
         }))
     }
 
-    _executeAfterModalClose = () => {
+    _executeAfterSidebarClose = () => {
         this.setState({
             projectForEdit: null,
-            isEditModalOpen: false,
+            isEditSidebarOpen: false,
         })
     }
 
     openProject = project => {
         this.setState({
             projectForEdit: project,
-            isEditModalOpen: true,
+            isEditSidebarOpen: true,
         })
     }
 
     openNew = () => {
         this.setState({
             projectForEdit: null,
-            isEditModalOpen: true,
+            isEditSidebarOpen: true,
         })
     }
 
     askForRemove = project => {
         this.setState({
             projectForDelete: project,
-            isDeleteModalOpen: true,
+            isDeleteSidebarOpen: true,
         })
     }
 
@@ -132,14 +132,14 @@ export default class ClientsPage extends Component {
         this.props.remove(this.state.projectForDelete)
 
         this.setState({
-            isDeleteModalOpen: false,
+            isDeleteSidebarOpen: false,
         })
     }
 
     deleteDismiss = () => {
         this.setState({
             projectForDelete: null,
-            isDeleteModalOpen: false,
+            isDeleteSidebarOpen: false,
         })
     }
 
@@ -150,7 +150,7 @@ export default class ClientsPage extends Component {
     }
 
     dismiss = () => {
-        this.setState({ isEditModalOpen: false })
+        this.setState({ isEditSidebarOpen: false })
     }
 
     render() {
@@ -163,24 +163,24 @@ export default class ClientsPage extends Component {
             <div className="Klijenti page--padding">
                 <Toaster remove={this.removeToast} toasts={this.state.toasts} />
 
-                <Modal
-                    isOpen={this.state.isEditModalOpen}
-                    onRequestClose={this._executeAfterModalClose}
+                <Sidebar
+                    isOpen={this.state.isEditSidebarOpen}
+                    onRequestClose={this._executeAfterSidebarClose}
                 >
                     <EditClientForm
                         client={projectForEdit}
                         onSubmit={this.submitProject}
                         onDismiss={this.dismiss}
                     />
-                </Modal>
+                </Sidebar>
 
-                <Modal isOpen={this.state.isDeleteModalOpen}>
+                <Sidebar isOpen={this.state.isDeleteSidebarOpen}>
                     <DeleteDialog
                         confirm={this.deleteConfirm}
                         dismiss={this.deleteDismiss}
                         project={this.state.projectForDelete}
                     />
-                </Modal>
+                </Sidebar>
 
                 <div className="page__controls">
                     <Button color="primary" onClick={this.openNew}>

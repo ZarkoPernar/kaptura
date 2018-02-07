@@ -16,7 +16,21 @@ exports.IBaseInventoryItemSchema = {
     type: String,
     brand_name: String,
     quantity: Number,
-    price: mongoose.Schema.Types.Decimal128,
+    // price: mongoose.Schema.Types.Decimal128,
+    price: Number,
+    currency: {
+        separator: {
+            type: String,
+            default: ',',
+        },
+        symbol: String,
+        decimal: {
+            type: String,
+            default: '.',
+        },
+        label: String,
+        value: String,
+    },
     // price: Number,
     offlineId: String,
 };
@@ -32,7 +46,7 @@ InventoryItemSchema.post('save', function (error, doc, next) {
         next(error);
     }
 });
-exports.InventoryItemModel = mongoose.model('invoice_item', InventoryItemSchema);
+exports.InventoryItemModel = mongoose.model('inventory_item', InventoryItemSchema);
 function createInvoiceItemModelActions(model) {
     return {
         getItem($id, user) {

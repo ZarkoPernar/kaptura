@@ -4,7 +4,7 @@ import ReactModal from 'react-modal'
 import './modal.scss'
 const TIMEOUT_MS = 300
 
-class Modal extends Component {
+class Sidebar extends Component {
     render() {
         return (
             <ReactModal
@@ -13,11 +13,12 @@ class Modal extends Component {
                 overlayClassName="ReactModal__Overlay"
                 shouldCloseOnOverlayClick
                 closeTimeoutMS={TIMEOUT_MS}
-                {...this.props}>
-                { this.props.children }
+                {...this.props}
+            >
+                {this.props.children}
             </ReactModal>
         )
     }
 }
 
-export default Modal
+export default Sidebar

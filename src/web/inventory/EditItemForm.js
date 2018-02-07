@@ -1,20 +1,53 @@
 import React from 'react'
 import yup from 'yup'
 
+import Select from '../shared/form/Select'
 import Form from '../shared/form/Form'
 import Input from '../shared/form/Input'
 import FormGroup from '../shared/form/FormGroup'
 import Button from '../shared/Button'
 import Checkbox from '../shared/form/Checkbox'
 
+const options = [
+    {
+        label: 'Kuna',
+        value: 'HRK',
+        symbol: 'kn',
+        symbolAfter: true,
+        separator: '.',
+        decimal: ',',
+    },
+    {
+        label: 'Euro',
+        value: 'EUR',
+        symbol: '€',
+    },
+    {
+        label: 'Dollar',
+        value: 'USD',
+        symbol: '$',
+    },
+    {
+        label: 'British Pound',
+        value: 'GBP',
+        symbol: '£',
+    },
+]
+
 const style = {
     minWidth: '28em',
 }
 const EditItemForm = ({ onSubmit, onDismiss }) => {
+    let currency
     return (
         <div style={style}>
             <Form
-                onSubmit={onSubmit}
+                onSubmit={val => {
+                    onSubmit({
+                        ...val,
+                        currency,
+                    })
+                }}
                 autoComplete="off"
                 formData={{ email: '' }}
                 validationSchema={yup.object().shape({
@@ -53,8 +86,15 @@ const EditItemForm = ({ onSubmit, onDismiss }) => {
                     <Input name="price" type="tel" autoComplete="off" />
                 </FormGroup>
 
-                <FormGroup label="Valuta (npr. HRK, USD, EUR)">
-                    <Input name="currency" autoComplete="off" />
+                <FormGroup label="Valuta" ignoreField>
+                    {/* <Input name="currency" autoComplete="off" /> */}
+                    <Select
+                        name="currency"
+                        options={options}
+                        onChange={val => {
+                            console.log(val), (currency = val)
+                        }}
+                    />
                 </FormGroup>
 
                 <FormGroup label="Kolicina">
