@@ -9,13 +9,18 @@
     "types": "server/index",
     "scripts": {
         "start": "node server",
-        "build": "rimraf ./public && SET NODE_ENV=production && SET BABEL_ENV=production && webpack --config ./tools/webpack.config.js --colors --progress --profile",
+        "build":
+            "rimraf ./public && SET NODE_ENV=production && SET BABEL_ENV=production && webpack --config ./tools/webpack.config.js --colors --progress --profile",
         "test": "jest",
         "serve": "SET NODE_ENV=production && nodemon -w server",
-        "build:live": "nodemon --exec ts-node -- ./src/server/index.ts --config ./tsconfig.json",
-        "devserver": "cross-env NODE_ENV=development webpack-dev-server --config ./tools/webpack.config.js",
-        "development": "cross-env NODE_ENV=development webpack -w ./src/web --config ./tools/webpack.config.js",
-        "dev": "SET NODE_ENV=development && npm-run-all --parallel build:live devserver"
+        "build:live":
+            "nodemon --exec ts-node -- ./src/server/index.ts --config ./tsconfig.json",
+        "devserver":
+            "cross-env NODE_ENV=development webpack-dev-server --config ./tools/webpack.config.js",
+        "development":
+            "cross-env NODE_ENV=development webpack -w ./src/web --config ./tools/webpack.config.js",
+        "dev":
+            "SET NODE_ENV=development && npm-run-all --parallel build:live devserver"
     },
     "keywords": [],
     "author": "",
@@ -44,7 +49,6 @@
         "clean-webpack-plugin": "^0.1.15",
         "copy-webpack-plugin": "^4.0.1",
         "css-loader": "^0.26.2",
-        "cypress": "^2.1.0",
         "enzyme": "^3.3.0",
         "enzyme-adapter-react-16": "^1.1.1",
         "eslint": "^3.17.0",
@@ -141,12 +145,8 @@
         "yup": "^0.24.0"
     },
     "jest": {
-        "collectCoverageFrom": [
-            "<rootDir>src/web/**/*.{js,jsx,mjs}"
-        ],
-        "setupFiles": [
-            "<rootDir>tools/polyfills.js"
-        ],
+        "collectCoverageFrom": ["<rootDir>src/web/**/*.{js,jsx,mjs}"],
+        "setupFiles": ["<rootDir>tools/polyfills.js"],
         "setupTestFrameworkScriptFile": "<rootDir>/tools/setupTests.js",
         "testMatch": [
             "<rootDir>**/__tests__/**/*.{js,jsx,mjs}",
@@ -157,7 +157,8 @@
         "transform": {
             "^.+\\.(js|jsx|mjs)$": "babel-jest",
             "^.+\\.css$": "<rootDir>tools/jest/cssTransform.js",
-            "^(?!.*\\.(js|jsx|mjs|css|json|graphql)$)": "<rootDir>tools/jest/fileTransform.js"
+            "^(?!.*\\.(js|jsx|mjs|css|json|graphql)$)":
+                "<rootDir>tools/jest/fileTransform.js"
         },
         "transformIgnorePatterns": [
             "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$",
