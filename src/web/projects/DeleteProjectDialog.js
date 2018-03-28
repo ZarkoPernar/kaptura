@@ -21,7 +21,7 @@ class DeleteProjectDialog extends Component {
         if (this.state.nameInput !== this.props.project.name) {
             return this.setState({
                 nameInputError: {
-                    message: 'Ovaj input je obavezan'
+                    message: 'Ovaj input je obavezan',
                 },
             })
         }
@@ -33,7 +33,7 @@ class DeleteProjectDialog extends Component {
         this.props.dismiss()
     }
 
-    nameInputChange = (val) => {
+    nameInputChange = val => {
         this.setState({
             nameInput: val,
         })
@@ -42,21 +42,38 @@ class DeleteProjectDialog extends Component {
     render() {
         return (
             <div>
-                <h3 key="title">Jeste li sigurni da zelite obrisati ovaj projekt?</h3>
+                <h3 key="title">
+                    Jeste li sigurni da zelite obrisati ovaj projekt?
+                </h3>
                 <p key="description">
-                    Upisite ime projekta kako bi ste potvrdili brisanje. Ova akcija je permanentna.
+                    Upisite naziv projekta kako bi ste potvrdili brisanje. Ova
+                    akcija je permanentna.
                 </p>
 
-                <FormGroup label="Ime Projekta">
-                    <Input name="name" onChange={this.nameInputChange} error={this.state.nameInputError}  />
+                <FormGroup label="Naziv Projekta">
+                    <Input
+                        name="name"
+                        onChange={this.nameInputChange}
+                        error={this.state.nameInputError}
+                    />
                 </FormGroup>
 
                 <div style={actionStyles} key="actions">
-                    <Button key="yes" onClick={this.confirm} color="danger" style={{marginRight: '15px'}}>
+                    <Button
+                        key="yes"
+                        onClick={this.confirm}
+                        color="danger"
+                        style={{ marginRight: '15px' }}
+                    >
                         Obrisi Projekt
                     </Button>
 
-                    <Button key="no" onClick={this.dismiss} clear color="primary">
+                    <Button
+                        key="no"
+                        onClick={this.dismiss}
+                        clear
+                        color="primary"
+                    >
                         Odustani
                     </Button>
                 </div>

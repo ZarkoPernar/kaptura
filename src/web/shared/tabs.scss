@@ -21,7 +21,7 @@
                 height: 2px;
                 background-color: $bc-primary;
                 opacity: 0;
-                transition: .2s ease opacity;
+                transition: 0.2s ease opacity;
             }
 
             &--is-active {
@@ -34,13 +34,28 @@
                 }
             }
         }
-    }
 
-    &__content {
+        &--links {
+            .tabs__controls__item .btn {
+                padding: 0;
 
-        &__item {
+                a {
+                    padding: 0.5rem 1.5rem;
+                    text-decoration: none;
+                    color: #626262;
+                }
+            }
 
+            .tabs__controls__item--is-active .btn {
+                a {
+                    color: $bc-primary;
+                }
+            }
         }
     }
 
+    &__content {
+        &__item {
+        }
+    }
 }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import PlacesAutocomplete from 'react-places-autocomplete'
-import { geocodeByAddress, geocodeByPlaceId } from 'react-places-autocomplete'
+import PlacesAutocomplete, {
+    geocodeByAddress,
+    geocodeByPlaceId,
+} from 'react-places-autocomplete'
 import PropTypes from 'prop-types'
 
 import getPlaceData from './getPlaceData'
@@ -21,13 +23,15 @@ export default class Address extends Component {
         onChange: PropTypes.func,
         onSelect: PropTypes.func,
     }
+
     state = {
-        googleLoaded: false
+        googleLoaded: false,
+        value: this.props.defaultValue,
     }
 
     componentDidMount() {
         this.setState({
-            googleLoaded: Boolean(window.google)
+            googleLoaded: Boolean(window.google),
         })
         this.unsubscribe = googleLibService.subscribe(this.googleHasLoaded)
     }
@@ -40,27 +44,35 @@ export default class Address extends Component {
 
     googleHasLoaded = () => {
         this.setState({
-            googleLoaded: Boolean(window.google)
+            googleLoaded: Boolean(window.google),
         })
     }
 
-    onChange = (value) => {
-        this.props.onChange(value, this.props.name)
+    onChange = value => {
+        if (this.props.onChange !== undefined) {
+            this.props.onChange(value, this.props.name)
+        } else {
+            this.setState({
+                value,
+            })
+        }
     }
 
     addressChange = (address, placeId) => {
-        this.props.onChange(address, this.props.name)
+        if (this.props.onChange !== undefined) {
+            this.props.onChange(address, this.props.name)
+        }
 
         this.getPlaceData(placeId)
     }
 
-    getPlaceData = (placeId) => {
+    getPlaceData = placeId => {
         geocodeByPlaceId(placeId)
             .then(this.getPlaceDataSuccess)
             .catch(this.getPlaceDataError)
     }
 
-    getPlaceDataSuccess = (results) => {
+    getPlaceDataSuccess = results => {
         if (!results.length) return
 
         const result = results[0]
@@ -74,16 +86,13 @@ export default class Address extends Component {
         if (this.props.onSelect !== undefined) {
             this.props.onSelect(_selected)
         }
-
     }
 
-    getPlaceDataError = (error) => {
+    getPlaceDataError = error => {
         console.error(error)
     }
 
-    onError = (error) => {
-
-    }
+    onError = error => {}
 
     render() {
         // const { value, ...filteredProps } = this.props
@@ -92,15 +101,15 @@ export default class Address extends Component {
         return this.renderAddress()
     }
 
-    renderText = (inputProps) => {
-        return (
-            <Input {...inputProps} />
-        )
+    renderText = inputProps => {
+        return <Input {...inputProps} />
     }
 
     renderAddress() {
+        const value = this.props.value || this.state.value
+
         const inputProps = {
-            value: this.props.value,
+            value,
             name: this.props.name,
             id: this.props.id,
             onChange: this.onChange,
@@ -116,7 +125,8 @@ export default class Address extends Component {
                 onError={this.onError}
                 onSelect={this.addressChange}
                 inputProps={inputProps}
-                classNames={classNames} />
+                classNames={classNames}
+            />
         )
     }
 }

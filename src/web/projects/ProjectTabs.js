@@ -24,24 +24,26 @@ export default class ProjectTabs extends Component {
 
     render() {
         return (
-            <Tabs>
-                <Tab onClick={this.selectListTab} isActive={this.props.activeTab === 'List'}>
-                    <Link to="/projekti">
-                        Lista
-                    </Link>
+            <Tabs hasLinks>
+                <Tab
+                    onClick={this.selectListTab}
+                    isActive={this.props.activeTab === 'List'}
+                >
+                    <Link to="/projekti">Lista</Link>
                 </Tab>
-                <Tab onClick={this.selectCalendarTab} isActive={this.props.activeTab === 'Calendar'}>
-                    <Link to="/projekti/kalendar">
-                        Kalendar
-                    </Link>
+                <Tab
+                    onClick={this.selectCalendarTab}
+                    isActive={this.props.activeTab === 'Calendar'}
+                >
+                    <Link to="/projekti/kalendar">Kalendar</Link>
                 </Tab>
-                <Tab onClick={this.selectMapTab} isActive={this.props.activeTab === 'Map'}>
-                    <Link to="/projekti/karta">
-                        Karta
-                    </Link>
+                <Tab
+                    onClick={this.selectMapTab}
+                    isActive={this.props.activeTab === 'Map'}
+                >
+                    <Link to="/projekti/karta">Karta</Link>
                 </Tab>
             </Tabs>
         )
     }
 }
-

@@ -59,7 +59,9 @@ const EditItemForm = ({ onSubmit, onDismiss }) => {
                         .number()
                         .typeError('Kolicina mora biti izrazena kao broj')
                         .positive('Kolicina mora biti pozitivan broj'),
-                    name: yup.string().required('Ime stavke je obavezno polje'),
+                    name: yup
+                        .string()
+                        .required('Naziv stavke je obavezno polje'),
                     brand: yup.string(),
                     type: yup.string(),
                     unit: yup.string(),
@@ -70,7 +72,7 @@ const EditItemForm = ({ onSubmit, onDismiss }) => {
                     // }),
                 })}
             >
-                <FormGroup label="Ime">
+                <FormGroup label="Naziv">
                     <Input name="name" autoComplete="off" />
                 </FormGroup>
 

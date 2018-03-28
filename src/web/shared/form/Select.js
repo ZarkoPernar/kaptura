@@ -163,6 +163,7 @@ class SelectComponent extends Component {
                 className="form-control"
                 onChange={this.onChange}
                 value={value}
+                defaultValue={this.props.defaultValue}
                 name={this.props.name}
             >
                 <option value="" />

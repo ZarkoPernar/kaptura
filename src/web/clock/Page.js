@@ -1,116 +1,194 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import Sidebar from '../shared/Sidebar'
 import Page from '../shared/Page'
+import PageBody from '../shared/PageBody'
 import PageSubheader from '../shared/PageSubheader'
 import Pagination from '../shared/Pagination'
+import Toaster from '../shared/toast/Toaster'
+import createStoreListComponent from '../shared/StoreList'
+import { selector as employeesSelector } from '../employees/reducer'
 
 import LogPropType from './LogPropType'
-import PageFilters from './PageFilters'
-import Logs from './Logs'
-import EditTimeForm from './EditTimeForm'
+import TimesheetPageFilters from './TimesheetPageFilters'
+import TimesheetList from './TimesheetList'
+import TimesheetDispatcher from './TimesheetDispatcher'
+import EditTimesheetForm from './EditTimesheetForm'
+import { storeItem } from './timesheetListReducer'
+import { storeItem as rootStoreItem } from './reducer'
 
-import createStoreListComponent from '../shared/StoreList'
+import './timesheet.scss'
 
-import { storeItem } from './timesheetReducer'
-import { storeItem as rootStoreItem } from '../timesheet/reducer'
+/**
+ * Timesheet Page component displays a list of timesheet logs,
+ * renders available filters for querying, and exposes the edit form in a sidebar.
+ *
+ * @export
+ * @class TimesheetPage
+ * @extends {Component}
+ */
+export class TimesheetPage extends Component {
+    static propTypes = {
+        timesheets: PropTypes.arrayOf(
+            PropTypes.shape({
+                _id: PropTypes.string.isRequired,
+                user_id: PropTypes.string.isRequired,
+                project_id: PropTypes.string,
+                check_in: PropTypes.string.isRequired,
+                check_out: PropTypes.string,
+                project_name: PropTypes.string,
+                client_name: PropTypes.string,
+            }),
+        ),
 
-import './sati.scss'
+        /**
+         * Raw redux store data with company employees.
+         * It is used on a join operation in the TimesheetList component
+         */
+        employees: PropTypes.shape({
+            byId: PropTypes.objectOf(
+                PropTypes.shape({
+                    _id: PropTypes.string.isRequired,
+                    name: PropTypes.string.isRequired,
+                }),
+            ),
+        }),
 
-@connect(state => ({ company: state.companyInfo.data }))
-@createStoreListComponent({
-    storeName: 'timesheetList',
-    actions: storeItem.actions,
-    rootStoreItem,
-})
-export default class SatiPage extends Component {
+        /** Indicates if the fetch list has failed */
+        // hasError: PropTypes.bool.isRequired,
+
+        /** Indicates if the fetch list is in progress */
+        // isLoading: PropTypes.bool.isRequired,
+
+        /** Indicates if an update on one of the items in the list is in progress */
+        // isUpdating: PropTypes.bool.isRequired,
+    }
+
+    static defaultProps = {
+        timesheets: [],
+        employees: {
+            byId: {},
+        },
+        update: () => {},
+    }
+
     state = {
-        timeForEdit: null,
-        isEditFormGroupOpen: false,
+        /** Is pased to the EditTimesheetForm */
+        selectedTimesheet: null,
+
+        /** When selectedTimesheet is set the TimesheetDispatcher component dispatches an update action */
+        timesheetForUpdate: null,
+
+        /** Used when querying api/timesheet/list as paramater */
         filters: {},
+
+        /** Used when querying api/timesheet/list as paramater */
+        pages: {},
     }
 
-    componentDidMount() {
-        this.props.list()
-    }
-
-    applyFilters = filters => {
+    onFilterChange = filters => {
         this.setState({
             filters,
-        })
-        this.props.list({
-            filters,
-            pages: {
-                pageNumber: this.currentPage,
-            },
         })
     }
 
     onPageChange = currentPage => {
-        console.log(currentPage)
-
-        this.props.list({
-            filters: this.state.filters,
+        this.setState({
             pages: {
                 pageNumber: currentPage,
             },
         })
-        this.currentPage = currentPage
     }
 
-    selectLog = log => {
+    selectTimesheet = log => {
         this.setState({
-            timeForEdit: log,
-            isEditSidebarOpen: true,
+            selectedTimesheet: log,
+            isSidebarOpen: true,
         })
     }
 
-    _executeAfterSidebarClose = () => {
-        if (!this.state.isEditSidebarOpen) return
-
+    onRequestClose = () => {
         this.setState({
-            timeForEdit: null,
-            isEditSidebarOpen: false,
+            selectedTimesheet: null,
+            isSidebarOpen: false,
         })
     }
 
-    // TODO:
-    updateLog = log => {
-        this.props.update(log)
-        this._executeAfterSidebarClose()
+    /**
+     * Set timesheet to update, close modal, publish a toast with a success message.
+     *
+     * @param {object} timesheet
+     */
+    updateLog = timesheet => {
+        this.setState({
+            toasts: [
+                {
+                    duration: 3000,
+                    // TODO: intl
+                    message: 'You have sucessufully updated the timesheet',
+                    color: 'success',
+                },
+            ],
+            timesheetForUpdate: timesheet,
+            selectedTimesheet: null,
+            isSidebarOpen: false,
+        })
     }
 
     render() {
-        const timeForEdit =
-            this.state.timeForEdit === null ? undefined : this.state.timeForEdit
         return (
-            <Page name="Sati" hasSubheader>
+            <Page name="timesheet" hasSubheader>
+                <Toaster toasts={this.state.toasts} />
+
+                <TimesheetDispatcher
+                    filters={this.state.filters}
+                    pages={this.state.pages}
+                    updateItem={this.state.timesheetForUpdate}
+                />
+
+                <Sidebar
+                    isOpen={this.state.isSidebarOpen}
+                    onRequestClose={this.onRequestClose}
+                >
+                    <EditTimesheetForm
+                        selectedTimesheet={this.state.selectedTimesheet}
+                        onSubmit={this.updateLog}
+                        onDismiss={this.onRequestClose}
+                    />
+                </Sidebar>
+
                 <PageSubheader>
-                    <PageFilters
+                    <TimesheetPageFilters
                         filters={this.state.filters}
-                        applyFilters={this.applyFilters}
+                        onFilterChange={this.onFilterChange}
                     />
                 </PageSubheader>
 
-                <div className="page--padding">
-                    <Sidebar
-                        isOpen={this.state.isEditSidebarOpen}
-                        onRequestClose={this._executeAfterSidebarClose}
-                    >
-                        <EditTimeForm
-                            timeLog={timeForEdit}
-                            onSubmit={this.updateLog}
-                            onDismiss={this._executeAfterSidebarClose}
-                        />
-                    </Sidebar>
-
-                    <Logs onSelect={this.selectLog} logs={this.props.items} />
-
+                <PageBody>
+                    <TimesheetList
+                        onSelect={this.selectTimesheet}
+                        timesheets={this.props.timesheets}
+                        employees={this.props.employees}
+                        hasError={this.props.hasError}
+                        isLoading={this.props.isLoading}
+                        isUpdating={this.props.isUpdating}
+                    />
                     <Pagination onChange={this.onPageChange} />
-                </div>
+                </PageBody>
             </Page>
         )
     }
 }
+
+const stateToProps = state => ({
+    locale: state.locale,
+    employees: employeesSelector(state),
+    timesheets: storeItem.listDataSelector(state),
+    hasError: storeItem.selector(state).error,
+    isLoading: storeItem.selector(state).loading,
+    isUpdating: storeItem.selector(state).updating,
+})
+
+export default connect(stateToProps, storeItem.actions)(TimesheetPage)

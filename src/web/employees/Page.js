@@ -41,7 +41,7 @@ export default class EmployeesPage extends Component {
         this._employees = combine(props.items, props.online)
     }
 
-    componentWillMount = () => {
+    componentDidMount() {
         this.getProjects()
     }
 
@@ -54,7 +54,7 @@ export default class EmployeesPage extends Component {
         }
     }
 
-    getProjects = () => {
+    getProjects() {
         this.props.list({
             pages: {
                 pageSize: this.state.pageSize,

@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import MdStarOutline from 'react-icons/lib/md/star-outline'
+import MdStar from 'react-icons/lib/md/star'
 
 import { inventoryStoreList } from './reducer'
 import { connectStoreList } from '../shared/connectStoreList'
 import Page from '../shared/Page'
 import PageBody from '../shared/PageBody'
+import Subtitle from '../shared/Subtitle'
 import PageSubheader from '../shared/PageSubheader'
 import Card, { CardBody } from '../shared/Card'
 import Table from '../shared/table/Table'
@@ -13,12 +16,11 @@ import TableRow from '../shared/table/TableRow'
 import TableCell from '../shared/table/TableCell'
 import Sidebar from '../shared/Sidebar'
 import Button from '../shared/Button'
-import MdStar from 'react-icons/lib/md/star'
-import MdStarOutline from 'react-icons/lib/md/star-outline'
 
 import EditItemForm from './EditItemForm'
 import { createOfflineId } from '../shared/offline.utils'
 import Currency from '../shared/Currency'
+import Tooltip from '../shared/Tooltip'
 
 class InventoryPage extends Component {
     static propTypes = {
@@ -88,16 +90,17 @@ class InventoryPage extends Component {
                 </PageSubheader>
 
                 <PageBody>
+                    <Subtitle>Trenutno Stanje</Subtitle>
                     <Table>
                         <TableHead
                             columns={[
-                                'Name',
+                                'Naziv',
                                 'Tip',
                                 'Brand',
                                 'Cijena',
                                 'Kolicina',
                                 'Mjera',
-                                'Favorit',
+                                'Opcije',
                             ]}
                         />
 
@@ -113,18 +116,26 @@ class InventoryPage extends Component {
                                 </TableCell>
                                 <TableCell>{item.quantity}</TableCell>
                                 <TableCell>{item.unit}</TableCell>
-                                <TableCell>
-                                    <Button
-                                        outline={!item.favorite_id}
-                                        small
-                                        iconOnly
+                                <TableCell noPadding align="center">
+                                    <Tooltip
+                                        title={
+                                            item.favorite_id
+                                                ? 'Ukloni iz favorita'
+                                                : 'Dodaj u favorite'
+                                        }
                                     >
-                                        {!item.favorite_id ? (
-                                            <MdStarOutline />
-                                        ) : (
-                                            <MdStar />
-                                        )}
-                                    </Button>
+                                        <Button
+                                            outline={!item.favorite_id}
+                                            small
+                                            iconOnly
+                                        >
+                                            {!item.favorite_id ? (
+                                                <MdStarOutline />
+                                            ) : (
+                                                <MdStar />
+                                            )}
+                                        </Button>
+                                    </Tooltip>
                                 </TableCell>
                             </TableRow>
                         ))}

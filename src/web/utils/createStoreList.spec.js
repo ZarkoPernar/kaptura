@@ -7,7 +7,7 @@ const middleware = applyMiddleware(thunk)
 
 let storeItem
 let store
-
+const name = 'test'
 beforeEach(() => {
     storeItem = createStoreList('test', {
         api: {

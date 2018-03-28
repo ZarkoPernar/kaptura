@@ -47,13 +47,13 @@ import './projekti.scss'
     rootStoreItem,
 })
 export default class ProjectPage extends Component {
-    static defaultProps = {
-        items: [],
-        list: () => {},
-        add: () => {},
-        update: () => {},
-        remove: () => {},
-    }
+    // static defaultProps = {
+    //     items: [],
+    //     list: () => {},
+    //     add: () => {},
+    //     update: () => {},
+    //     remove: () => {},
+    // }
 
     state = {
         projectForEdit: null,
@@ -286,7 +286,12 @@ export default class ProjectPage extends Component {
                         applyFilters={this.applyFilters}
                     />
 
-                    <Button flat color="primary" onClick={this.openNew}>
+                    <Button
+                        style={{ marginLeft: '1em' }}
+                        flat
+                        color="primary"
+                        onClick={this.openNew}
+                    >
                         Novi Projekt
                     </Button>
                 </PageSubheader>

@@ -14,7 +14,7 @@ import SearchProject from '../projects/SearchProject'
 
 export default class PageFilters extends Component {
     static propTypes = {
-        applyFilters: PropTypes.func.isRequired,
+        onFilterChange: PropTypes.func.isRequired,
     }
 
     state = {
@@ -22,54 +22,54 @@ export default class PageFilters extends Component {
     }
 
     applyFilter = (name, value, comparator = '=') => {
-        this.props.applyFilters({
+        this.props.onFilterChange({
             ...this.props.filters,
-            [name]: value ? { comparator, value } : undefined
+            [name]: value ? { comparator, value } : undefined,
         })
     }
 
-    onClientSelect = (client) => {
+    onClientSelect = client => {
         this.setState({
-            clientName: client.name
+            clientName: client.name,
         })
         this.applyFilter('client_id', client._id)
     }
 
-    onProjectSelect = (project) => {
+    onProjectSelect = project => {
         this.setState({
-            projectName: project.name
+            projectName: project.name,
         })
         this.applyFilter('project_id', project._id)
     }
 
     onFilterInputChange = (value, name) => {
         this.setState({
-            [name]: value
+            [name]: value,
         })
     }
 
     onDateChange = (value, name) => {
         this.setState({
-            [name]: value
+            [name]: value,
         })
         this.applyFilter('check_in', value, '>')
     }
 
     clearProject = () => {
         this.setState({
-            projectName: ''
+            projectName: '',
         })
         this.applyFilter('project_id')
     }
     clearClient = () => {
         this.setState({
-            clientName: ''
+            clientName: '',
         })
         this.applyFilter('client_id')
     }
     clearStart = () => {
         this.setState({
-            startDate: ''
+            startDate: '',
         })
         this.applyFilter('check_in')
     }
@@ -79,36 +79,60 @@ export default class PageFilters extends Component {
             <FormGroup
                 key="Projekt"
                 label="Projekt"
-                inline flat
+                inline
+                flat
                 itemLeft={<MdAssignment />}
-                itemRight={<Button iconOnly clear onClick={this.clearProject}><MdCancel /></Button>}>
+                itemRight={
+                    <Button iconOnly clear onClick={this.clearProject}>
+                        <MdCancel />
+                    </Button>
+                }
+            >
                 <SearchProject
                     name="projectName"
                     onSelect={this.onProjectSelect}
                     onChange={this.onFilterInputChange}
-                    value={this.state.projectName} />
+                    value={this.state.projectName}
+                />
             </FormGroup>,
 
             <FormGroup
                 key="Klijent"
                 label="Klijent"
-                inline flat
+                inline
+                flat
                 itemLeft={<MdBook />}
-                itemRight={<Button iconOnly clear onClick={this.clearClient}><MdCancel /></Button>}>
+                itemRight={
+                    <Button iconOnly clear onClick={this.clearClient}>
+                        <MdCancel />
+                    </Button>
+                }
+            >
                 <SearchClient
                     name="clientName"
                     onSelect={this.onClientSelect}
                     onChange={this.onFilterInputChange}
-                    value={this.state.clientName} />
+                    value={this.state.clientName}
+                />
             </FormGroup>,
 
             <FormGroup
                 key="Pocinje"
                 label="Pocinje"
-                inline flat
+                inline
+                flat
                 itemLeft={<MdDate />}
-                itemRight={<Button iconOnly clear onClick={this.clearStart}><MdCancel /></Button>}>
-                <Datepicker name="startDate" onChange={this.onDateChange} value={this.state.startDate} />
+                itemRight={
+                    <Button iconOnly clear onClick={this.clearStart}>
+                        <MdCancel />
+                    </Button>
+                }
+            >
+                <Datepicker
+                    name="startDate"
+                    onChange={this.onDateChange}
+                    value={this.state.startDate}
+                />
             </FormGroup>,
         ]
     }

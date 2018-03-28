@@ -33,7 +33,7 @@ class Datepicker extends Component {
 
     render() {
         const { value, ...filteredProps } = this.props
-        const selected = getValueFromProps(value)
+        const selected = getValueFromProps(value || this.props.defaultValue)
 
         return (
             <DatePicker

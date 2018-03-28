@@ -2,13 +2,13 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { v4 as uid } from 'uuid'
 
-import { actions as userInfoActions} from '../userInfo.reducer'
+import { actions as userInfoActions } from '../userInfo.reducer'
 import appTitle from '../shared/appTitle'
 import createStoreListComponent from '../shared/StoreList'
 
 import { isUnfinished, getLast, inOut } from './clock'
 import { storeItem } from './reducer'
-import { storeItem as listStoreItem } from './timesheetReducer'
+import { storeItem as listStoreItem } from './timesheetListReducer'
 import { storeItem as rootStoreItem } from '../timesheet/reducer'
 
 import ClockButton from './ClockButton'
@@ -17,15 +17,18 @@ import './clock.scss'
 
 const DEFAULT_TITLE = 'Clock'
 
-@connect((state) => ({
-    user: state.userInfo && state.userInfo.user,
-}), {
-    loadUser: userInfoActions.load,
-    sendToList: ({ payload }) => ({
-        type: listStoreItem.types.ADD_ITEM,
-        payload
-    })
-})
+@connect(
+    state => ({
+        user: state.userInfo && state.userInfo.user,
+    }),
+    {
+        loadUser: userInfoActions.load,
+        sendToList: ({ payload }) => ({
+            type: listStoreItem.types.ADD_ITEM,
+            payload,
+        }),
+    },
+)
 @createStoreListComponent({
     storeName: 'clock',
     actions: storeItem.actions,
@@ -48,14 +51,8 @@ export default class Clock extends PureComponent {
         }
     }
 
-    componentWillMount() {
-        this.getUser()
-        // this.setState(state => ({
-        //     items: getFromStorage(state.items)
-        // }))
-    }
-
     componentDidMount() {
+        this.getUser()
         this.appTitle = appTitle(window.document)
     }
 
@@ -70,22 +67,21 @@ export default class Clock extends PureComponent {
         }
     }
 
-
     getUser = () => {
         this.props.loadUser()
     }
 
-    getLogs = (user) => {
+    getLogs = user => {
         this.props.list({
             filters: {
                 user_id: {
                     comparator: '=',
                     value: user._id,
-                }
+                },
             },
             pages: {
                 pageSize: 1,
-            }
+            },
         })
     }
 
@@ -103,16 +99,23 @@ export default class Clock extends PureComponent {
         } else {
             const log = inOut()
 
-            this.props.add({
-                ...log,
-                _id: uid(),
-                user_id: this.props.user._id,
-            })
-            .then(this.props.sendToList)
+            this.props
+                .add({
+                    ...log,
+                    _id: uid(),
+                    user_id: this.props.user._id,
+                })
+                .then(this.props.sendToList)
         }
     }
 
     render() {
-        return <ClockButton onToggle={this.onToggle} activeLog={this._activeLog} isActive={this._hasUnfinished} />
+        return (
+            <ClockButton
+                onToggle={this.onToggle}
+                activeLog={this._activeLog}
+                isActive={this._hasUnfinished}
+            />
+        )
     }
 }

@@ -4,8 +4,11 @@
 $line-transition: 0.38s transform cubic-bezier(0.24, 0.8, 0, 0.97);
 $label-transition: 0.38s cubic-bezier(0.24, 0.8, 0, 0.97) transform,
     0.38s cubic-bezier(0.24, 0.8, 0, 0.97) opacity;
+
 $size: 0.5em;
 $label-top-offset-modifier: 3.5;
+$label-top-offset: $label-top-offset-modifier * $size;
+$form-group-margin-bottom: 2em;
 
 textarea {
     display: block;
@@ -14,13 +17,13 @@ textarea {
 .form-group {
     font-size: 1rem;
     display: block;
-    margin-bottom: $label-top-offset-modifier * $size;
+    margin-bottom: $form-group-margin-bottom;
     padding-top: 2 * $size;
     position: relative;
 
     .form-group__label {
         position: absolute;
-        top: $label-top-offset-modifier * $size;
+        top: $label-top-offset;
         left: 0;
         color: $bc-earth;
         font-weight: 600;
@@ -34,8 +37,7 @@ textarea {
     &--active,
     &--is-focused {
         .form-group__label {
-            transform: translate3d(0, -($label-top-offset-modifier * $size), 0)
-                scale(1);
+            transform: translate3d(0, -($label-top-offset), 0) scale(1);
         }
     }
 

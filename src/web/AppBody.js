@@ -19,7 +19,7 @@ function Loader(props) {
     if (props.error) {
         return <div>Error!</div>
     } else if (props.pastDelay) {
-        return <div>Loading...</div>
+        return null
     } else {
         return null
     }

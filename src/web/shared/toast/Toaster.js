@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import { connect } from 'react-redux'
-
-require('./toast.scss')
+import { v4 } from 'uuid'
 
 import { Toast } from './Toast'
+import './toast.scss'
 
 export const toastPropType = PropTypes.shape({
-    id: PropTypes.oneOf([PropTypes.string.isRequired, PropTypes.number]),
+    message: PropTypes.string.isRequired,
+    duration: PropTypes.number,
 })
 const toastsPropTypes = PropTypes.arrayOf(toastPropType)
 
@@ -21,68 +21,55 @@ export default class Toaster extends Component {
     }
 
     state = {
-        toasts: []
-    }
-
-    constructor(props) {
-        super(props)
-        // const nextToasts = Array.isArray(props.toasts) ? props.toasts : [props.toasts]
+        toasts: [],
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.toasts !== this.props.toasts) {
-            const nextToasts = Array.isArray(nextProps.toasts) ? nextProps.toasts : [nextProps.toasts]
+            const nextToasts = (Array.isArray(nextProps.toasts)
+                ? nextProps.toasts
+                : [nextProps.toasts]
+            ).map(toast => {
+                if (!toast.id) {
+                    return {
+                        ...toast,
+                        id: v4(),
+                    }
+                }
+
+                return toast
+            })
             this.setState(({ toasts }) => ({
-                toasts: [...toasts, ...nextToasts]
+                toasts: [...toasts, ...nextToasts],
             }))
         }
     }
 
-    removeToast = (toast) => {
-        this.setState((state) => ({
-            toasts: state.toasts.filter(temp => temp.id !== toast.id)
+    removeToast = toast => {
+        this.setState(state => ({
+            toasts: state.toasts.filter(temp => temp.id !== toast.id),
         }))
     }
 
     render() {
         return (
-            <div key="toaster" className="toaster" hidden={!this.props.toasts.length}>
+            <div
+                key="toaster"
+                className="toaster"
+                hidden={!this.state.toasts.length}
+            >
                 <ul className="toast-list">
-                    { this.state.toasts.map((data) => {
-                        return (<Toast key={data.id || Math.random()}
-                            toastData={data}
-                            dismiss={this.removeToast} />
+                    {this.state.toasts.map(data => {
+                        return (
+                            <Toast
+                                key={data.id}
+                                toastData={data}
+                                dismiss={this.removeToast}
+                            />
                         )
-                    }) }
+                    })}
                 </ul>
             </div>
         )
     }
 }
-
-// const LinkedToaster = connect(mapStateToProps, mapDispatchToProps)(Toaster)
-
-// export default LinkedToaster
-
-// function mapStateToProps({toasts}) {
-//     return {
-//         toasts,
-//     }
-// }
-
-// function mapDispatchToProps(dispatch) {
-//     return {
-//         removeToast(toast) {
-//             dispatch({
-//                 type: 'REMOVE_TOAST',
-//                 payload: toast
-//             })
-//         },
-//         dismissToast(toast) {
-//             dispatch({
-//                 type: 'DISMISS_TOAST',
-//                 payload: toast
-//             })
-//         }
-//     }
-// }

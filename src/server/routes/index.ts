@@ -41,7 +41,7 @@ export default function registerRoutes(app) {
     app.all(API_PREFIX + '/*', localAuthMiddleware)
 
     // log everything on api routes to mongo
-    // app.all(API_PREFIX + '/*', apiLogging)
+    app.all(API_PREFIX + '/*', apiLogging)
 
     // api routes
     projectRoutes(app)

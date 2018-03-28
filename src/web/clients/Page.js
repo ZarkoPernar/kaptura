@@ -27,7 +27,7 @@ export default class ClientsPage extends Component {
         pageNumber: 1,
     }
 
-    componentWillMount = () => {
+    componentDidMount = () => {
         this.getProjects()
     }
 
@@ -184,7 +184,6 @@ export default class ClientsPage extends Component {
 
                 <div className="page__controls">
                     <Button color="primary" onClick={this.openNew}>
-                        <MdAdd />
                         Novi Klijent
                     </Button>
                 </div>

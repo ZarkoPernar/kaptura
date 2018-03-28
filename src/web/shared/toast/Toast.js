@@ -11,7 +11,7 @@ export class Toast extends Component {
     }
 
     state = {
-        closed: false
+        closed: false,
     }
 
     componentDidMount() {
@@ -21,7 +21,10 @@ export class Toast extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return (nextProps.toastData !== this.props.toastData || nextState.closed !== this.state.closed)
+        return (
+            nextProps.toastData !== this.props.toastData ||
+            nextState.closed !== this.state.closed
+        )
     }
 
     _dismiss = () => {
@@ -30,7 +33,7 @@ export class Toast extends Component {
 
     _timeOut = () => {
         this.setState({
-            closed: true
+            closed: true,
         })
 
         this.props.removeMe()
@@ -38,8 +41,16 @@ export class Toast extends Component {
 
     render() {
         return (
-            <li onClick={this._dismiss} className={'toast ' + (this.props.toastData.closed || this.state.closed ? 'toast--closed' : '')}>
-                {this.props.toastData.description}
+            <li
+                onClick={this._dismiss}
+                className={
+                    'toast ' +
+                    (this.props.toastData.closed || this.state.closed
+                        ? 'toast--closed'
+                        : '')
+                }
+            >
+                {this.props.toastData.message}
             </li>
         )
     }

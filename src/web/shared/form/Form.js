@@ -1,37 +1,60 @@
 import React, { Component, Children, cloneElement } from 'react'
 import PropTypes, { func } from 'prop-types'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form as FormikForm, Field } from 'formik'
 import yup from 'yup'
 
 import FormGroup from './FormGroup'
 import Input from './Input'
+import { flattenObject, unflattenObject } from '../../utils/flattenObject'
 
 export const FormValidationContext = React.createContext({
     errors: {},
     values: {},
 })
 
-class EnhancedForm extends Component {
+class Form extends Component {
+    static propTypes = {
+        onSubmit: PropTypes.func.isRequired,
+        onChange: PropTypes.func.isRequired,
+        initialValues: PropTypes.object.isRequired,
+        validationSchema: PropTypes.object,
+    }
+
+    static defaultProps = {
+        onSubmit: () => {},
+        onChange: () => {},
+        initialValues: {},
+    }
+
     handleSubmit = (
         values,
         { setSubmitting, setErrors /* setValues and other goodies */ },
     ) => {
         // do async validating after submitting to some api
         console.log(values)
-        this.props.onSubmit(values)
+        this.props.onSubmit(unflattenObject(values))
     }
 
     createHandleBlur(handleBlur) {
         return function onBlur(e) {
-            if (e.target.nodeName === 'BUTTON' || e.target.dataset.ignoreField)
+            const element = e.target
+            if (element.nodeName === 'BUTTON' || element.dataset.ignoreField)
                 return
             handleBlur(e)
         }
     }
 
     createHandleChange(handleChange) {
-        return function onBlur(e) {
-            if (e.target.nodeName === 'BUTTON' || e.target.dataset.ignoreField)
+        return e => {
+            const element = e.target
+
+            this.props.onChange(
+                unflattenObject({
+                    [element.name]: element.value,
+                }),
+            )
+
+            if (element.nodeName === 'BUTTON' || element.dataset.ignoreField)
                 return
             handleChange(e)
         }
@@ -40,7 +63,7 @@ class EnhancedForm extends Component {
     render() {
         return (
             <Formik
-                // initialValues={this.props.formData}
+                initialValues={flattenObject(this.props.initialValues)}
                 validationSchema={this.props.validationSchema}
                 // validate={this.props.validate}
                 onSubmit={this.handleSubmit}
@@ -53,34 +76,21 @@ class EnhancedForm extends Component {
                     handleSubmit,
                     isSubmitting,
                 }) => (
-                    <Form
+                    <FormikForm
                         autoComplete={this.props.autoComplete}
                         onChange={this.createHandleChange(handleChange)}
                         onBlur={this.createHandleBlur(handleBlur)}
                     >
-                        {/* {Children.map(this.props.children, formGroup => {
-                            const inputName =
-                                formGroup.props.children.props.name
-
-                            return cloneElement(formGroup, {
-                                onBlur: handleBlur,
-                                onChange: handleChange,
-                                error: errors[inputName],
-                            })
-                        })} */}
-
                         <FormValidationContext.Provider
                             value={{ errors, values }}
                         >
                             {this.props.children}
                         </FormValidationContext.Provider>
-                    </Form>
+                    </FormikForm>
                 )}
             />
         )
     }
 }
 
-EnhancedForm.propTypes = {}
-
-export default EnhancedForm
+export default Form

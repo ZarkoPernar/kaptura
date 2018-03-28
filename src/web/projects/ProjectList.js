@@ -9,9 +9,10 @@ import Button from '../shared/Button'
 import TableHead from '../shared/table/TableHead'
 import TableRow from '../shared/table/TableRow'
 import TableCell from '../shared/table/TableCell'
+import Tooltip from '../shared/Tooltip'
 
 const projectListColumnNames = [
-    'Ime',
+    'Naziv',
     'Broj',
     'Klijent',
     'Adresa',
@@ -65,16 +66,22 @@ class ProjectList extends PureComponent {
                                 <TableCell>
                                     <TimeFormat>{project.end_date}</TimeFormat>
                                 </TableCell>
-                                <TableCell key="options">
-                                    <Button
-                                        iconOnly
-                                        small
-                                        color="danger"
-                                        className="btn--table"
-                                        onClick={this.getRowRemove(project)}
-                                    >
-                                        <MdDelete />
-                                    </Button>
+                                <TableCell
+                                    key="options"
+                                    noPadding
+                                    align="center"
+                                >
+                                    <Tooltip title="Obrisi Projekt">
+                                        <Button
+                                            iconOnly
+                                            small
+                                            color="danger"
+                                            className="btn--table"
+                                            onClick={this.getRowRemove(project)}
+                                        >
+                                            <MdDelete />
+                                        </Button>
+                                    </Tooltip>
                                 </TableCell>
                             </TableRow>
                         )

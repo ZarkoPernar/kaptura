@@ -9,10 +9,6 @@ class EnhancedInput extends Component {
         if (this.props.onChange !== undefined) {
             this.props.onChange(e.target.value, this.props.name, e)
         }
-
-        if (this.props.formikOnChange !== undefined) {
-            this.props.formikOnChange(e)
-        }
     }
 
     render() {
@@ -20,8 +16,8 @@ class EnhancedInput extends Component {
         return (
             <input
                 className="form-control"
-                onChange={this.onChange}
                 {...props}
+                onChange={this.onChange}
             />
         )
     }

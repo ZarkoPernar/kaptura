@@ -4,13 +4,13 @@ import * as apiService from '../shared/apiService'
 import Card from '../shared/Card'
 
 class ProjectChartsComponent extends Component {
-    componentWillMount = () => {
+    componentDidMount() {
         this.getProjects()
     }
 
     getProjects = () => {
         getProjects({})
-            .then((res) => {
+            .then(res => {
                 this.setState({ projects: res })
             })
             .catch(console.error)
@@ -19,9 +19,7 @@ class ProjectChartsComponent extends Component {
     render() {
         return (
             <div className="page page--padding">
-                <Card>
-                    Charts
-                </Card>
+                <Card>Charts</Card>
             </div>
         )
     }

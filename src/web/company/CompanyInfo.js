@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import Card, { CardBody } from '../shared/Card'
@@ -23,7 +23,7 @@ const toDispatch = { save: info => createUpdateAction(info) }
 @connect(toState, toDispatch)
 export default class CompanyInfo extends Component {
     static defaultProps = {
-        company: { }
+        company: {},
     }
 
     state = {
@@ -33,7 +33,7 @@ export default class CompanyInfo extends Component {
             google_address: '',
             company_number: '',
         },
-        forUpdate: {}
+        forUpdate: {},
     }
 
     constructor(props) {
@@ -56,7 +56,7 @@ export default class CompanyInfo extends Component {
                 forUpdate: {
                     ...this.state.forUpdate,
                     _id: nextProps.company._id,
-                }
+                },
             })
         }
     }
@@ -65,17 +65,17 @@ export default class CompanyInfo extends Component {
         this.setState({
             company: {
                 ...this.state.company,
-                [name]: value
+                [name]: value,
             },
             forUpdate: {
                 _id: this.state.company._id,
                 ...this.state.forUpdate,
-                [name]: value
-            }
+                [name]: value,
+            },
         })
     }
 
-    onAddressSelect = (address) => {
+    onAddressSelect = address => {
         this.setState({
             company: {
                 ...this.state.company,
@@ -85,10 +85,8 @@ export default class CompanyInfo extends Component {
                 _id: this.state.company._id,
                 ...this.state.forUpdate,
                 ...address,
-            }
+            },
         })
-
-
     }
 
     save = () => {
@@ -100,7 +98,6 @@ export default class CompanyInfo extends Component {
         const cellStyle = { maxWidth: '50%' }
 
         return (
-
             <Box>
                 <Flex grid>
                     <Cell sm="7">
@@ -109,38 +106,72 @@ export default class CompanyInfo extends Component {
                                 <Subtitle>Osnovne Informacije</Subtitle>
                                 <Flex grid>
                                     <Cell>
-                                        <FormGroup label="Ime Tvrtke">
-                                            <Input name="name" value={this.state.company.name} onChange={this.onChange} />
+                                        <FormGroup label="Naziv Tvrtke">
+                                            <Input
+                                                name="name"
+                                                value={this.state.company.name}
+                                                onChange={this.onChange}
+                                            />
                                         </FormGroup>
                                     </Cell>
 
                                     <Cell>
                                         <FormGroup label="OIB">
-                                            <Input name="company_number" value={this.state.company.company_number} onChange={this.onChange} />
+                                            <Input
+                                                name="company_number"
+                                                value={
+                                                    this.state.company
+                                                        .company_number
+                                                }
+                                                onChange={this.onChange}
+                                            />
                                         </FormGroup>
                                     </Cell>
                                 </Flex>
                                 <Flex grid>
                                     <Cell>
                                         <FormGroup label="Email">
-                                            <Input type="email" name="email" value={this.state.company.email} onChange={this.onChange} />
+                                            <Input
+                                                type="email"
+                                                name="email"
+                                                value={this.state.company.email}
+                                                onChange={this.onChange}
+                                            />
                                         </FormGroup>
                                     </Cell>
 
                                     <Cell>
                                         <FormGroup label="IBAN">
-                                            <Input name="bank_account" value={this.state.company.bank_account} onChange={this.onChange} />
+                                            <Input
+                                                name="bank_account"
+                                                value={
+                                                    this.state.company
+                                                        .bank_account
+                                                }
+                                                onChange={this.onChange}
+                                            />
                                         </FormGroup>
                                     </Cell>
 
                                     <Cell>
                                         <FormGroup label="Adresa">
-                                            <SearchAddress name="google_address" onSelect={this.onAddressSelect} value={this.state.company.google_address} onChange={this.onChange} />
+                                            <SearchAddress
+                                                name="google_address"
+                                                onSelect={this.onAddressSelect}
+                                                value={
+                                                    this.state.company
+                                                        .google_address
+                                                }
+                                                onChange={this.onChange}
+                                            />
                                         </FormGroup>
                                     </Cell>
                                 </Flex>
 
-                                <ButtonLoader loading={this.props.updating} onClick={this.save}>
+                                <ButtonLoader
+                                    loading={this.props.updating}
+                                    onClick={this.save}
+                                >
                                     Spremi Promjene
                                 </ButtonLoader>
                             </CardBody>
@@ -150,11 +181,12 @@ export default class CompanyInfo extends Component {
                     <Cell sm="5">
                         <Box padding>
                             <Subtitle>Osnovne Informacije</Subtitle>
-                            Ove informacije korisne su za automatsku izradu faktura
+                            Ove informacije korisne su za automatsku izradu
+                            faktura
                         </Box>
                     </Cell>
                 </Flex>
             </Box>
-        );
+        )
     }
 }

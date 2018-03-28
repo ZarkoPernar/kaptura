@@ -20,7 +20,10 @@ const TYPES = [
     UPDATE_ERROR,
 ]
 
-export default function createStoreList(name=required('name'), { api, storeItem } = {}) {
+export default function createStoreItem(
+    name = required('name'),
+    { api, storeItem } = {},
+) {
     const ACTION_TYPES = TYPES.reduce((types, type) => {
         types[type] = name + SPLIT + type
         return types
@@ -91,7 +94,6 @@ export default function createStoreList(name=required('name'), { api, storeItem 
         }
     }
 
-
     // START LOAD
     function load(params) {
         return dispatch => {
@@ -100,7 +102,8 @@ export default function createStoreList(name=required('name'), { api, storeItem 
             if (!api) {
                 dispatch(loadSuccess(params))
             } else {
-                return api.getById(params)
+                return api
+                    .getById(params)
                     .then(res => dispatch(loadSuccess(res)))
                     .catch(err => dispatch(loadFailure(err)))
             }
@@ -117,18 +120,17 @@ export default function createStoreList(name=required('name'), { api, storeItem 
     function loadSuccess(payload) {
         return {
             type: ACTION_TYPES.LOAD_SUCCESS,
-            payload
+            payload,
         }
     }
 
     function loadFailure(error) {
         return {
             type: ACTION_TYPES.LOAD_ERROR,
-            error
+            error,
         }
     }
     // :: END LOAD
-
 
     // START UPDATE
     function update(item) {
@@ -138,7 +140,8 @@ export default function createStoreList(name=required('name'), { api, storeItem 
             if (!api) {
                 dispatch(updateSuccess(item))
             } else {
-                return api.update(item)
+                return api
+                    .update(item)
                     .then(res => dispatch(updateSuccess(res)))
                     .catch(err => dispatch(updateFailure(err)))
             }
@@ -155,14 +158,14 @@ export default function createStoreList(name=required('name'), { api, storeItem 
     function updateSuccess(payload) {
         return {
             type: ACTION_TYPES.UPDATE_SUCCESS,
-            payload
+            payload,
         }
     }
 
     function updateFailure(error) {
         return {
             type: ACTION_TYPES.UPDATE_ERROR,
-            error
+            error,
         }
     }
 

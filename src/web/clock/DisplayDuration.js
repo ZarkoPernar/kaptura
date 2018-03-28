@@ -10,11 +10,8 @@ export default class DisplayDuration extends PureComponent {
         time: new Date().toISOString(),
     }
 
-    componentWillMount() {
-        this.interval = setInterval(this.update, 1000)
-    }
-
     componentDidMount() {
+        this.interval = setInterval(this.update, 1000)
         this.appTitle = appTitle(window.document)
     }
 
@@ -35,6 +32,6 @@ export default class DisplayDuration extends PureComponent {
             this.appTitle.setTitle(time + DEFAULT_TITLE)
         }
 
-        return <span>{ time }</span>
+        return <span>{time}</span>
     }
 }

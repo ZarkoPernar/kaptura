@@ -62,6 +62,10 @@ body {
     font-weight: $font-weight;
 }
 
+a {
+    color: $bc-primary;
+}
+
 .App {
     height: 100%;
     min-height: 400px;

@@ -17,35 +17,46 @@
  2. Tests will not display detailed error messages
  when running against production version code
  */
-process.env.NODE_ENV = 'test';
 
-// Register babel so that it will transpile ES6 to ES5
-// before our tests run.
-require('babel-register')();
+// Do this as the first thing so that any code reading it knows the right env.
+process.env.BABEL_ENV = 'test'
+process.env.NODE_ENV = 'test'
+process.env.PUBLIC_URL = ''
 
-// Disable webpack-specific features for tests since
-// Mocha doesn't know what to do with them.
-require.extensions['.css'] = function () {return null;};
-require.extensions['.png'] = function () {return null;};
-require.extensions['.jpg'] = function () {return null;};
+// Makes the script crash on unhandled rejections instead of silently
+// ignoring them. In the future, promise rejections that are not handled will
+// terminate the Node.js process with a non-zero exit code.
+process.on('unhandledRejection', err => {
+    throw err
+})
 
-// Configure JSDOM and set global variables
-// to simulate a browser environment for tests.
-var jsdom = require('jsdom').jsdom;
+// // Register babel so that it will transpile ES6 to ES5
+// // before our tests run.
+// require('babel-register')();
 
-var exposedProperties = ['window', 'navigator', 'document'];
+// // Disable webpack-specific features for tests since
+// // Mocha doesn't know what to do with them.
+// require.extensions['.css'] = function () {return null;};
+// require.extensions['.png'] = function () {return null;};
+// require.extensions['.jpg'] = function () {return null;};
 
-global.document = jsdom('');
-global.window = document.defaultView;
-Object.keys(document.defaultView).forEach((property) => {
-  if (typeof global[property] === 'undefined') {
-    exposedProperties.push(property);
-    global[property] = document.defaultView[property];
-  }
-});
+// // Configure JSDOM and set global variables
+// // to simulate a browser environment for tests.
+// var jsdom = require('jsdom').jsdom;
 
-global.navigator = {
-  userAgent: 'node.js'
-};
+// var exposedProperties = ['window', 'navigator', 'document'];
 
-documentRef = document;  //eslint-disable-line no-undef
+// global.document = jsdom('');
+// global.window = document.defaultView;
+// Object.keys(document.defaultView).forEach((property) => {
+//   if (typeof global[property] === 'undefined') {
+//     exposedProperties.push(property);
+//     global[property] = document.defaultView[property];
+//   }
+// });
+
+// global.navigator = {
+//   userAgent: 'node.js'
+// };
+
+// documentRef = document;  //eslint-disable-line no-undef

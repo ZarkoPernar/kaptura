@@ -1,4 +1,8 @@
 .subtitle {
+    &:first-child {
+        margin-top: 0;
+    }
+
     &--underlined {
         margin-bottom: 2em;
         padding-bottom: 1em;

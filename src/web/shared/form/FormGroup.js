@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Children } from 'react'
 import PropTypes from 'prop-types'
 import { v4 as uid } from 'uuid'
 import classnames from 'classnames'
@@ -18,22 +18,25 @@ class FormGroup extends PureComponent {
     constructor(props) {
         super(props)
 
-        this._id =
-            (props.formName ? props.formName : uid()) +
-            '-' +
-            props.children.props.name
+        if (Children.count(props.children) > 1) {
+            throw new Error(
+                'FormGroup must have exactly one direct child element',
+            )
+        }
+
+        const inputElement = props.children
 
         this.state = {
             isFocused: false,
-            hasValue: hasValue(props.children.props.value),
+            id:
+                (props.formName !== undefined ? props.formName : uid()) +
+                '-' +
+                inputElement.props.name,
         }
     }
 
     onChange = e => {
         // TODO: validate
-        this.setState({
-            hasValue: hasValue(e.target.value),
-        })
         if (this.props.onChange !== undefined) {
             this.props.onChange(e)
         }
@@ -54,13 +57,15 @@ class FormGroup extends PureComponent {
     render() {
         const input = this.props.children
         // FIXME: figure out why input.type === Checkbox does not work
-        const hideFgLine = input.type.displayName === Checkbox.displayName
-        const id = input.props.id || this._id
+        const shouldHideFgLine = input.type.displayName === Checkbox.displayName
+        const id = input.props.id || this.state.id
 
         let labelElement
-        let inputElement = this.props.ignoreField
+        const inputElement = this.props.ignoreField
             ? React.cloneElement(input, {
                   id,
+                  // We use data-ignore-field attr so we can read
+                  // it from the event.target for formik
                   'data-ignore-field': true,
               })
             : React.cloneElement(input, {
@@ -91,40 +96,51 @@ class FormGroup extends PureComponent {
 
         return (
             <FormValidationContext.Consumer>
-                {({ errors }) => (
-                    <div
-                        onChange={this.onChange}
-                        onBlur={this.onBlur}
-                        onFocus={this.onFocus}
-                        className={classnames('form-group', {
-                            'form-group--inline': this.props.inline,
-                            'form-group--is-focused': this.state.isFocused,
-                            'form-group--active': this.state.hasValue,
-                            'form-group--has-error': errors[input.props.name],
-                            'form-group--flat': this.props.flat,
-                            'form-group--icon-left':
-                                this.props.itemLeft !== undefined,
-                        })}
-                        style={this.props.style}
-                    >
-                        {labelElement}
+                {({ errors, values }) => {
+                    const inputHasValue =
+                        input.props.value !== undefined
+                            ? hasValue(input.props.value)
+                            : hasValue(values[input.props.name])
 
-                        <div className="input-group">
-                            {itemLeft}
-                            {inputElement}
-                            {itemRight}
-                            {hideFgLine ? null : (
-                                <span className="form-group__line" />
-                            )}
-                        </div>
+                    return (
+                        <div
+                            onChange={this.onChange}
+                            onBlur={this.onBlur}
+                            onFocus={this.onFocus}
+                            className={classnames('form-group', {
+                                'form-group--inline': this.props.inline,
+                                'form-group--is-focused': this.state.isFocused,
+                                'form-group--active': inputHasValue,
+                                'form-group--has-error':
+                                    errors[input.props.name],
+                                'form-group--flat': this.props.flat,
+                                'form-group--icon-left':
+                                    this.props.itemLeft !== undefined,
+                            })}
+                            style={this.props.style}
+                        >
+                            {labelElement}
 
-                        {errors[input.props.name] ? (
-                            <div className="form-group__messages">
-                                {errors[input.props.name]}
+                            <div className="input-group">
+                                {itemLeft}
+                                {React.cloneElement(inputElement, {
+                                    defaultValue:
+                                        values[inputElement.props.name],
+                                })}
+                                {itemRight}
+                                {shouldHideFgLine ? null : (
+                                    <span className="form-group__line" />
+                                )}
                             </div>
-                        ) : null}
-                    </div>
-                )}
+
+                            {errors[input.props.name] ? (
+                                <div className="form-group__messages">
+                                    {errors[input.props.name]}
+                                </div>
+                            ) : null}
+                        </div>
+                    )
+                }}
             </FormValidationContext.Consumer>
         )
     }

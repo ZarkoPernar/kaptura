@@ -15,10 +15,6 @@ export default class LoginPage extends Component {
         toasts: [],
     }
 
-    componentWillMount() {
-
-    }
-
     login = () => {
         const body = new FormData()
         body.append('username', this.state.username)
@@ -28,52 +24,69 @@ export default class LoginPage extends Component {
         fetch('/auth/login', {
             method: 'POST',
             body,
-         })
-        .then(console.log)
-        .catch(this.handleCreateProjectError)
+        })
+            .then(console.log)
+            .catch(this.handleCreateProjectError)
     }
 
     onChange = (value, name) => {
         this.setState({
-            [name]: value
+            [name]: value,
         })
     }
 
-    handleCreateProjectError = (err) => {
+    handleCreateProjectError = err => {
         console.log(err)
         this.setState(state => ({
-            toasts: [...state.toasts, {
-                description: err.message
-            }]
+            toasts: [
+                ...state.toasts,
+                {
+                    description: err.message,
+                },
+            ],
         }))
     }
 
-    removeToast = (toast) => {
-        this.setState((state) => ({
-            toasts: state.toasts.filter(temp => temp.id !== toast.id)
+    removeToast = toast => {
+        this.setState(state => ({
+            toasts: state.toasts.filter(temp => temp.id !== toast.id),
         }))
     }
 
     render() {
         return (
             <div className="Korisnik-page">
-                <Toaster key="toaster" remove={this.removeToast} toasts={this.state.toasts} />
+                <Toaster
+                    key="toaster"
+                    remove={this.removeToast}
+                    toasts={this.state.toasts}
+                />
 
                 <div className="login-container">
                     <FormGroup label="Korisnicko Ime">
-                        <Input name="username" value={this.state.username} onChange={this.onChange} />
+                        <Input
+                            name="username"
+                            value={this.state.username}
+                            onChange={this.onChange}
+                        />
                     </FormGroup>
 
                     <FormGroup label="Password">
-                        <Input name="password" type="password" value={this.state.password} onChange={this.onChange} />
+                        <Input
+                            name="password"
+                            type="password"
+                            value={this.state.password}
+                            onChange={this.onChange}
+                        />
                     </FormGroup>
 
                     <div className="login-actions">
-                        <Button onClick={this.login}>
-                            Login
-                        </Button>
+                        <Button onClick={this.login}>Login</Button>
 
-                        <a href="/auth/google/login" className="btn btn--color-danger btn--google">
+                        <a
+                            href="/auth/google/login"
+                            className="btn btn--color-danger btn--google"
+                        >
                             Login with Google
                         </a>
                     </div>
@@ -82,4 +95,3 @@ export default class LoginPage extends Component {
         )
     }
 }
-

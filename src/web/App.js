@@ -17,11 +17,6 @@ import './print.scss'
 
 const TAB_KEY = 9
 
-@withRouter
-@connect(state => ({ user: state.userInfo.user }), {
-    onlineUsers: onlineEmployees.actions.load,
-    addNotif: payload => ({ type: 'notifications/ADD_ITEM', payload }),
-})
 export class App extends Component {
     state = {
         menuIsOpen: false,
@@ -91,4 +86,11 @@ export class App extends Component {
     }
 }
 
-export default hot(module)(App)
+export default hot(module)(
+    withRouter(
+        connect(state => ({ user: state.userInfo.user }), {
+            onlineUsers: onlineEmployees.actions.load,
+            addNotif: payload => ({ type: 'notifications/ADD_ITEM', payload }),
+        })(App),
+    ),
+)

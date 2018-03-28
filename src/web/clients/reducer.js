@@ -1,4 +1,5 @@
 import { createStoreList } from 'redux-store-list'
+import { createEpic } from 'redux-store-list/epic'
 import { combineEpics } from 'redux-observable'
 // import createStoreList from '../utils/createStoreList'
 
@@ -13,8 +14,6 @@ export const storeItem = {
     },
 }
 
-export const clientEpic = storeItem.epic
+export const clientEpic = createEpic(storeItem, api)
 
 export default storeItem.reducer
-
-console.log(storeItem)

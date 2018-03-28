@@ -4,7 +4,7 @@ import { userInfoEpic, socketUserEpic } from './userInfo.reducer'
 import { clientEpic } from './clients/reducer'
 import { employeesEpic } from './employees/reducer'
 import { companyEpic } from './company/reducer'
-import { inventoryStoreList } from './inventory/reducer'
+import { inventoryEpic } from './inventory/reducer'
 
 const epics = combineEpics(
     userInfoEpic,
@@ -12,7 +12,7 @@ const epics = combineEpics(
     employeesEpic,
     companyEpic,
     clientEpic,
-    inventoryStoreList.epic,
+    inventoryEpic,
 )
 
 export default createEpicMiddleware(epics)

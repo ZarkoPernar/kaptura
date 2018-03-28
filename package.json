@@ -10,7 +10,7 @@
     "scripts": {
         "start": "node server",
         "build": "rimraf ./public && SET NODE_ENV=production && SET BABEL_ENV=production && webpack --config ./tools/webpack.config.js --colors --progress --profile",
-        "test": "react-scripts test --env=jsdom",
+        "test": "jest",
         "serve": "SET NODE_ENV=production && nodemon -w server",
         "build:live": "nodemon --exec ts-node -- ./src/server/index.ts --config ./tsconfig.json",
         "devserver": "cross-env NODE_ENV=development webpack-dev-server --config ./tools/webpack.config.js",
@@ -44,11 +44,14 @@
         "clean-webpack-plugin": "^0.1.15",
         "copy-webpack-plugin": "^4.0.1",
         "css-loader": "^0.26.2",
+        "cypress": "^2.1.0",
+        "enzyme": "^3.3.0",
+        "enzyme-adapter-react-16": "^1.1.1",
         "eslint": "^3.17.0",
-        "eslint-config-airbnb": "^14.1.0",
+        "eslint-config-airbnb": "16.1.0",
         "eslint-plugin-babel": "^4.1.1",
-        "eslint-plugin-import": "^2.2.0",
-        "eslint-plugin-jsx-a11y": "^4.0.0",
+        "eslint-plugin-import": "^2.8.0",
+        "eslint-plugin-jsx-a11y": "^6.0.3",
         "eslint-plugin-react": "^7.6.1",
         "extract-text-webpack-plugin": "^2.1.0",
         "favicons-webpack-plugin": "0.0.7",
@@ -56,11 +59,14 @@
         "html-webpack-plugin": "^2.28.0",
         "image-webpack-loader": "3.4.1",
         "jest": "21.2.1",
+        "jest-enzyme": "^4.2.0",
         "node-sass": "^4.5.0",
         "npm-run-all": "^4.0.2",
+        "raf": "^3.4.0",
         "react-hot-loader": "^4.0.0-beta.18",
         "react-scripts": "^1.1.0",
         "react-styleguidist": "^6.0.33",
+        "react-test-renderer": "^16.2.0",
         "sass-loader": "^6.0.2",
         "style-ext-html-webpack-plugin": "^3.4.0",
         "style-loader": "^0.13.2",
@@ -72,7 +78,8 @@
         "webpack-dev-server": "^2.4.1",
         "webpack-hot-middleware": "^2.17.1",
         "webpack-jarvis": "^0.1.1",
-        "webpack-notifier": "^1.5.0"
+        "webpack-notifier": "^1.5.0",
+        "whatwg-fetch": "^2.0.3"
     },
     "dependencies": {
         "@types/express": "^4.11.1",
@@ -111,6 +118,7 @@
         "react-google-maps": "^9.4.5",
         "react-grid-layout": "^0.16.3",
         "react-icons": "^2.2.7",
+        "react-intl": "^2.4.0",
         "react-loadable": "^5.3.1",
         "react-md-spinner": "^0.2.5",
         "react-modal": "^3.1.11",
@@ -118,11 +126,12 @@
         "react-redux": "^5.0.6",
         "react-router-dom": "^4.2.2",
         "react-select": "^1.2.1",
+        "react-tippy": "^1.2.2",
         "react-transition-group": "^2.2.1",
         "recompose": "^0.26.0",
         "redux": "^3.7.2",
         "redux-observable": "^0.17.0",
-        "redux-store-list": "^0.2.4",
+        "redux-store-list": "0.3.0",
         "redux-thunk": "^2.2.0",
         "reselect": "3.0.1",
         "rxjs": "^5.5.6",
@@ -130,5 +139,42 @@
         "socket.io-client": "^2.0.4",
         "uuid": "^3.2.1",
         "yup": "^0.24.0"
+    },
+    "jest": {
+        "collectCoverageFrom": [
+            "<rootDir>src/web/**/*.{js,jsx,mjs}"
+        ],
+        "setupFiles": [
+            "<rootDir>tools/polyfills.js"
+        ],
+        "setupTestFrameworkScriptFile": "<rootDir>/tools/setupTests.js",
+        "testMatch": [
+            "<rootDir>**/__tests__/**/*.{js,jsx,mjs}",
+            "<rootDir>**/?(*.)(spec|test).{js,jsx,mjs}"
+        ],
+        "testEnvironment": "node",
+        "testURL": "http://localhost",
+        "transform": {
+            "^.+\\.(js|jsx|mjs)$": "babel-jest",
+            "^.+\\.css$": "<rootDir>tools/jest/cssTransform.js",
+            "^(?!.*\\.(js|jsx|mjs|css|json|graphql)$)": "<rootDir>tools/jest/fileTransform.js"
+        },
+        "transformIgnorePatterns": [
+            "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$",
+            "^.+\\.module\\.css$"
+        ],
+        "moduleNameMapper": {
+            "^react-native$": "react-native-web",
+            "^.+\\.module\\.css$": "identity-obj-proxy"
+        },
+        "moduleFileExtensions": [
+            "web.js",
+            "mjs",
+            "js",
+            "json",
+            "web.jsx",
+            "jsx",
+            "node"
+        ]
     }
 }

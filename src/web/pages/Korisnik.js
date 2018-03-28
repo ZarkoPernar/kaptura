@@ -16,30 +16,34 @@ export default class KorisnikPage extends Component {
         },
     }
 
-    componentWillMount() {
-        apiService.get('/user/userInfo')
+    componentDidMount() {
+        apiService
+            .get('/user/userInfo')
             .then(({ user }) => {
                 this.setState({
                     userInfo: user,
                 })
             })
-            .catch((err) => {
+            .catch(err => {
                 console.error(err)
             })
     }
 
-    handleCreateProjectError = (err) => {
+    handleCreateProjectError = err => {
         console.log(err)
         this.setState(state => ({
-            toasts: [...state.toasts, {
-                description: err.message
-            }]
+            toasts: [
+                ...state.toasts,
+                {
+                    description: err.message,
+                },
+            ],
         }))
     }
 
-    removeToast = (toast) => {
-        this.setState((state) => ({
-            toasts: state.toasts.filter(temp => temp.id !== toast.id)
+    removeToast = toast => {
+        this.setState(state => ({
+            toasts: state.toasts.filter(temp => temp.id !== toast.id),
         }))
     }
 
@@ -48,11 +52,11 @@ export default class KorisnikPage extends Component {
             userInfo: {
                 ...state.userInfo,
                 [propName]: value,
-            }
+            },
         }))
     }
 
-    onSubmit = (ev) => {
+    onSubmit = ev => {
         ev.preventDefault()
         apiService.post('/user/update', this.state.userInfo)
     }
@@ -64,12 +68,14 @@ export default class KorisnikPage extends Component {
                     <CardBody>
                         <form onSubmit={this.onSubmit}>
                             <FormGroup label="Ime i Prezime">
-                                <Input name="full_name" onChange={this.inputChanged} value={this.state.userInfo.full_name} />
+                                <Input
+                                    name="full_name"
+                                    onChange={this.inputChanged}
+                                    value={this.state.userInfo.full_name}
+                                />
                             </FormGroup>
 
-                            <Button>
-                                Spremi Promjene
-                            </Button>
+                            <Button>Spremi Promjene</Button>
                         </form>
                     </CardBody>
                 </Card>

@@ -6,35 +6,36 @@ const ENTER_KEY = 13
 class TextareaComponent extends Component {
     static propTypes = {
         name: PropTypes.string,
-        onChange: PropTypes.func,
+        onChange: PropTypes.func.isRequired,
         onFocus: PropTypes.func,
         onBlur: PropTypes.func,
         rows: PropTypes.number,
     }
 
     static defaultProps = {
-        rows: 1
+        onChange: () => {},
+        rows: 1,
     }
 
     constructor(props) {
         super(props)
 
         this.state = {
-            rows: this.props.rows
+            rows: this.props.rows,
         }
     }
 
-    onChange = (e) => {
+    onChange = e => {
         this.props.onChange(e.target.value, this.props.name)
     }
 
-    onKeyDown = (event) => {
+    onKeyDown = event => {
         if (event.keyCode === ENTER_KEY) {
             // event.preventDefault()
             // event.stopPropagation()
-            this.setState((state) => {
+            this.setState(state => {
                 return {
-                    rows: state.rows + 1
+                    rows: state.rows + 1,
                 }
             })
         }
@@ -42,7 +43,13 @@ class TextareaComponent extends Component {
 
     render() {
         return (
-            <textarea className="form-control" {...this.props} onKeyDown={this.onKeyDown} rows={this.state.rows} onChange={this.onChange} />
+            <textarea
+                className="form-control"
+                {...this.props}
+                onKeyDown={this.onKeyDown}
+                rows={this.state.rows}
+                onChange={this.onChange}
+            />
         )
     }
 }

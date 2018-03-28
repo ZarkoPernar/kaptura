@@ -15,13 +15,10 @@ const InvoiceItemsList = ({ items, rowClick }) => (
     <div>
         <Table key="table">
             <TableHead key="head">
-                <TableHeading>Stavka</TableHeading>
-                <TableHeading>Tip</TableHeading>
-                <TableHeading>Proizvođač</TableHeading>
+                <TableHeading>Naziv</TableHeading>
+                <TableHeading>Jed. cjena</TableHeading>
                 <TableHeading>Količina</TableHeading>
-                <TableHeading>Cijena</TableHeading>
-                <TableHeading>Opis</TableHeading>
-                <TableHeading>Bilješke</TableHeading>
+                <TableHeading>Ukupna Cijena</TableHeading>
             </TableHead>
             {items.map(item => {
                 return (
@@ -34,13 +31,13 @@ const InvoiceItemsList = ({ items, rowClick }) => (
                     >
                         <TableCell>{item.name}</TableCell>
 
-                        <TableCell>{item.type}</TableCell>
-
-                        <TableCell>{item.brand_name}</TableCell>
+                        <TableCell>{item.price}</TableCell>
 
                         <TableCell>{item.quantity}</TableCell>
 
-                        <TableCell>{item.price}</TableCell>
+                        <TableCell>
+                            <Currency>{item.price * item.quantity}</Currency>
+                        </TableCell>
 
                         <TableCell>{item.description}</TableCell>
 

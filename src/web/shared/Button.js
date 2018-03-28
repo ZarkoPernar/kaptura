@@ -29,11 +29,11 @@ export default class Button extends Component {
 
     state = {
         ripples: [],
+        measurements: null,
     }
 
     _element = null
     _scrollHost = null
-    _measurements = null
 
     componentDidMount() {
         this._scrollHost = getScrollHost(document)
@@ -46,14 +46,19 @@ export default class Button extends Component {
     }
 
     onMouseDown = event => {
-        if (this.props.disabled === true || event.nativeEvent.which !== 1)
-            return
+        const isRightMouseClick = event.nativeEvent.which !== 1
+        const buttonIsDisabled = this.props.disabled === true
 
-        this._measurements = this._element.getBoundingClientRect()
+        if (buttonIsDisabled || isRightMouseClick) return
+
+        // we must collect measurements on every click
+        // beacause the button dimensions may have changed
+        const measurements = this._element.getBoundingClientRect()
 
         const ripple = createRipple(event, this._scrollHost)
 
         this.setState(state => ({
+            measurements,
             ripples: [...state.ripples, ripple],
         }))
     }
@@ -61,6 +66,16 @@ export default class Button extends Component {
     onMouseUp = event => {
         if (this.props.disabled === true || event.nativeEvent.which !== 1)
             return
+
+        this.clearRipples()
+
+        this.setState(state => ({
+            ripples: replaceLastItem(state.ripples, { mouseUp: true }),
+        }))
+    }
+
+    onMouseLeave = event => {
+        if (this.state.ripples.length === 0) return
 
         this.clearRipples()
 
@@ -78,11 +93,13 @@ export default class Button extends Component {
     clearRipples = debounce(this._clearRipples, 800)
 
     getRef = ref => {
-        if (!ref) {
-            return
-        }
+        if (!ref) return
+
         this._element = ref
-        this._measurements = ref.getBoundingClientRect()
+
+        this.setState({
+            measurements: ref.getBoundingClientRect(),
+        })
     }
 
     render() {
@@ -105,10 +122,12 @@ export default class Button extends Component {
         return (
             <button
                 ref={this.getRef}
-                className={
-                    'btn ' +
-                    (color ? ' btn--color-' + color + ' ' : '') +
-                    classnames({
+                type="button"
+                className={classnames(
+                    'btn',
+                    className || '',
+                    color ? ' btn--color-' + color + ' ' : '',
+                    {
                         'btn--icon-only': iconOnly,
                         'btn--icon-left': iconLeft,
                         'btn--small': small,
@@ -118,13 +137,12 @@ export default class Button extends Component {
                         'btn--flat': flat,
                         'btn--block': block,
                         'btn--full': full,
-                    }) +
-                    ' ' +
-                    (className || '')
-                }
+                    },
+                )}
                 {...rest}
                 onMouseDown={this.onMouseDown}
                 onMouseUp={this.onMouseUp}
+                onMouseLeave={this.onMouseLeave}
             >
                 {children}
 
@@ -132,7 +150,7 @@ export default class Button extends Component {
                     {this.state.ripples.map((e, i) => (
                         <Ripple
                             key={i}
-                            hostElement={this._measurements}
+                            hostElement={this.state.measurements}
                             event={e}
                         />
                     ))}
